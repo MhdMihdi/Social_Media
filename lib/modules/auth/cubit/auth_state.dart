@@ -27,9 +27,9 @@ class AuthSelectCollegeState extends AuthState {}
 
 class AuthSignUpLoadingState extends AuthState {}
 
-class AuthSignUpDoneState extends AuthState {}
-
 class AuthSignUpSuccessState extends AuthState {}
+
+class AuthSignUpDoneState extends AuthState {}
 
 class AuthLoginLoadingState extends AuthState {}
 

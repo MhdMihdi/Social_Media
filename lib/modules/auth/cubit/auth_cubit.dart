@@ -305,7 +305,7 @@ class AuthCubit extends Cubit<AuthState>
           await  storage.write(key:"token", value: data.token);
           Navigator.pushNamed(
             context,
-            NamedRoutes.emailVerify
+            NamedRoutes.completeInfo
           );
         }else
         {
@@ -321,7 +321,7 @@ class AuthCubit extends Cubit<AuthState>
       }finally
       {
         // isLoading=false;
-
+       emit(AuthSignUpDoneState());
       }
     }
   }
@@ -372,7 +372,6 @@ class AuthCubit extends Cubit<AuthState>
         // isLoading=false;
         emit(AuthLoginDoneState());
 
-        print('ssss');
 
       }
     }
