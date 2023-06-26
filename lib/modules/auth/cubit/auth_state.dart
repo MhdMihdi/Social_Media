@@ -17,6 +17,10 @@ class AuthSelectSpecialtyState extends AuthState {}
 
 class AuthSelectOptionState extends AuthState {}
 
+class AuthSelectLanState extends AuthState {}
+
+class AuthSelectFrameState extends AuthState {}
+
 class AuthSelectState extends AuthState {}
 
 class AuthSelectCollegeState extends AuthState {}

@@ -4,8 +4,8 @@
 import 'package:dev_space/modules/auth/cubit/auth_cubit.dart';
 import 'package:dev_space/shared/components/components.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 
 class SignUpScreen2 extends StatelessWidget {
@@ -59,27 +59,10 @@ class SignUpScreen2 extends StatelessWidget {
                 children:
                 [
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    //crossAxisAlignment: CrossAxisAlignment.start,
                     children:
                     [
-                      MyFormField(
-                          controller: cubit.programmingAgeController,
-                          label: 'Your Programming Age',
-                          type: TextInputType.number,
-                          format: [
-                            FilteringTextInputFormatter.digitsOnly,
-                          ],
-                          prefix: Icons.real_estate_agent_outlined,
-                          padding: const EdgeInsets.all(15.0),
-                          validate: (value) {
-                            if (value!.isEmpty) {
-                              return 'Programming Age is required';
-                            }
-                            return null;
-                          }),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
+
                       const Text(
                         'Your IT Specialty:',
                         style: TextStyle(
@@ -455,7 +438,196 @@ class SignUpScreen2 extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(
-                        height:10.0 ,
+                        height:15.0 ,
+                      ),
+                      MyFormField(
+                        controller: cubit.programmingAgeController,
+                        label: 'Your Programming Age',
+                        prefix: Icons.real_estate_agent_outlined,
+                        padding: const EdgeInsets.all(15.0),
+                        readOnly: true,
+                        onTap: (){
+                          showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime.now(),
+                          ).then((value){
+                            cubit.programmingAgeController.text=
+                                DateFormat('yyyy/MM/dd').format(value!);
+                          });
+                        },
+                        validate: (value) {
+                          if (value!.isEmpty) {
+                            return 'Programming Age is required';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 15.0,
+                      ),
+                      MyFormField(
+                          controller: cubit.languagesController,
+                          label: 'Your Languages',
+                          prefix: Icons.code,
+                          readOnly: true,
+                          padding: const EdgeInsets.all(
+                              15.0
+                          ),
+                          onTap: ()
+                          {
+                            showModalBottomSheet(
+                              context: context,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20)
+                                ),
+                              ),
+                              builder: (BuildContext context)
+                              {
+                                return Container(
+                                  height: 350,
+                                  padding: const EdgeInsets.all(20),
+                                  child: Stack(
+                                    alignment: AlignmentDirectional.topCenter,
+                                    clipBehavior: Clip.none,
+                                    children:
+                                    [
+                                      Positioned(
+                                        top: -35,
+                                        child: Container(
+                                          width: 50,
+                                          height: 6,
+                                          margin: const EdgeInsets.only(bottom: 20),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(2.5),
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      ListView.builder(
+                                        itemCount:Languages.values.length,
+                                        itemBuilder: (context,index)
+                                        {
+                                          return MyCheckBox(
+                                            title:Languages.values[index].name,
+                                            value: cubit.selectedLang.contains(Languages.values[index].name),
+                                            onChanged: (value)
+                                            {
+                                              cubit.selectLan(
+                                                value,
+                                                Languages.values[index].name,
+                                              );
+
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ).then((value){
+                              print(cubit.selectedLang);
+                              cubit.languagesController.text=cubit.selectedLang.join(',');
+                            });
+
+                          },
+                          validate: (value)
+                          {
+                            if (value!.isEmpty) {
+                              return 'Programming Age is required';
+                            }
+                            return null;
+                          }
+                      ),
+                      const SizedBox(
+                        height:15.0 ,
+                      ),
+                      MyFormField(
+                          controller: cubit.frameWorkController,
+                          label: 'Your frameWork',
+                          prefix: Icons.code,
+                          readOnly: true,
+                          padding: const EdgeInsets.all(
+                              15.0
+                          ),
+                          onTap: ()
+                          {
+                            showModalBottomSheet(
+                              context: context,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20)
+                                ),
+                              ),
+                              builder: (BuildContext context)
+                              {
+                                return Container(
+                                  height: 350,
+                                  padding: const EdgeInsets.all(20),
+                                  child: Stack(
+                                    alignment: AlignmentDirectional.topCenter,
+                                    clipBehavior: Clip.none,
+                                    children:
+                                    [
+                                      Positioned(
+                                        top: -35,
+                                        child: Container(
+                                          width: 50,
+                                          height: 6,
+                                          margin: const EdgeInsets.only(bottom: 20),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(2.5),
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      ListView.builder(
+                                        itemCount:FrameWork.values.length,
+                                        itemBuilder: (context,index)
+                                        {
+                                          return MyCheckBox(
+                                            title:FrameWork.values[index].name,
+                                            value: cubit.selectedFrame.contains(FrameWork.values[index].name),
+                                            onChanged: (value)
+                                            {
+                                              cubit.selectFrame(
+                                                value,
+                                                FrameWork.values[index].name,
+                                              );
+
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ).then((value){
+                              print(cubit.selectedFrame);
+                              cubit.frameWorkController.text=cubit.selectedFrame.join(',');
+                            });
+
+                          },
+                          validate: (value)
+                          {
+                            if (value!.isEmpty) {
+                              return 'Programming Age is required';
+                            }
+                            return null;
+                          }
+                      ),
+                      const SizedBox(
+                        height:15.0 ,
                       ),
                       state is AuthLoginLoadingState?
                       const CircularProgressIndicator(

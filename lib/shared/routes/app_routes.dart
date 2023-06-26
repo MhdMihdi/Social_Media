@@ -1,7 +1,7 @@
 import 'package:dev_space/layout/dev_layout.dart';
 import 'package:dev_space/modules/auth/complete_information/complete_information.dart';
 import 'package:dev_space/modules/auth/log_in/log_in_screen.dart';
-import 'package:dev_space/modules/auth/sign_up/email_verifiction.dart';
+import 'package:dev_space/modules/auth/log_in/email_verifiction.dart';
 import 'package:dev_space/modules/auth/sign_up/sign_up_screen1.dart';
 import 'package:dev_space/modules/auth/sign_up/sign_up_screen2.dart';
 import 'package:dev_space/modules/auth/welcome/welcome_screen.dart';

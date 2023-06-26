@@ -14,53 +14,50 @@ class DevLayout extends StatelessWidget {
         ),
       ),
       bottomNavigationBar:Container(
-        color:const Color(0XFF615AAB) ,
-        child:  Padding(
-          padding: const EdgeInsets.symmetric(
-              horizontal: 10.0,
-              vertical: 15
-          ),
-          child: GNav(
-            gap: 8,
-            padding:const EdgeInsets.all(16.0),
-            backgroundColor: const Color(0XFF615AAB),
-            color: Colors.white,
-            activeColor: Colors.white,
-            tabBackgroundColor: Colors.white30,
-            onTabChange: (index)
-            {
-              print(index);
-            },
-            tabs: const [
-                GButton(
-                    icon:Icons.home,
-                    text: 'Home',
-                ),
-                GButton(
-                    icon:Icons.group_add,
-                    text: 'Friend Request',
-                ),
-                GButton(
-                    icon:Icons.group,
-                    text: 'Communities',
-                ),
-                GButton(
-                    icon:Icons.person,
-                    text: 'Profile',
-                ),
-                GButton(
-                    icon:Icons.notifications,
-                    text: 'Notifications',
-                ),
-                GButton(
-                    icon:Icons.settings,
-                    text: 'Settings',
-                ),
-              ],
-           //style: GnavStyle.oldSchool,
-
-          ),
+      color:const Color(0XFF615AAB),
+       child:  Padding(
+        padding: const EdgeInsets.symmetric(
+            horizontal: 10.0,
+            vertical: 15
         ),
+        child: GNav(
+          gap: 2,
+          padding:const EdgeInsets.all(10.0),
+          backgroundColor: const Color(0XFF615AAB),
+          color: Colors.white,
+          activeColor: Colors.white,
+          tabBackgroundColor: Colors.white30,
+          onTabChange: (index)
+          {
+            print(index);
+          },
+          tabs: const[
+             GButton(
+                  icon:Icons.home,
+                  text: 'Home',
+              ),
+              GButton(
+                  icon:Icons.group_add,
+                  text: 'Friend Request',
+              ),
+              GButton(
+                  icon:Icons.group,
+                  text: 'Communities',
+              ),
+              GButton(
+                  icon:Icons.person,
+                  text: 'Profile',
+              ),
+              GButton(
+                  icon:Icons.notifications,
+                  text: 'Notifications',
+              ),
+
+            ],
+         //style: GnavStyle.oldSchool,
+
+         ),
+       ),
       ),
     );
   }

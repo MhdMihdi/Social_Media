@@ -86,10 +86,6 @@ enum Languages{
   MatLab,
   Scala,
 }
-
-dynamic Asp='Asp.Net Core';
-dynamic Net='.Net Core';
-
 enum FrameWork{
   Flutter,
   ReactJs,
@@ -126,6 +122,8 @@ class AuthCubit extends Cubit<AuthState>
   var locationController = TextEditingController();
   var birthDateController = TextEditingController();
   var programmingAgeController = TextEditingController();
+  var languagesController = TextEditingController();
+  var frameWorkController = TextEditingController();
   var phoneNumberController = TextEditingController();
   var bioController = TextEditingController();
   var companiesController = TextEditingController();
@@ -135,7 +133,7 @@ class AuthCubit extends Cubit<AuthState>
   bool isRePassword=true;
   Gender?gender;
   File?imag;
-  final emailRegex=RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+  final RegExp emailRegex=RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
   Specialty?specialty;
   College?college;
   var storage=const FlutterSecureStorage();
@@ -241,6 +239,26 @@ class AuthCubit extends Cubit<AuthState>
       selected.remove(val);
     }
     emit(AuthSelectOptionState());
+  }
+  selectLan(value,val)
+  {
+    if(value!)
+    {
+      selectedLang.add(val);
+    }else{
+      selectedLang.remove(val);
+    }
+    emit(AuthSelectLanState());
+  }
+  selectFrame(value,val)
+  {
+    if(value!)
+    {
+      selectedFrame.add(val);
+    }else{
+      selectedFrame.remove(val);
+    }
+    emit(AuthSelectFrameState());
   }
 
   bool selectStudent=false;
