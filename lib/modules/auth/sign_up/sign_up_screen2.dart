@@ -3,6 +3,7 @@
 
 import 'package:dev_space/modules/auth/cubit/auth_cubit.dart';
 import 'package:dev_space/shared/components/components.dart';
+import 'package:dev_space/shared/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -59,10 +60,9 @@ class SignUpScreen2 extends StatelessWidget {
                 children:
                 [
                   Column(
-                    //crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children:
                     [
-
                       const Text(
                         'Your IT Specialty:',
                         style: TextStyle(
@@ -636,13 +636,13 @@ class SignUpScreen2 extends StatelessWidget {
                         :MyButton(
                         onPressed: ()
                         {
-                          cubit.signUp(context);
-                          // Navigator.pushNamed(
-                          //   context,
-                          //   NamedRoutes.emailVerify
-                          // );
+                          //cubit.signUp(context);
+                          Navigator.pushNamed(
+                            context,
+                            NamedRoutes.completeInfo
+                          );
                         },
-                        title: 'Next',
+                        title: 'Sign Up',
                         width:250,
                         height:50,
                         color:const Color(0XFF615AAB) ,
