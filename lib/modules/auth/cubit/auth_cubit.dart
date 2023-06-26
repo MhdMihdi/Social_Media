@@ -286,7 +286,7 @@ class AuthCubit extends Cubit<AuthState>
     bool isValidate=formKey.currentState!.validate();
     bool isValidate1=formKey2.currentState!.validate();
 
-    if(isValidate && isValidate1 )
+    if(isValidate&&isValidate1 )
     {
       // isLoading=true;
       emit(AuthSignUpLoadingState());
