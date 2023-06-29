@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class AuthService {
 
-  static String baseUrl = 'http://192.168.1.4:8001/api/';
+  static String baseUrl = 'http://192.168.1.4:8000/api/';
 
   static signUp({
     image, required firstName, required lastName,
@@ -18,11 +18,11 @@ class AuthService {
   }) async
   {
     var headers = {
-      'Content-type': 'application/json'
+      'Accept': 'application/json'
     };
     var request = http.MultipartRequest(
         'POST',
-        Uri.parse('${baseUrl}auth/signUp')
+        Uri.parse('${baseUrl}auth/signUp'),
     );
     request.fields.addAll({
       'first_name': firstName,
@@ -39,13 +39,15 @@ class AuthService {
       'gender': gender
     });
     request.files.add(await http.MultipartFile.fromPath('image', image));
+
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
 
-    debugPrint(response.stream.bytesToString().toString());
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      var stringObject = response.stream.bytesToString().toString();
+    var stringObject=await response.stream.bytesToString();
+    debugPrint(stringObject);
+    if (response.statusCode == 200 || response.statusCode == 201)
+    {
       var user = userFromJson(stringObject);
       return user;
     } else {

@@ -152,10 +152,10 @@ class SignUpScreen1 extends StatelessWidget {
                                 {
                                   return 'Email is required';
                                 }
-                                if(cubit.emailRegex.hasMatch(value))
-                                {
-                                  return  'Please enter a valid email address';
-                                }
+                                // if(cubit.emailRegex.hasMatch(value))
+                                // {
+                                //   return  'Please enter a valid email address';
+                                // }
                                 return null;
                               }
                           ),
@@ -238,7 +238,7 @@ class SignUpScreen1 extends StatelessWidget {
                                   lastDate: DateTime.now(),
                                 ).then((value){
                                   cubit.birthDateController.text=
-                                      DateFormat('yyyy/MM/dd').format(value!);
+                                      DateFormat('yyyy-MM-dd').format(value!);
                                 });
 
                               },
@@ -320,46 +320,47 @@ class SignUpScreen1 extends StatelessWidget {
                           MyButton(
                              onPressed: ()
                              {
-                               // if(cubit.formKey.currentState!.validate())
-                               // {
-                               //   if(cubit.gender != null) {
-                               //     Navigator.pushNamed(
-                               //         context,
-                               //         NamedRoutes.signIn2,
-                               //         arguments: (
-                               //         cubit.imag,
-                               //         cubit.firstNameController.text,
-                               //         cubit.lastNameController.text,
-                               //         cubit.emailController.text,
-                               //         cubit.passwordController.text,
-                               //         cubit.rePasswordController.text,
-                               //         cubit.birthDateController.text,
-                               //         cubit.locationController.text,
-                               //         cubit.gender,
-                               //         )
-                               //     );
-                               //   }
-                               // }
-                               // if(cubit.gender==null)
-                               // {
-                               //    ScaffoldMessenger.of(context).showSnackBar(
-                               //      SnackBar(
-                               //        content: Center(
-                               //            child: Text(
-                               //              'Please Select a Gender',
-                               //              style: TextStyle(
-                               //                fontSize: 20.0
-                               //              ),
-                               //            ),
-                               //        ),
-                               //        backgroundColor: Color(0XFF615AAB),
-                               //      ),
-                               //    );
-                               // }
-                              Navigator.pushNamed(
-                                context,
-                                NamedRoutes.signIn2
-                              );
+                               if(cubit.formKey.currentState!.validate())
+                               {
+                                 if(cubit.gender != null) {
+                                   Navigator.pushNamed(
+                                       context,
+                                       NamedRoutes.signIn2,
+                                       arguments: (
+                                       cubit.formKey.currentState!.validate(),
+                                       cubit.imag?.path,
+                                       cubit.firstNameController.text,
+                                       cubit.lastNameController.text,
+                                       cubit.emailController.text,
+                                       cubit.passwordController.text,
+                                       cubit.rePasswordController.text,
+                                       cubit.birthDateController.text,
+                                       cubit.locationController.text,
+                                       cubit.gender!.name,
+                                       )
+                                   );
+                                 }
+                               }
+                               if(cubit.gender==null)
+                               {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Center(
+                                          child: Text(
+                                            'Please Select a Gender',
+                                            style: TextStyle(
+                                              fontSize: 20.0
+                                            ),
+                                          ),
+                                      ),
+                                      backgroundColor: Color(0XFF615AAB),
+                                    ),
+                                  );
+                               }
+                              // Navigator.pushNamed(
+                              //   context,
+                              //   NamedRoutes.signIn2
+                              // );
                              },
                              title: 'Next',
                              width:250,

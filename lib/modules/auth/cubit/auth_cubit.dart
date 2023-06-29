@@ -222,13 +222,12 @@ class AuthCubit extends Cubit<AuthState>
           ),
     );
   }
+
   toggleSpecialty(val)
   {
     specialty=val;
     emit(AuthSelectSpecialtyState());
   }
-
-
 
   selectOption(value,val)
   {
@@ -240,6 +239,7 @@ class AuthCubit extends Cubit<AuthState>
     }
     emit(AuthSelectOptionState());
   }
+
   selectLan(value,val)
   {
     if(value!)
@@ -250,6 +250,7 @@ class AuthCubit extends Cubit<AuthState>
     }
     emit(AuthSelectLanState());
   }
+
   selectFrame(value,val)
   {
     if(value!)
@@ -293,12 +294,19 @@ class AuthCubit extends Cubit<AuthState>
       try
       {
         var data=await AuthService.signUp(
-          image:imag?.path,firstName: firstNameController.text, lastName: lastNameController.text,
-          email: emailController.text, password: passwordController.text,
-          birthDate: birthDateController.text, location: locationController.text,
-          gender: gender!.name, programmingAge: programmingAgeController.text,
-          specialty: specialty!.name, section: selected.join(','),
-          language: selectedLang.join(','), frameWork: selectedFrame.join(','),
+          image:imag?.path,
+          firstName: firstNameController.text,
+          lastName: lastNameController.text,
+          email: emailController.text,
+          password: passwordController.text,
+          birthDate: birthDateController.text,
+          location: locationController.text,
+          gender: gender!.name,
+          programmingAge: programmingAgeController.text,
+          specialty: specialty!.name,
+          section: selected.join(','),
+          language: selectedLang.join(','),
+          frameWork: selectedFrame.join(','),
         );
         if(data!=null)
         {
@@ -310,19 +318,26 @@ class AuthCubit extends Cubit<AuthState>
           );
         }else
         {
-           const SnackBar(
-             content:  Text(
-              'their this is a problem'
-            ),
-             width: 100.0,
-             backgroundColor: Colors.deepPurple,
-            behavior:SnackBarBehavior.floating,
+          ScaffoldMessenger.of(context).showSnackBar(
+             SnackBar(
+               content:  const Center(
+                  child: Text(
+                      'their is a problem in Sign Up'
+                  ),
+                ),
+                width: 300.0,
+                shape:  RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                backgroundColor: Colors.deepPurple,
+                behavior:SnackBarBehavior.floating,
+              ),
           );
         }
       }finally
       {
         // isLoading=false;
-       emit(AuthSignUpDoneState());
+        emit(AuthSignUpDoneState());
       }
     }
   }

@@ -16,19 +16,39 @@ class EmailVerification extends StatelessWidget {
         var cubit=AuthCubit.get(context);
         return Scaffold(
           appBar: AppBar(
-            leading: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(
-                    Icons.arrow_back_ios
+            title: const Text(
+              'Verify your email',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 25.0
+              ),
+
+            ),
+            centerTitle: true,
+            backgroundColor: const Color(0XFF615AAB),
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                    bottomLeft:Radius.circular(40.0) ,
+                    bottomRight:Radius.circular(40.0)
                 )
+            ),
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+              )
             ),
           ),
           body: Form(
             key: cubit.emailVerifyFormKey,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                  vertical: 15.0
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,7 +196,7 @@ class EmailVerification extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(
-                    height: 75.0,
+                    height: 50.0,
                   ),
                   Row(
                     children:

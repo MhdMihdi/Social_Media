@@ -3,7 +3,6 @@
 
 import 'package:dev_space/modules/auth/cubit/auth_cubit.dart';
 import 'package:dev_space/shared/components/components.dart';
-import 'package:dev_space/shared/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -454,7 +453,7 @@ class SignUpScreen2 extends StatelessWidget {
                             lastDate: DateTime.now(),
                           ).then((value){
                             cubit.programmingAgeController.text=
-                                DateFormat('yyyy/MM/dd').format(value!);
+                                DateFormat('yyyy-MM-dd').format(value!);
                           });
                         },
                         validate: (value) {
@@ -540,7 +539,7 @@ class SignUpScreen2 extends StatelessWidget {
                           validate: (value)
                           {
                             if (value!.isEmpty) {
-                              return 'Programming Age is required';
+                              return 'Languages is required';
                             }
                             return null;
                           }
@@ -621,7 +620,7 @@ class SignUpScreen2 extends StatelessWidget {
                           validate: (value)
                           {
                             if (value!.isEmpty) {
-                              return 'Programming Age is required';
+                              return 'framework is required';
                             }
                             return null;
                           }
@@ -629,27 +628,31 @@ class SignUpScreen2 extends StatelessWidget {
                       const SizedBox(
                         height:15.0 ,
                       ),
-                      state is AuthLoginLoadingState?
-                      const CircularProgressIndicator(
-                        color: Color(0XFF615AAB),
+                      state is AuthSignUpLoadingState?
+                      const Center(
+                        child: CircularProgressIndicator(
+                          color: Color(0XFF615AAB),
+                        ),
                       )
-                        :MyButton(
-                        onPressed: ()
-                        {
-                          //cubit.signUp(context);
-                          Navigator.pushNamed(
-                            context,
-                            NamedRoutes.completeInfo
-                          );
-                        },
-                        title: 'Sign Up',
-                        width:250,
-                        height:50,
-                        color:const Color(0XFF615AAB) ,
-                        radius: 20.0,
-                        titleColor: Colors.white,
-                        titleSize:30.0,
+                        :Center(
+                          child: MyButton(
+                          onPressed: ()
+                          {
+                            cubit.signUp(context);
+                            // Navigator.pushNamed(
+                            //   context,
+                            //   NamedRoutes.completeInfo
+                            // );
+                          },
+                          title: 'Sign Up',
+                          width:250,
+                          height:50,
+                          color:const Color(0XFF615AAB) ,
+                          radius: 20.0,
+                          titleColor: Colors.white,
+                          titleSize:30.0,
                       ),
+                        ),
                     ],
                   ),
                 ],

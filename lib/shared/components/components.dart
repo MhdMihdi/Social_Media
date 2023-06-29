@@ -246,7 +246,6 @@ class MyButton extends StatelessWidget {
     this.titleColor,
     this.titleSize,
     this.side=Colors.white,
-
   });
 
   @override

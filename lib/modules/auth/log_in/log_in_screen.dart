@@ -141,7 +141,7 @@ class LogInScreen extends StatelessWidget
                                 {
                                   Navigator.pushNamed(
                                       context,
-                                      NamedRoutes.emailVerify,
+                                      NamedRoutes.resetPass,
                                   );
                                 },
                                 child: const Text(
