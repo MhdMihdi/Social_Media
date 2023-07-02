@@ -36,3 +36,21 @@ class AuthLoginLoadingState extends AuthState {}
 class AuthLoginSuccessState extends AuthState {}
 
 class AuthLoginDoneState extends AuthState {}
+
+class AuthForgotPasswordLoadingState extends AuthState {}
+
+class AuthForgotPasswordSuccessState extends AuthState {}
+
+class AuthForgotPasswordDoneState extends AuthState {}
+
+class AuthCheckCodeLoadingState extends AuthState {}
+
+class AuthCheckCodeSuccessState extends AuthState {}
+
+class AuthCheckCodeDoneState extends AuthState {}
+
+class AuthResetPassLoadingState extends AuthState {}
+
+class AuthResetPassSuccessState extends AuthState {}
+
+class AuthResetPassDoneState extends AuthState {}

@@ -1,6 +1,5 @@
 import 'package:dev_space/modules/auth/cubit/auth_cubit.dart';
 import 'package:dev_space/shared/components/components.dart';
-import 'package:dev_space/shared/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -73,9 +72,9 @@ class EmailVerification extends StatelessWidget {
                   const SizedBox(
                     height: 14.0,
                   ),
-                  const Text(
-                    'supermimo7@gmail.com',
-                    style: TextStyle(
+                   Text(
+                    cubit.forgotPasswordController.text,
+                    style: const TextStyle(
                         fontSize: 17.0,
                         fontWeight: FontWeight.bold
                     ),
@@ -89,17 +88,15 @@ class EmailVerification extends StatelessWidget {
                     [
                       SizedBox(
                         height: 68,
-                        width: 64,
+                        width: 44,
                         child: TextFormField(
+                          controller: cubit.emailVerifyController1,
                           onChanged: (value) {
                             if (value.length == 1) {
                               FocusScope.of(context).nextFocus();
                             }
                           },
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .titleLarge,
+                          style: Theme.of(context).textTheme.titleLarge,
                           keyboardType: TextInputType.number,
                           textAlign: TextAlign.center,
                           inputFormatters: [
@@ -115,17 +112,15 @@ class EmailVerification extends StatelessWidget {
                       ),
                       SizedBox(
                         height: 68,
-                        width: 64,
+                        width: 44,
                         child: TextFormField(
+                          controller:cubit.emailVerifyController2 ,
                           onChanged: (value) {
                             if (value.length == 1) {
                               FocusScope.of(context).nextFocus();
                             }
                           },
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .titleLarge,
+                          style: Theme.of(context).textTheme.titleLarge,
                           keyboardType: TextInputType.number,
                           textAlign: TextAlign.center,
                           inputFormatters: [
@@ -141,17 +136,15 @@ class EmailVerification extends StatelessWidget {
                       ),
                       SizedBox(
                         height: 68,
-                        width: 64,
+                        width: 44,
                         child: TextFormField(
+                          controller:cubit.emailVerifyController3 ,
                           onChanged: (value) {
                             if (value.length == 1) {
                               FocusScope.of(context).nextFocus();
                             }
                           },
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .titleLarge,
+                          style: Theme.of(context).textTheme.titleLarge,
                           keyboardType: TextInputType.number,
                           textAlign: TextAlign.center,
                           inputFormatters: [
@@ -167,17 +160,15 @@ class EmailVerification extends StatelessWidget {
                       ),
                       SizedBox(
                         height: 68,
-                        width: 64,
+                        width: 44,
                         child: TextFormField(
+                          controller: cubit.emailVerifyController4,
                           onChanged: (value) {
                             if (value.length == 1) {
                               FocusScope.of(context).nextFocus();
                             }
                           },
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .titleLarge,
+                          style: Theme.of(context).textTheme.titleLarge,
                           keyboardType: TextInputType.number,
                           textAlign: TextAlign.center,
                           inputFormatters: [
@@ -191,8 +182,54 @@ class EmailVerification extends StatelessWidget {
                           ),
                         ),
                       ),
-
-
+                      SizedBox(
+                        height: 68,
+                        width: 44,
+                        child: TextFormField(
+                          controller:cubit.emailVerifyController5 ,
+                          onChanged: (value) {
+                            if (value.length == 1) {
+                              FocusScope.of(context).nextFocus();
+                            }
+                          },
+                          style: Theme.of(context).textTheme.titleLarge,
+                          keyboardType: TextInputType.number,
+                          textAlign: TextAlign.center,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(1),
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0)
+                              )
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 68,
+                        width: 44,
+                        child: TextFormField(
+                          controller: cubit.emailVerifyController6,
+                          onChanged: (value) {
+                            if (value.length == 1) {
+                              FocusScope.of(context).nextFocus();
+                            }
+                          },
+                          style: Theme.of(context).textTheme.titleLarge,
+                          keyboardType: TextInputType.number,
+                          textAlign: TextAlign.center,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(1),
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0)
+                              )
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(
@@ -218,10 +255,7 @@ class EmailVerification extends StatelessWidget {
                       Expanded(
                         child: MyButton(
                           onPressed: () {
-                            Navigator.pushNamed(
-                                context,
-                                NamedRoutes.completeInfo
-                            );
+                            cubit.checkCode(context);
                           },
                           title: 'Confirm',
                           //width: 100,

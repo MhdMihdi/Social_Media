@@ -1,6 +1,7 @@
 import 'package:dev_space/layout/dev_layout.dart';
 import 'package:dev_space/modules/auth/complete_information/complete_information.dart';
 import 'package:dev_space/modules/auth/log_in/forget_password/enter_email.dart';
+import 'package:dev_space/modules/auth/log_in/forget_password/reset_password.dart';
 import 'package:dev_space/modules/auth/log_in/log_in_screen.dart';
 import 'package:dev_space/modules/auth/log_in/forget_password/email_verifiction.dart';
 import 'package:dev_space/modules/auth/sign_up/sign_up_screen1.dart';
@@ -18,6 +19,7 @@ class NamedRoutes
    static const emailVerify='emailVerify';
    static const completeInfo= 'completeInfo';
    static const homePage= 'homePage';
+   static const newPass= 'resetPassword';
 
 }
 
@@ -31,6 +33,7 @@ class AppRoutes
   static const emailVerify=EmailVerification();
   static const completeInfo=CompleteInformation();
   static const homePage=DevLayout();
+  static const newPass=ResetPassword();
 
  
   static Map <String,Widget Function(BuildContext context)>routes=
@@ -43,6 +46,7 @@ class AppRoutes
      NamedRoutes.emailVerify:(context)=>AppRoutes.emailVerify,
      NamedRoutes.completeInfo:(context)=>AppRoutes.completeInfo,
      NamedRoutes.homePage:(context)=>AppRoutes.homePage,
+     NamedRoutes.newPass:(context)=>AppRoutes.newPass,
 
 
   };

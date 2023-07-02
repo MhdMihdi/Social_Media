@@ -101,17 +101,16 @@ enum FrameWork{
 
 }
 
-class AuthCubit extends Cubit<AuthState>
-{
+class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitialState());
 
   static AuthCubit get(context) => BlocProvider.of(context);
 
   var formKey = GlobalKey<FormState>();
   var formKey2 = GlobalKey<FormState>();
-  var loginFormKey=GlobalKey<FormState>();
-  var emailVerifyFormKey=GlobalKey<FormState>();
-  var completeInfoFormKey=GlobalKey<FormState>();
+  var loginFormKey = GlobalKey<FormState>();
+  var emailVerifyFormKey = GlobalKey<FormState>();
+  var completeInfoFormKey = GlobalKey<FormState>();
   var firstNameController = TextEditingController();
   var lastNameController = TextEditingController();
   var emailController = TextEditingController();
@@ -129,35 +128,39 @@ class AuthCubit extends Cubit<AuthState>
   var companiesController = TextEditingController();
   var workYearsController = TextEditingController();
   var currentWorkController = TextEditingController();
+  var forgotPasswordController = TextEditingController();
+  var emailVerifyController1 = TextEditingController();
+  var emailVerifyController2 = TextEditingController();
+  var emailVerifyController3 = TextEditingController();
+  var emailVerifyController4 = TextEditingController();
+  var emailVerifyController5 = TextEditingController();
+  var emailVerifyController6 = TextEditingController();
+  var newPass = TextEditingController();
+  var newPassConfirm = TextEditingController();
   bool isPassword = true;
-  bool isRePassword=true;
+  bool isRePassword = true;
   Gender?gender;
   File?imag;
-  final RegExp emailRegex=RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+  final emailRegex =RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
   Specialty?specialty;
   College?college;
-  var storage=const FlutterSecureStorage();
-  bool isLoading=false;
-  List<dynamic>selected=[];
-  List<dynamic>selectedLang=[];
-  List<dynamic>selectedFrame=[];
-  String email ='',password ='';
+  var storage = const FlutterSecureStorage();
+  bool isLoading = false;
+  List<dynamic>selected = [];
+  List<dynamic>selectedLang = [];
+  List<dynamic>selectedFrame = [];
 
-
-  togglePassword()
-  {
+  togglePassword() {
     isPassword = !isPassword;
     emit(AuthIsPasswordState());
   }
 
-  toggleRePassword()
-  {
+  toggleRePassword() {
     isRePassword = !isRePassword;
     emit(AuthIsPasswordState());
   }
 
-  selectGender(val)
-  {
+  selectGender(val) {
     gender = val;
     emit(AuthSelectGenderState());
   }
@@ -205,8 +208,7 @@ class AuthCubit extends Cubit<AuthState>
   }
 
   //bottomSheet
-  void showSelectPhotoOptions(BuildContext context)
-  {
+  void showSelectPhotoOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -215,7 +217,8 @@ class AuthCubit extends Cubit<AuthState>
           top: Radius.circular(25.0),
         ),
       ),
-      builder: (context) => SingleChildScrollView(
+      builder: (context) =>
+          SingleChildScrollView(
             child: SelectPhotoOptionsScreen(
               onTap: _pickImage,
             ),
@@ -223,78 +226,68 @@ class AuthCubit extends Cubit<AuthState>
     );
   }
 
-  toggleSpecialty(val)
-  {
-    specialty=val;
+  toggleSpecialty(val) {
+    specialty = val;
     emit(AuthSelectSpecialtyState());
   }
 
-  selectOption(value,val)
-  {
-    if(value!)
-    {
+  selectOption(value, val) {
+    if (value!) {
       selected.add(val);
-    }else{
+    } else {
       selected.remove(val);
     }
     emit(AuthSelectOptionState());
   }
 
-  selectLan(value,val)
-  {
-    if(value!)
-    {
+  selectLan(value, val) {
+    if (value!) {
       selectedLang.add(val);
-    }else{
+    } else {
       selectedLang.remove(val);
     }
     emit(AuthSelectLanState());
   }
 
-  selectFrame(value,val)
-  {
-    if(value!)
-    {
+  selectFrame(value, val) {
+    if (value!) {
       selectedFrame.add(val);
-    }else{
+    } else {
       selectedFrame.remove(val);
     }
     emit(AuthSelectFrameState());
   }
 
-  bool selectStudent=false;
-  toggleSelectStudent()
-  {
-    selectStudent =! selectStudent;
+  bool selectStudent = false;
+
+  toggleSelectStudent() {
+    selectStudent = !selectStudent;
     emit(AuthSelectState());
   }
 
-  bool selectWork=false;
-  toggleSelectWork()
-  {
-    selectWork =! selectWork;
+  bool selectWork = false;
+
+  toggleSelectWork() {
+    selectWork = !selectWork;
     emit(AuthSelectState());
   }
 
-  toggleCollege(val)
-  {
-    college=val;
+  toggleCollege(val) {
+    college = val;
     emit(AuthSelectCollegeState());
   }
 
   signUp(context) async
   {
-    bool isValidate=formKey.currentState!.validate();
-    bool isValidate1=formKey2.currentState!.validate();
+    bool isValidate = formKey.currentState!.validate();
+    bool isValidate1 = formKey2.currentState!.validate();
 
-    if(isValidate&&isValidate1 )
-    {
+    if (isValidate && isValidate1) {
       // isLoading=true;
       emit(AuthSignUpLoadingState());
-      try
-      {
-        var data=await AuthService.signUp(
-          image:imag?.path,
+      try {
+        var data = await AuthService.signUp(
+          image: imag?.path,
           firstName: firstNameController.text,
           lastName: lastNameController.text,
           email: emailController.text,
@@ -308,55 +301,50 @@ class AuthCubit extends Cubit<AuthState>
           language: selectedLang.join(','),
           frameWork: selectedFrame.join(','),
         );
-        if(data!=null)
-        {
+        if (data != null) {
           emit(AuthSignUpSuccessState());
-          await  storage.write(key:"token", value: data.token);
+          await storage.write(key: "token", value: data.token);
           Navigator.pushNamed(
-            context,
-            NamedRoutes.completeInfo
+              context,
+              NamedRoutes.completeInfo
           );
-        }else
-        {
+        } else {
           ScaffoldMessenger.of(context).showSnackBar(
-             SnackBar(
-               content:  const Center(
-                  child: Text(
-                      'their is a problem in Sign Up'
-                  ),
+            SnackBar(
+              content: const Center(
+                child: Text(
+                    'their is a problem in Sign Up'
                 ),
-                width: 300.0,
-                shape:  RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                backgroundColor: Colors.deepPurple,
-                behavior:SnackBarBehavior.floating,
               ),
+              width: 300.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              backgroundColor: Colors.deepPurple,
+              behavior: SnackBarBehavior.floating,
+            ),
           );
         }
-      }finally
-      {
+      } finally {
         // isLoading=false;
         emit(AuthSignUpDoneState());
       }
     }
   }
+
   logIn(context) async
   {
-    bool isValidate=loginFormKey.currentState!.validate();
+    bool isValidate = loginFormKey.currentState!.validate();
 
-    if(isValidate)
-    {
+    if (isValidate) {
       // isLoading=true;
       emit(AuthLoginLoadingState());
-      try
-      {
-        var data= await AuthService.logIn(
+      try {
+        var data = await AuthService.logIn(
           email: loginEmailController.text,
           password: loginPasswordController.text,
         );
-        if(data != null)
-        {
+        if (data != null) {
           emit(AuthLoginSuccessState());
           await storage.write(key: 'token', value: data.token);
           loginFormKey.currentState!.save();
@@ -364,36 +352,160 @@ class AuthCubit extends Cubit<AuthState>
             context,
             NamedRoutes.homePage,
           );
-        }else
-        {
+        } else {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content:  const Center(
+                content: const Center(
                   child: Text(
                       'their is a problem in LogIn'
                   ),
                 ),
                 width: 300.0,
-                shape:  RoundedRectangleBorder(
+                shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 backgroundColor: Colors.deepPurple,
-                behavior:SnackBarBehavior.floating,
+                behavior: SnackBarBehavior.floating,
               )
           );
         }
       }
-      finally
-      {
+      finally {
         // isLoading=false;
         emit(AuthLoginDoneState());
-
-
       }
     }
   }
 
+  forgotPassword(context) async
+  {
+    emit(AuthForgotPasswordLoadingState());
+    try {
+      var data = AuthService.forgotPassword(
+          email: forgotPasswordController.text
+      );
+      if (data != null) {
+        emit(AuthForgotPasswordSuccessState());
+        Navigator.pushNamed(
+          context,
+          NamedRoutes.emailVerify,
+          arguments: (forgotPasswordController.text)
+        );
+      } else
+      {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Center(
+                child: Text(
+                    'their is a problem in sending code'
+                ),
+              ),
+              width: 300.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              backgroundColor: Colors.deepPurple,
+              behavior: SnackBarBehavior.floating,
+            )
+        );
+      }
+    }
+    finally
+    {
+      emit(AuthForgotPasswordDoneState());
+    }
+  }
+  checkCode(context) async
+  {
+    emit(AuthCheckCodeLoadingState());
+    try {
+      var data = AuthService.checkCode(
+          code: emailVerifyController1.text+
+                emailVerifyController2.text+
+                emailVerifyController3.text+
+                emailVerifyController4.text+
+                emailVerifyController5.text+
+                emailVerifyController6.text
+      );
+      if (data != null) {
+        emit(AuthCheckCodeSuccessState());
+        Navigator.pushNamed(
+          context,
+          NamedRoutes.newPass,
+          arguments: (
+                  emailVerifyController1.text+
+                  emailVerifyController2.text+
+                  emailVerifyController3.text+
+                  emailVerifyController4.text+
+                  emailVerifyController5.text+
+                  emailVerifyController6.text
+          )
+        );
+      } else
+      {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Center(
+                child: Text(
+                    'their is a problem in Verify your email'
+                ),
+              ),
+              width: 300.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              backgroundColor: Colors.deepPurple,
+              behavior: SnackBarBehavior.floating,
+            )
+        );
+      }
+    }
+    finally
+    {
+      emit(AuthCheckCodeDoneState());
+    }
+  }
+  resetPass(context) async
+  {
+    emit(AuthResetPassLoadingState());
+    try {
+      var data = AuthService.resetPass(
+          code: emailVerifyController1.text+
+                emailVerifyController2.text+
+                emailVerifyController3.text+
+                emailVerifyController4.text+
+                emailVerifyController5.text+
+                emailVerifyController6.text,
+          pass: newPass.text
+      );
+      if (data != null) {
+        emit(AuthResetPassSuccessState());
+        Navigator.pushNamed(
+          context,
+          NamedRoutes.homePage,
+        );
+      } else
+      {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Center(
+                child: Text(
+                    'their is a problem in reset password'
+                ),
+              ),
+              width: 300.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              backgroundColor: Colors.deepPurple,
+              behavior: SnackBarBehavior.floating,
+            )
+        );
+      }
+    }
+    finally
+    {
+      emit(AuthResetPassDoneState());
+    }
+  }
 }
-
-
-

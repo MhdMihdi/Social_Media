@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class AuthService {
 
-  static String baseUrl = 'http://192.168.1.4:8000/api/';
+  static String baseUrl = 'http://192.168.1.5:8000/api/';
 
   static signUp({
     image, required firstName, required lastName,
@@ -83,22 +83,67 @@ class AuthService {
     } else {
       return null;
     }
-    // print(body);
-    // var response = await client.post(Uri.parse('$baseUrl/auth/logIn'),
-    //headers: {'Accept': 'application/json'}, body: body);
+  }
 
-    // var headers = {
-    //   'Accept': 'application/json',
-    //
-    // };
-    // var request = http.MultipartRequest('POST', Uri.parse('http://192.168.94.124:8000/api/auth/logIn'));
-    // request.fields.addAll({
-    //   'email': email,
-    //   'password': password.toString(),
-    // });
-    //
-    // request.headers.addAll(headers);
-    //
-    // http.StreamedResponse response = await request.send();
+  static forgotPassword({required email})async
+  {
+    var response= await http.post(
+      Uri.parse('${baseUrl}auth/forgotPassword'),
+      headers: {
+        //'Accept' : 'application/json',
+        'Content-type' : 'application/json',
+      },
+      body:jsonEncode(<String,dynamic>{
+        'email':email,
+      }),
+    );
+    if (response.statusCode == 200 || response.statusCode == 201)
+    {
+      debugPrint(response.body.toString());
+
+    } else {
+      debugPrint(response.statusCode.toString());
+    }
+  }
+  static checkCode({required code})async
+  {
+    var response= await http.post(
+      Uri.parse('${baseUrl}auth/checkToken'),
+      headers: {
+        //'Accept' : 'application/json',
+        'Content-type' : 'application/json',
+      },
+      body:jsonEncode(<String,dynamic>{
+        'token':code,
+      }),
+    );
+    if (response.statusCode == 200 || response.statusCode == 201)
+    {
+      debugPrint(response.body.toString());
+
+    } else {
+      debugPrint(response.statusCode.toString());
+    }
+  }
+  static resetPass({required code,required pass})async
+  {
+    var response= await http.post(
+      Uri.parse('${baseUrl}auth/resetPassword'),
+      headers: {
+        //'Accept' : 'application/json',
+        'Content-type' : 'application/json',
+      },
+      body:jsonEncode(<String,dynamic>{
+        'token':code,
+        'password':pass
+      }),
+    );
+    if (response.statusCode == 200 || response.statusCode == 201)
+    {
+      debugPrint(response.body.toString());
+
+    } else {
+      debugPrint(response.statusCode.toString());
+    }
   }
 }

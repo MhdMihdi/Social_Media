@@ -61,19 +61,17 @@ class LogInScreen extends StatelessWidget
                               padding: const EdgeInsets.all(
                                   15.0
                               ),
-                              onSave: (value){
-                                cubit.email=value!;
-                              },
+
                               validate: (value)
                               {
                                 if(value!.isEmpty)
                                 {
                                   return 'Email is required';
                                 }
-                                // if(cubit.emailRegex.hasMatch(value))
-                                // {
-                                //   return  'Please Enter A Valid Email Address';
-                                // }
+                                if(!cubit.emailRegex.hasMatch(value))
+                                {
+                                  return  'Please Enter A Valid Email Address';
+                                }
                                 return null;
                               },
                             ),
@@ -96,9 +94,6 @@ class LogInScreen extends StatelessWidget
                               padding: const EdgeInsets.all(
                                   15.0
                               ),
-                              onSave: (value){
-                                cubit.password=value!;
-                              },
                               validate: (value)
                               {
                                 if(value!.isEmpty)

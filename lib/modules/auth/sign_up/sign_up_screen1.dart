@@ -152,10 +152,10 @@ class SignUpScreen1 extends StatelessWidget {
                                 {
                                   return 'Email is required';
                                 }
-                                // if(cubit.emailRegex.hasMatch(value))
-                                // {
-                                //   return  'Please enter a valid email address';
-                                // }
+                                if(!cubit.emailRegex.hasMatch(value))
+                                {
+                                  return  'Please enter a valid email address';
+                                }
                                 return null;
                               }
                           ),

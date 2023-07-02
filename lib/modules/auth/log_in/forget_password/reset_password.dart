@@ -3,16 +3,15 @@ import 'package:dev_space/shared/components/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class EnterEmail extends StatelessWidget {
-  const EnterEmail({super.key});
+class ResetPassword extends StatelessWidget {
+  const ResetPassword({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {},
       builder: (context, state) {
-
-        var cubit =AuthCubit.get(context);
+        var cubit=AuthCubit.get(context);
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -28,8 +27,8 @@ class EnterEmail extends StatelessWidget {
           body: Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: 10.0,
-                  vertical: 10.0,
+                horizontal: 10.0,
+                vertical: 10.0,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -37,7 +36,7 @@ class EnterEmail extends StatelessWidget {
                 children:
                 [
                   const Text(
-                    'Send verification code',
+                    'Set up your new password',
                     style: TextStyle(
                         fontSize: 25.0,
                         fontWeight: FontWeight.bold
@@ -47,32 +46,64 @@ class EnterEmail extends StatelessWidget {
                     height: 15.0,
                   ),
                   const Text(
-                      'Enter your email address.',
+                    'Enter new password',
                     style: TextStyle(
-                      fontSize: 17.0,
-                      fontWeight: FontWeight.bold
+                        fontSize: 17.0,
+                        fontWeight: FontWeight.bold
                     ),
                   ),
                   const SizedBox(
                     height: 30.0,
                   ),
                   MyFormField(
-                    controller: cubit.forgotPasswordController,
-                    type: TextInputType.emailAddress,
-                    label: 'Email',
-                    prefix: Icons.email_outlined,
+                    controller:cubit.newPass,
+                    type: TextInputType.text,
+                    label: 'New Password',
+                    prefix: Icons.lock,
+                    isPassword: cubit.isPassword,
+                    suffix: cubit.isPassword?
+                    Icons.remove_red_eye_outlined
+                        :Icons.visibility_off_outlined,
                     padding: const EdgeInsets.all(
                         15.0
                     ),
 
                     validate: (value) {
                       if (value!.isEmpty) {
-                        return 'Email is required';
+                        return 'password is required';
                       }
-                      if(!cubit.emailRegex.hasMatch(value))
+                      if(value.length<8)
                       {
-                        return  'Please Enter A Valid Email Address';
+                        return 'Password Must Be 8 Character Or More';
                       }
+
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  MyFormField(
+                    controller: cubit.newPassConfirm,
+                    type: TextInputType.text,
+                    label: 'Confirm Password',
+                    prefix: Icons.lock,
+                    isPassword: cubit.isRePassword,
+                    suffix: cubit.isRePassword?
+                    Icons.remove_red_eye_outlined
+                        :Icons.visibility_off_outlined,
+                    padding: const EdgeInsets.all(
+                        15.0
+                    ),
+
+                    validate: (value) {
+                      if (value!.isEmpty) {
+                        return 'Confirm password is required';
+                      }
+                      if (cubit.newPass !=  cubit.newPassConfirm) {
+                        return 'Password not match';
+                      }
+
                       return null;
                     },
                   ),
@@ -89,9 +120,9 @@ class EnterEmail extends StatelessWidget {
                     child: MyButton(
                       onPressed: ()
                       {
-                        cubit.forgotPassword(context);
+                        //cubit.checkCode(context);
                       },
-                      title: 'Send',
+                      title: 'Reset',
                       width:500,
                       height:50,
                       color:const Color(0XFF615AAB) ,
