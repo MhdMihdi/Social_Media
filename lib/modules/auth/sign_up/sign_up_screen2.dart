@@ -3,6 +3,7 @@
 
 import 'package:dev_space/modules/auth/cubit/auth_cubit.dart';
 import 'package:dev_space/shared/components/components.dart';
+import 'package:dev_space/shared/components/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -30,7 +31,7 @@ class SignUpScreen2 extends StatelessWidget {
 
             ),
             centerTitle: true,
-            backgroundColor: const Color(0XFF615AAB),
+            backgroundColor:  Constants.color,
             shape:const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                     bottomLeft:Radius.circular(40.0) ,
@@ -631,7 +632,7 @@ class SignUpScreen2 extends StatelessWidget {
                       state is AuthSignUpLoadingState?
                       const Center(
                         child: CircularProgressIndicator(
-                          color: Color(0XFF615AAB),
+                          color: Constants.color,
                         ),
                       )
                         :Center(
@@ -647,7 +648,7 @@ class SignUpScreen2 extends StatelessWidget {
                           title: 'Sign Up',
                           width:250,
                           height:50,
-                          color:const Color(0XFF615AAB) ,
+                          color: Constants.color ,
                           radius: 20.0,
                           titleColor: Colors.white,
                           titleSize:30.0,

@@ -1,5 +1,6 @@
 import 'package:dev_space/modules/auth/cubit/auth_cubit.dart';
 import 'package:dev_space/shared/components/components.dart';
+import 'package:dev_space/shared/components/constants.dart';
 import 'package:dev_space/shared/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -113,7 +114,7 @@ class LogInScreen extends StatelessWidget
 
                             state is AuthLoginLoadingState?
                             const CircularProgressIndicator(
-                              color: Color(0XFF615AAB),
+                              color: Constants.color,
                             )
                             :MyButton(
                               onPressed: ()
@@ -124,7 +125,7 @@ class LogInScreen extends StatelessWidget
                               width: 300,
                               height: 50,
                               radius: 20.0,
-                              color: const Color(0XFF615AAB),
+                              color:  Constants.color,
                               titleColor: Colors.white,
                               titleSize: 30.0,
                             ),
@@ -142,7 +143,7 @@ class LogInScreen extends StatelessWidget
                                 child: const Text(
                                  'Forget Password ?',
                                   style: TextStyle(
-                                      color: Color(0XFF615AAB)
+                                      color: Constants.color
                                   ),
                                 ),
                             ),
@@ -172,7 +173,7 @@ class LogInScreen extends StatelessWidget
                                     child: const Text(
                                       'Sign Up Now',
                                       style: TextStyle(
-                                        color: Color(0XFF615AAB)
+                                        color: Constants.color
                                       ),
                                     ),
                                 ),

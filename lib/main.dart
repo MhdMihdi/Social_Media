@@ -1,21 +1,31 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, must_be_immutable
 
 import 'package:dev_space/modules/auth/cubit/auth_cubit.dart';
 import 'package:dev_space/shared/bloc_observer.dart';
+import 'package:dev_space/shared/network/local/cache_helper.dart';
 import 'package:dev_space/shared/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main()
+void main()async
 {
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await CacheHelper.init();
+  String? token=  await CacheHelper.getData(key: 'token');
+  debugPrint(token);
+
   Bloc.observer=MyBlocObserver();
 
-  runApp(MyApp());
+
+  runApp(MyApp(token: token));
 }
 
 class MyApp extends StatelessWidget
 {
-  const MyApp({super.key});
+  String?token;
+   MyApp({super.key,this.token});
 
   @override
   Widget build(BuildContext context)
@@ -26,9 +36,9 @@ class MyApp extends StatelessWidget
         BlocProvider(
             create:(context)=>AuthCubit(),
         ),
-        BlocProvider(
-            create:(context)=>AuthCubit(),
-        ),
+        // BlocProvider(
+        //     create:(context)=>AuthCubit(),
+        // ),
         // BlocProvider(
         //     create:(context)=>AuthCubit(),
         // ),
@@ -39,9 +49,8 @@ class MyApp extends StatelessWidget
         {
           return MaterialApp(
             routes:AppRoutes.routes,
-            initialRoute: NamedRoutes.welcome,
+            initialRoute: token==null?NamedRoutes.welcome:NamedRoutes.completeInfo,
             theme: ThemeData(
-
               useMaterial3: true,
             ),
             debugShowCheckedModeBanner: false,

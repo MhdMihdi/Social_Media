@@ -1,3 +1,4 @@
+import 'package:dev_space/shared/components/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
@@ -14,7 +15,7 @@ class DevLayout extends StatelessWidget {
         ),
       ),
       bottomNavigationBar:Container(
-      color:const Color(0XFF615AAB),
+      color: Constants.color,
        child:  Padding(
         padding: const EdgeInsets.symmetric(
             horizontal: 10.0,
@@ -23,7 +24,7 @@ class DevLayout extends StatelessWidget {
         child: GNav(
           gap: 2,
           padding:const EdgeInsets.all(10.0),
-          backgroundColor: const Color(0XFF615AAB),
+          backgroundColor: Constants.color,
           color: Colors.white,
           activeColor: Colors.white,
           tabBackgroundColor: Colors.white30,

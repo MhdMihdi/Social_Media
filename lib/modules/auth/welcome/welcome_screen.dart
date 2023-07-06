@@ -1,5 +1,6 @@
 
 import 'package:dev_space/shared/components/components.dart';
+import 'package:dev_space/shared/components/constants.dart';
 import 'package:dev_space/shared/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 
@@ -45,7 +46,7 @@ class WelcomeScreen extends StatelessWidget
               title: 'Login',
               width:250,
               height:50,
-              color: const Color(0XFF615AAB),
+              color:  Constants.color,
               radius: 20.0,
               titleColor: Colors.white,
               titleSize:30.0,
@@ -64,7 +65,7 @@ class WelcomeScreen extends StatelessWidget
               title: 'SignUp',
               width:250,
               height:50,
-              color: const Color(0XFF615AAB),
+              color:  Constants.color,
               radius: 20.0,
               titleColor: Colors.white,
               titleSize:30.0,

@@ -2,15 +2,16 @@
 
 import 'dart:io';
 import 'package:dev_space/database/Services/auth_service.dart';
+import 'package:dev_space/database/Services/user_service.dart';
+import 'package:dev_space/shared/components/constants.dart';
 import 'package:dev_space/shared/components/select_photo_options_screen.dart';
+import 'package:dev_space/shared/network/local/cache_helper.dart';
 import 'package:dev_space/shared/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 
 part 'auth_state.dart';
 
@@ -66,7 +67,7 @@ enum Network{
   NetworkTechnician,
 }
 enum College {
-  CollegeStudent,
+  UnderGraduate,
   Graduated,
   Masters,
   PhD,
@@ -111,41 +112,56 @@ class AuthCubit extends Cubit<AuthState> {
   var loginFormKey = GlobalKey<FormState>();
   var emailVerifyFormKey = GlobalKey<FormState>();
   var completeInfoFormKey = GlobalKey<FormState>();
+
   var firstNameController = TextEditingController();
   var lastNameController = TextEditingController();
-  var emailController = TextEditingController();
   var loginEmailController = TextEditingController();
-  var passwordController = TextEditingController();
   var loginPasswordController = TextEditingController();
+
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
   var rePasswordController = TextEditingController();
   var locationController = TextEditingController();
   var birthDateController = TextEditingController();
   var programmingAgeController = TextEditingController();
   var languagesController = TextEditingController();
   var frameWorkController = TextEditingController();
-  var phoneNumberController = TextEditingController();
-  var bioController = TextEditingController();
-  var companiesController = TextEditingController();
+
+  //var studySemesterController = TextEditingController();
+  var currentYearController = TextEditingController();
+  var sectionController = TextEditingController();
+  var studySequenceController = TextEditingController();
+  var companiesController=TextEditingController();
   var workYearsController = TextEditingController();
   var currentWorkController = TextEditingController();
+  var phoneNumberController = TextEditingController();
+  var bioController = TextEditingController();
+  var countryController = TextEditingController();
+
+
   var forgotPasswordController = TextEditingController();
+
   var emailVerifyController1 = TextEditingController();
   var emailVerifyController2 = TextEditingController();
   var emailVerifyController3 = TextEditingController();
   var emailVerifyController4 = TextEditingController();
   var emailVerifyController5 = TextEditingController();
   var emailVerifyController6 = TextEditingController();
+
   var newPass = TextEditingController();
   var newPassConfirm = TextEditingController();
+
   bool isPassword = true;
   bool isRePassword = true;
+
   Gender?gender;
-  File?imag;
-  final emailRegex =RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
   Specialty?specialty;
   College?college;
-  var storage = const FlutterSecureStorage();
-  bool isLoading = false;
+
+  File?imag;
+
+  final emailRegex =RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+
   List<dynamic>selected = [];
   List<dynamic>selectedLang = [];
   List<dynamic>selectedFrame = [];
@@ -303,7 +319,7 @@ class AuthCubit extends Cubit<AuthState> {
         );
         if (data != null) {
           emit(AuthSignUpSuccessState());
-          await storage.write(key: "token", value: data.token);
+          await CacheHelper.putData(key: 'token', value: data.token);
           Navigator.pushNamed(
               context,
               NamedRoutes.completeInfo
@@ -320,7 +336,7 @@ class AuthCubit extends Cubit<AuthState> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0),
               ),
-              backgroundColor: Colors.deepPurple,
+              backgroundColor: Constants.color,
               behavior: SnackBarBehavior.floating,
             ),
           );
@@ -346,8 +362,7 @@ class AuthCubit extends Cubit<AuthState> {
         );
         if (data != null) {
           emit(AuthLoginSuccessState());
-          await storage.write(key: 'token', value: data.token);
-          loginFormKey.currentState!.save();
+          await CacheHelper.putData(key: 'token', value: data.token);
           Navigator.pushNamed(
             context,
             NamedRoutes.homePage,
@@ -364,7 +379,7 @@ class AuthCubit extends Cubit<AuthState> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
                 ),
-                backgroundColor: Colors.deepPurple,
+                backgroundColor: Constants.color,
                 behavior: SnackBarBehavior.floating,
               )
           );
@@ -404,7 +419,7 @@ class AuthCubit extends Cubit<AuthState> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0),
               ),
-              backgroundColor: Colors.deepPurple,
+              backgroundColor: Constants.color,
               behavior: SnackBarBehavior.floating,
             )
         );
@@ -454,7 +469,7 @@ class AuthCubit extends Cubit<AuthState> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0),
               ),
-              backgroundColor: Colors.deepPurple,
+              backgroundColor: Constants.color,
               behavior: SnackBarBehavior.floating,
             )
         );
@@ -497,7 +512,7 @@ class AuthCubit extends Cubit<AuthState> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0),
               ),
-              backgroundColor: Colors.deepPurple,
+              backgroundColor: Constants.color,
               behavior: SnackBarBehavior.floating,
             )
         );
@@ -506,6 +521,52 @@ class AuthCubit extends Cubit<AuthState> {
     finally
     {
       emit(AuthResetPassDoneState());
+    }
+  }
+
+  completeInfo(context) async
+  {
+    bool isValidate = completeInfoFormKey.currentState!.validate();
+
+    if (isValidate) {
+      // isLoading=true;
+      emit(AuthCompleteInfoLoadingState());
+      try {
+        var data = await UserService.completeInfo(
+            study_semester: college!.name, current_year: currentYearController.text,
+            section: sectionController.text, study_sequence: studySequenceController.text,
+            companies:companiesController.text, years_as_expert: workYearsController.text,
+            work_at_company:  currentWorkController.text, phone_number: phoneNumberController.text,
+            bio: bioController.text, country: countryController.text
+        );
+        if (data != null) {
+          emit(AuthCompleteInfoSuccessState());
+          Navigator.pushNamed(
+            context,
+            NamedRoutes.homePage,
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: const Center(
+                  child: Text(
+                      'their is a problem in Complete Info'
+                  ),
+                ),
+                width: 300.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                backgroundColor: Constants.color,
+                behavior: SnackBarBehavior.floating,
+              )
+          );
+        }
+      }
+      finally {
+        // isLoading=false;
+        emit(AuthCompleteInfoDoneState());
+      }
     }
   }
 }

@@ -2,6 +2,7 @@
 
 import 'package:dev_space/modules/auth/cubit/auth_cubit.dart';
 import 'package:dev_space/shared/components/components.dart';
+import 'package:dev_space/shared/components/constants.dart';
 import 'package:dev_space/shared/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -51,7 +52,7 @@ class SignUpScreen1 extends StatelessWidget {
                                   child: cubit.imag==null?
                                    CircleAvatar(
                                     radius: 60.0,
-                                    backgroundColor: Color(0XFF615AAB),
+                                    backgroundColor: Constants.color,
                                     backgroundImage: AssetImage(
                                       'assets/images/male.png',
                                     ),
@@ -66,7 +67,7 @@ class SignUpScreen1 extends StatelessWidget {
                                   radius: 20.0,
                                   child: CircleAvatar(
                                     radius: 17.0,
-                                    backgroundColor: Color(0XFF615AAB),
+                                    backgroundColor: Constants.color,
                                     child: Icon(
                                       Icons.add,
                                       size: 25,
@@ -353,7 +354,7 @@ class SignUpScreen1 extends StatelessWidget {
                                             ),
                                           ),
                                       ),
-                                      backgroundColor: Color(0XFF615AAB),
+                                      backgroundColor: Constants.color,
                                     ),
                                   );
                                }
@@ -365,7 +366,7 @@ class SignUpScreen1 extends StatelessWidget {
                              title: 'Next',
                              width:250,
                              height:50,
-                             color:Color(0XFF615AAB) ,
+                             color:Constants.color ,
                              radius: 20.0,
                              titleColor: Colors.white,
                              titleSize:30.0,

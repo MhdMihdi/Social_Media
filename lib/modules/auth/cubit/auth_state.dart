@@ -54,3 +54,9 @@ class AuthResetPassLoadingState extends AuthState {}
 class AuthResetPassSuccessState extends AuthState {}
 
 class AuthResetPassDoneState extends AuthState {}
+
+class AuthCompleteInfoLoadingState extends AuthState {}
+
+class AuthCompleteInfoSuccessState extends AuthState {}
+
+class AuthCompleteInfoDoneState extends AuthState {}

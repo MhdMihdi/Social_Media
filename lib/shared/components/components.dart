@@ -1,6 +1,7 @@
 
 // ignore_for_file: must_be_immutable
 
+import 'package:dev_space/shared/components/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -20,7 +21,7 @@ class Header extends StatelessWidget
         Container(
           height:100.0,
           decoration: const BoxDecoration(
-            color: Color(0XFF615AAB),
+            color: Constants.color,
             borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(50.0),
                 bottomRight: Radius.circular(50.0),

@@ -1,3 +1,4 @@
+import 'package:dev_space/shared/components/constants.dart';
 import 'package:flutter/material.dart';
 
 class SelectPhoto extends StatelessWidget {
@@ -19,7 +20,7 @@ class SelectPhoto extends StatelessWidget {
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
         elevation: 10,
-        backgroundColor: Colors.grey.shade200,
+        backgroundColor: Constants.color,
         shape: const StadiumBorder(),
       ),
       child: Padding(
@@ -33,7 +34,7 @@ class SelectPhoto extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: Colors.black,
+              color: Colors.white,
             ),
             const SizedBox(
               width: 14,
@@ -42,7 +43,7 @@ class SelectPhoto extends StatelessWidget {
               textLabel,
               style: const TextStyle(
                 fontSize: 18,
-                color: Colors.black,
+                color: Colors.white,
               ),
             )
           ],

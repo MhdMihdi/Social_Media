@@ -1,10 +1,14 @@
 import 'package:dev_space/modules/auth/cubit/auth_cubit.dart';
 import 'package:dev_space/shared/components/components.dart';
+import 'package:dev_space/shared/components/constants.dart';
+import 'package:dev_space/shared/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CompleteInformation extends StatelessWidget
 {
+
   const CompleteInformation({super.key});
 
   @override
@@ -25,7 +29,7 @@ class CompleteInformation extends StatelessWidget
               ),
             ),
             centerTitle: true,
-            backgroundColor: const Color(0XFF615AAB),
+            backgroundColor:Constants.color,
             shape:const RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                 bottomLeft:Radius.circular(40.0) ,
@@ -86,7 +90,7 @@ class CompleteInformation extends StatelessWidget
                                     children:
                                     [
                                       Radio(
-                                          value: College.CollegeStudent,
+                                          value: College.UnderGraduate,
                                           groupValue: cubit.college,
                                           onChanged: (val)
                                           {
@@ -94,7 +98,7 @@ class CompleteInformation extends StatelessWidget
                                           }
                                       ),
                                       Text(
-                                        College.CollegeStudent.name,
+                                        College.UnderGraduate.name,
                                         style: const TextStyle(
                                             fontSize: 15.0
                                         ),
@@ -209,6 +213,69 @@ class CompleteInformation extends StatelessWidget
                         const SizedBox(
                           height: 15.0,
                         ),
+                        MyFormField(
+                            controller: cubit.currentYearController,
+                            label: 'Current year',
+                            prefix: Icons.school_outlined,
+                            padding: const EdgeInsets.all(
+                                15.0
+                            ),
+                            type:TextInputType.number,
+                            format:
+                            [
+                              LengthLimitingTextInputFormatter(1),
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            validate: (value)
+                            {
+                              if(value!.isEmpty)
+                              {
+                                return 'Current year is required';
+                              }
+                              return null;
+                            }
+                        ),
+                        const SizedBox(
+                          height: 15.0,
+                        ),
+                        MyFormField(
+                            controller: cubit.sectionController,
+                            label: 'which Section you study',
+                            prefix: Icons.school_outlined,
+                            padding: const EdgeInsets.all(
+                                15.0
+                            ),
+                            validate: (value)
+                            {
+                              if(value!.isEmpty)
+                              {
+                                return 'Section is required';
+                              }
+                              return null;
+                            }
+                        ),
+                        const SizedBox(
+                          height: 15.0,
+                        ),
+                        MyFormField(
+                            controller: cubit.studySequenceController,
+                            label: 'Your study sequence',
+                            prefix: Icons.school_outlined,
+                            padding: const EdgeInsets.all(
+                                15.0
+                            ),
+                            validate: (value)
+                            {
+                              if(value!.isEmpty)
+                              {
+                                return 'sequence is required';
+                              }
+                              return null;
+                            }
+                        ),
+                        const SizedBox(
+                          height: 15.0,
+                        ),
                         Container(
                           width:300,
                           height:3,
@@ -248,7 +315,7 @@ class CompleteInformation extends StatelessWidget
                                 {
                                   if(value!.isEmpty)
                                   {
-                                    return 'phone number is required';
+                                    return 'Companies is required';
                                   }
                                   return null;
                                 }
@@ -263,11 +330,16 @@ class CompleteInformation extends StatelessWidget
                                 padding: const EdgeInsets.all(
                                     15.0
                                 ),
+                                type:TextInputType.number,
+                                format:
+                                [
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
                                 validate: (value)
                                 {
                                   if(value!.isEmpty)
                                   {
-                                    return 'phone number is required';
+                                    return 'years is required';
                                   }
                                   return null;
                                 }
@@ -286,7 +358,7 @@ class CompleteInformation extends StatelessWidget
                                 {
                                   if(value!.isEmpty)
                                   {
-                                    return 'phone number is required';
+                                    return 'current company is required';
                                   }
                                   return null;
                                 }
@@ -312,6 +384,11 @@ class CompleteInformation extends StatelessWidget
                         padding: const EdgeInsets.all(
                             15.0
                         ),
+                        type:TextInputType.number,
+                        format:
+                        [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                         validate: (value)
                         {
                           if(value!.isEmpty)
@@ -344,15 +421,43 @@ class CompleteInformation extends StatelessWidget
                     const SizedBox(
                       height: 20.0,
                     ),
+                    MyFormField(
+                        controller: cubit.countryController,
+                        label: 'where ary you from',
+                        prefix: Icons.location_city_outlined,
+                        padding: const EdgeInsets.all(
+                            15.0
+                        ),
+                        validate: (value)
+                        {
+                          if(value!.isEmpty)
+                          {
+                            return 'this field is required';
+                          }
+                          return null;
+                        }
+                    ),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children:
                       [
-                        Expanded(
+                        state is AuthCompleteInfoLoadingState?
+                        const SizedBox()
+                        :Expanded(
                           child: MyButton(
-                            onPressed: () {},
+                            onPressed: ()
+                            {
+                              Navigator.pushNamed(
+                                context,
+                                NamedRoutes.homePage
+                              );
+                            },
                             title: 'Skip',
                             titleSize: 20.0,
-                            side: const Color(0XFF615AAB),
+                            side: Constants.color,
                             titleColor: Colors.white,
                             height: 50.0,
                             color:Colors.grey,
@@ -362,14 +467,21 @@ class CompleteInformation extends StatelessWidget
                         const SizedBox(
                           width: 15.0,
                         ),
-                        Expanded(
+                        state is AuthCompleteInfoLoadingState?
+                          const CircularProgressIndicator(
+                            color: Constants.color,
+                          )
+                        :Expanded(
                           child: MyButton(
-                            onPressed: (){},
+                            onPressed: ()
+                            {
+                              cubit.completeInfo(context);
+                            },
                             title: 'Done',
                             titleSize: 20.0,
                             height: 50,
                             titleColor: Colors.white,
-                            color: const Color(0XFF615AAB),
+                            color: Constants.color,
                             radius: 20.0,
                           ),
                         ),

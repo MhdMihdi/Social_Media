@@ -30,109 +30,120 @@ class ResetPassword extends StatelessWidget {
                 horizontal: 10.0,
                 vertical: 10.0,
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children:
-                [
-                  const Text(
-                    'Set up your new password',
-                    style: TextStyle(
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.bold
+              child: Form(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children:
+                  [
+                    const Text(
+                      'Set up your new password',
+                      style: TextStyle(
+                          fontSize: 25.0,
+                          fontWeight: FontWeight.bold
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 15.0,
-                  ),
-                  const Text(
-                    'Enter new password',
-                    style: TextStyle(
-                        fontSize: 17.0,
-                        fontWeight: FontWeight.bold
+                    const SizedBox(
+                      height: 15.0,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 30.0,
-                  ),
-                  MyFormField(
-                    controller:cubit.newPass,
-                    type: TextInputType.text,
-                    label: 'New Password',
-                    prefix: Icons.lock,
-                    isPassword: cubit.isPassword,
-                    suffix: cubit.isPassword?
-                    Icons.remove_red_eye_outlined
-                        :Icons.visibility_off_outlined,
-                    padding: const EdgeInsets.all(
-                        15.0
+                    const Text(
+                      'Enter new password',
+                      style: TextStyle(
+                          fontSize: 17.0,
+                          fontWeight: FontWeight.bold
+                      ),
                     ),
-
-                    validate: (value) {
-                      if (value!.isEmpty) {
-                        return 'password is required';
-                      }
-                      if(value.length<8)
+                    const SizedBox(
+                      height: 30.0,
+                    ),
+                    MyFormField(
+                      controller:cubit.newPass,
+                      type: TextInputType.text,
+                      label: 'New Password',
+                      prefix: Icons.lock,
+                      isPassword: cubit.isPassword,
+                      suffix: cubit.isPassword?
+                      Icons.remove_red_eye_outlined
+                          :Icons.visibility_off_outlined,
+                      suffixFunction: ()
                       {
-                        return 'Password Must Be 8 Character Or More';
-                      }
-
-                      return null;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
-                  MyFormField(
-                    controller: cubit.newPassConfirm,
-                    type: TextInputType.text,
-                    label: 'Confirm Password',
-                    prefix: Icons.lock,
-                    isPassword: cubit.isRePassword,
-                    suffix: cubit.isRePassword?
-                    Icons.remove_red_eye_outlined
-                        :Icons.visibility_off_outlined,
-                    padding: const EdgeInsets.all(
-                        15.0
-                    ),
-
-                    validate: (value) {
-                      if (value!.isEmpty) {
-                        return 'Confirm password is required';
-                      }
-                      if (cubit.newPass !=  cubit.newPassConfirm) {
-                        return 'Password not match';
-                      }
-
-                      return null;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 30.0,
-                  ),
-                  state is AuthForgotPasswordLoadingState?
-                  const Center(
-                      child: CircularProgressIndicator(
-                        color: Color(0XFF615AAB),
-                      )
-                  )
-                  :Center(
-                    child: MyButton(
-                      onPressed: ()
-                      {
-                        //cubit.checkCode(context);
+                        cubit.togglePassword();
                       },
-                      title: 'Reset',
-                      width:500,
-                      height:50,
-                      color:const Color(0XFF615AAB) ,
-                      radius: 20.0,
-                      titleColor: Colors.white,
-                      titleSize:30.0,
-                    ),
-                  ),
+                      padding: const EdgeInsets.all(
+                          15.0
+                      ),
 
-                ],
+                      validate: (value) {
+                        if (value!.isEmpty) {
+                          return 'password is required';
+                        }
+                        if(value.length<8)
+                        {
+                          return 'Password Must Be 8 Character Or More';
+                        }
+
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    MyFormField(
+                      controller: cubit.newPassConfirm,
+                      type: TextInputType.text,
+                      label: 'Confirm Password',
+                      prefix: Icons.lock,
+                      isPassword: cubit.isRePassword,
+                      suffix: cubit.isRePassword?
+                      Icons.remove_red_eye_outlined
+                          :Icons.visibility_off_outlined,
+                      suffixFunction: ()
+                      {
+                        cubit.toggleRePassword();
+                      },
+                      padding: const EdgeInsets.all(
+                          15.0
+                      ),
+
+                      validate: (value) {
+                        if (value!.isEmpty) {
+                          return 'Confirm password is required';
+                        }
+                        if (cubit.newPass.text !=  cubit.newPassConfirm.text) {
+                          return 'Password not match';
+                        }
+
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 30.0,
+                    ),
+                    state is AuthResetPassLoadingState?
+                    const Center(
+                        child: CircularProgressIndicator(
+                          color: Color(0XFF615AAB),
+                        )
+                    )
+                    :Center(
+                      child: MyButton(
+                        onPressed: ()
+                        {
+                          cubit.resetPass(context);
+                        },
+                        title: 'Reset',
+                        width:500,
+                        height:50,
+                        color:const Color(0XFF615AAB) ,
+                        radius: 20.0,
+                        titleColor: Colors.white,
+                        titleSize:30.0,
+                      ),
+                    ),
+
+                  ],
+                ),
               ),
             ),
           ),

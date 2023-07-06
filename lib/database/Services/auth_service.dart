@@ -1,12 +1,16 @@
 import 'dart:convert';
 import 'package:dev_space/database/models/user_model.dart';
+import 'package:dev_space/shared/components/constants.dart';
+import 'package:dev_space/shared/network/local/cache_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 
 class AuthService {
 
-  static String baseUrl = 'http://192.168.1.5:8000/api/';
+
+  static var storage=const FlutterSecureStorage();
 
   static signUp({
     image, required firstName, required lastName,
@@ -22,7 +26,7 @@ class AuthService {
     };
     var request = http.MultipartRequest(
         'POST',
-        Uri.parse('${baseUrl}auth/signUp'),
+        Uri.parse('${Constants.baseUrl}auth/signUp'),
     );
     request.fields.addAll({
       'first_name': firstName,
@@ -60,10 +64,10 @@ class AuthService {
     required String password,
   }) async
   {
-    debugPrint(email);
-    debugPrint(password);
+    //debugPrint(email);
+    //debugPrint(password);
     var response= await http.post(
-        Uri.parse('${baseUrl}auth/logIn'),
+        Uri.parse('${Constants.baseUrl}auth/logIn'),
         headers: {
           //'Accept' : 'application/json',
           'Content-type' : 'application/json',
@@ -88,7 +92,7 @@ class AuthService {
   static forgotPassword({required email})async
   {
     var response= await http.post(
-      Uri.parse('${baseUrl}auth/forgotPassword'),
+      Uri.parse('${Constants.baseUrl}auth/forgotPassword'),
       headers: {
         //'Accept' : 'application/json',
         'Content-type' : 'application/json',
@@ -108,7 +112,7 @@ class AuthService {
   static checkCode({required code})async
   {
     var response= await http.post(
-      Uri.parse('${baseUrl}auth/checkToken'),
+      Uri.parse('${Constants.baseUrl}auth/checkToken'),
       headers: {
         //'Accept' : 'application/json',
         'Content-type' : 'application/json',
@@ -128,7 +132,7 @@ class AuthService {
   static resetPass({required code,required pass})async
   {
     var response= await http.post(
-      Uri.parse('${baseUrl}auth/resetPassword'),
+      Uri.parse('${Constants.baseUrl}auth/resetPassword'),
       headers: {
         //'Accept' : 'application/json',
         'Content-type' : 'application/json',
@@ -141,6 +145,9 @@ class AuthService {
     if (response.statusCode == 200 || response.statusCode == 201)
     {
       debugPrint(response.body.toString());
+      var js=jsonDecode(response.body);
+      String token=js['token'];
+      await CacheHelper.putData(key: 'token', value: token);
 
     } else {
       debugPrint(response.statusCode.toString());
