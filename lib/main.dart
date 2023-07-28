@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, must_be_immutable
 
+import 'package:dev_space/layout/cubit/dev_cubit.dart';
 import 'package:dev_space/modules/auth/cubit/auth_cubit.dart';
 import 'package:dev_space/shared/bloc_observer.dart';
 import 'package:dev_space/shared/network/local/cache_helper.dart';
@@ -36,20 +37,20 @@ class MyApp extends StatelessWidget
         BlocProvider(
             create:(context)=>AuthCubit(),
         ),
-        // BlocProvider(
-        //     create:(context)=>AuthCubit(),
-        // ),
+        BlocProvider(
+            create:(context)=>DevCubit(),
+        ),
         // BlocProvider(
         //     create:(context)=>AuthCubit(),
         // ),
       ],
-      child: BlocConsumer<AuthCubit,AuthState>(
+      child: BlocConsumer<DevCubit,DevState>(
         listener: (context, state) {},
         builder: (context, state)
         {
           return MaterialApp(
             routes:AppRoutes.routes,
-            initialRoute: token==null?NamedRoutes.welcome:NamedRoutes.completeInfo,
+            initialRoute: token==null?NamedRoutes.welcome:NamedRoutes.homePage,
             theme: ThemeData(
               useMaterial3: true,
             ),

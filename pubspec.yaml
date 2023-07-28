@@ -45,13 +45,16 @@ dependencies:
   intl: ^0.18.1
   #local storage
   flutter_secure_storage: ^8.0.0
-  #conditiones
-  conditional_builder_null_safety: ^0.0.6
   #handle api
   http: ^0.13.6
-  #google nav bar
+  #bottom nav bar
   google_nav_bar: ^5.0.6
-
+  #story view
+  story: ^1.1.0
+  #lottie
+  lottie: ^2.4.0
+  #video player
+  youtube_player_flutter: ^8.1.2
 
 
 dev_dependencies:

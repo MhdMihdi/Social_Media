@@ -1,11 +1,8 @@
 
 // ignore_for_file: must_be_immutable
-
 import 'package:dev_space/shared/components/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-
 
 class Header extends StatelessWidget
 {
@@ -70,10 +67,10 @@ class MyFormField extends StatelessWidget
 
    MyFormField({
     super.key,
-    required this.controller,
+     this.controller,
     required this.label,
-    required this.prefix,
-    required this.validate,
+    this.prefix,
+    this.validate,
     this.labelColor,
     this.prefixColor,
     this.type,
@@ -116,6 +113,7 @@ class MyFormField extends StatelessWidget
 
       labelStyle: TextStyle(
         color: labelColor,
+
       ),
         prefixIcon: Icon(
         prefix,
@@ -131,8 +129,9 @@ class MyFormField extends StatelessWidget
           : null,
       suffixIconColor: suffixColor,
       contentPadding: padding,
+
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(radius),
+          borderRadius: BorderRadius.circular(radius)
       ),
     ),
    );
@@ -275,6 +274,581 @@ class MyButton extends StatelessWidget {
     );
   }
 }
+
+class Post extends StatefulWidget {
+  const Post({super.key});
+
+  @override
+  State<Post> createState() => _PostState();
+}
+List<Widget>media=
+[
+  Image.asset(
+    'assets/images/2.jpg',
+    fit: BoxFit.fill,
+    filterQuality: FilterQuality.medium,
+  ),
+  Image.asset(
+    'assets/images/2.jpg',
+    fit: BoxFit.fill,
+    filterQuality: FilterQuality.medium,
+  ),
+  Image.asset(
+    'assets/images/2.jpg',
+    fit: BoxFit.fill,
+    filterQuality: FilterQuality.medium,
+  ),
+];
+
+int currentPage=0;
+
+class _PostState extends State<Post> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 350,
+      height:310,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20.0),
+        color: Constants.color,
+      ),
+      child:Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:
+        [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const CircleAvatar(
+                  //backgroundImage: ,
+                  radius: 20,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                const Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Mohammad Mihdi',
+                      style: TextStyle(
+                          color: Colors.white
+                      ),
+                    ),
+                    Text(
+                      '14 minutes ago',
+                      style: TextStyle(
+                          color: Colors.white
+                      ),
+                    ),
+
+                  ],
+                ),
+                const SizedBox(
+                  width: 140.0,
+                ),
+                InkWell(
+                  onTap: (){
+
+                  },
+                  splashColor: Colors.white,
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical:  8.0
+                    ),
+                    child: Row(
+                      //crossAxisAlignment: CrossAxisAlignment.start,
+                      children:
+                      [
+                        CircleAvatar(
+                          radius: 4,
+                        ),
+                        SizedBox(
+                          width:1 ,
+                        ),
+                        CircleAvatar(
+                          radius: 4,
+                        ),
+                        SizedBox(
+                          width:1 ,
+                        ),
+                        CircleAvatar(
+                          radius: 4,
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          const Expanded(
+            child:  Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal:   8.0
+              ),
+              child: Text(
+                'On Fire',
+                style: TextStyle(
+                    color: Colors.white
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 350,
+            height: 150,
+            child: Stack(
+              children:[
+                PageView(
+                    onPageChanged: (index)
+                    {
+                      setState(() {
+                        currentPage = index;
+                      });
+
+                    },
+                    children:media
+                ),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: 30,
+                      height: 20,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        color: Colors.black54,
+                      ),
+                      child: Text(
+                        '${currentPage+1}/${media.length}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 8.0,
+            ),
+            child: Row(
+              children: [
+                Text(
+                  '55 Likes',
+                  style: TextStyle(
+                      color: Colors.white
+                  ),
+                ),
+                SizedBox(
+                  width: 15,
+                ),
+                Text(
+                  '55 DisLikes',
+                  style: TextStyle(
+                      color: Colors.white
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 5.0,
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: 8.0
+            ),
+            child: Divider(
+              height: 1,
+              color: Colors.white,
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+
+            children: [
+              MyButton(
+                onPressed: (){},
+                title: 'Like',
+                titleColor: Colors.white,
+                side: Constants.color,
+                width: 60,
+              ),
+              Container(
+                width:2 ,
+                height: 10,
+                color: Colors.white,
+              ),
+              MyButton(
+                onPressed: (){},
+                title: 'DisLike',
+                titleColor: Colors.white,
+                side: Constants.color,
+                width: 80,
+              ),
+              MyButton(
+                onPressed: (){},
+                title: 'Comment',
+                titleColor: Colors.white,
+                side: Constants.color,
+                width: 95,
+              ),
+              MyButton(
+                onPressed: (){},
+                title: 'Share',
+                titleColor: Colors.white,
+                side: Constants.color,
+                width: 95,
+              ),
+
+            ],
+          ),
+
+        ],
+      ),
+    );
+  }
+}
+
+class SharedPost extends StatefulWidget {
+  const SharedPost({super.key});
+
+  @override
+  State<SharedPost> createState() => _SharedPostState();
+}
+
+class _SharedPostState extends State<SharedPost> {
+
+  List<Widget>media=
+  [
+    Image.asset(
+      'assets/images/2.jpg',
+      fit: BoxFit.fill,
+      filterQuality: FilterQuality.medium,
+    ),
+    Image.asset(
+      'assets/images/2.jpg',
+      fit: BoxFit.fill,
+      filterQuality: FilterQuality.medium,
+    ),
+    Image.asset(
+      'assets/images/2.jpg',
+      fit: BoxFit.fill,
+      filterQuality: FilterQuality.medium,
+    ),
+  ];
+  int currentPage=0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: 350,
+        height:390,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.0),
+          color: Constants.color,
+        ),
+        child:Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children:
+            [
+              Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children:
+                      [
+                        const CircleAvatar(
+                          //backgroundImage: ,
+                          radius: 20,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        const Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children:
+                          [
+                            Text(
+                              'dasdkasl is shared a post',
+                              style: TextStyle(
+                                color: Colors.white,
+
+                              ),
+                            ),
+                            Text(
+                              '14 minutes ago',
+                              style: TextStyle(
+                                  color: Colors.white
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15.0,
+                            ),
+                            Text(
+                              'Content',
+                              style: TextStyle(
+                                color: Colors.white,
+
+                              ),
+                            ),
+
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 140.0,
+                        ),
+                        InkWell(
+                            onTap: (){},
+                            splashColor: Colors.white,
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical:  8.0
+                              ),
+                              child: Row(
+                                //crossAxisAlignment: CrossAxisAlignment.start,
+                                children:
+                                [
+                                  CircleAvatar(
+                                    radius: 4,
+                                  ),
+                                  SizedBox(
+                                    width:1 ,
+                                  ),
+                                  CircleAvatar(
+                                    radius: 4,
+                                  ),
+                                  SizedBox(
+                                    width:1 ,
+                                  ),
+                                  CircleAvatar(
+                                    radius: 4,
+                                  ),
+                                ],
+                              ),
+                            )
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 8.0
+                          ),
+                          child: Divider(
+                            height: 1,
+                            color: Colors.white,
+                          ),
+                        ),
+                        InkWell(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CircleAvatar(
+                                      //backgroundImage: ,
+                                      radius: 20,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Mohammad Mihdi',
+                                          style: TextStyle(
+                                              color: Colors.white
+                                          ),
+                                        ),
+                                        Text(
+                                          '14 minutes ago',
+                                          style: TextStyle(
+                                              color: Colors.white
+                                          ),
+                                        ),
+
+                                      ],
+                                    ),
+
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const Flexible(
+                                child:  Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal:   8.0
+                                  ),
+                                  child: Text(
+                                    'On Fire',
+                                    style: TextStyle(
+                                        color: Colors.white
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 350,
+                                height: 150,
+                                child: Stack(
+                                  children:[
+                                    PageView(
+
+                                        onPageChanged: (index)
+                                        {
+                                          setState(() {
+                                            currentPage = index;
+                                          });
+                                        },
+                                        children:media
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      right: 0,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          width: 30,
+                                          height: 20,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(20.0),
+                                            color: Colors.black54,
+                                          ),
+                                          child: Text(
+                                            '${currentPage+1}/${media.length}',
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 8.0,
+                              vertical: 8.0
+                          ),
+                          child: Divider(
+                            height: 1,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 8.0,
+                          ),
+                          child: Row(
+                            //mainAxisAlignment: MainAxisAlignment.start,
+                            children:
+                            [
+                              Text(
+                                '55 Likes',
+                                style: TextStyle(
+                                    color: Colors.white
+                                ),
+                              ),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              Text(
+                                '55 DisLikes',
+                                style: TextStyle(
+                                    color: Colors.white
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5.0,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            MyButton(
+                              onPressed: (){},
+                              title: 'Like',
+                              titleColor: Colors.white,
+                              side: Constants.color,
+                              width: 60,
+                            ),
+                            Container(
+                              width:2 ,
+                              height: 10,
+                              color: Colors.white,
+                            ),
+                            MyButton(
+                              onPressed: (){},
+                              title: 'DisLike',
+                              titleColor: Colors.white,
+                              side: Constants.color,
+                              width: 80,
+                            ),
+                            MyButton(
+                              onPressed: (){},
+                              title: 'Comment',
+                              titleColor: Colors.white,
+                              side: Constants.color,
+                              width: 95,
+                            ),
+                            MyButton(
+                              onPressed: (){},
+                              title: 'Share',
+                              titleColor: Colors.white,
+                              side: Constants.color,
+                              width: 95,
+                            ),
+                          ],
+                        ),
+                      ]
+                  )
+              )
+            ]
+        )
+    );
+  }
+}
+
+
+
+
 
 
 

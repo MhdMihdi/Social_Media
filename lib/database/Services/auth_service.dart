@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:dev_space/database/models/user_model.dart';
+import 'package:dev_space/database/models/auth_models/auth_model.dart';
 import 'package:dev_space/shared/components/constants.dart';
 import 'package:dev_space/shared/network/local/cache_helper.dart';
 import 'package:flutter/material.dart';

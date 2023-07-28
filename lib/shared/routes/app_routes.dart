@@ -7,6 +7,13 @@ import 'package:dev_space/modules/auth/log_in/forget_password/email_verifiction.
 import 'package:dev_space/modules/auth/sign_up/sign_up_screen1.dart';
 import 'package:dev_space/modules/auth/sign_up/sign_up_screen2.dart';
 import 'package:dev_space/modules/auth/welcome/welcome_screen.dart';
+import 'package:dev_space/modules/communities_screen/communities_sceen.dart';
+import 'package:dev_space/modules/friends_request_screen/friends_request_screen.dart';
+import 'package:dev_space/modules/home_screen/home_screen.dart';
+import 'package:dev_space/modules/home_screen/sotry_view_screen.dart';
+import 'package:dev_space/modules/home_screen/story_add_screen.dart';
+import 'package:dev_space/modules/notifications_screen/notifications_screen.dart';
+import 'package:dev_space/modules/profile_screen/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class NamedRoutes
@@ -20,6 +27,13 @@ class NamedRoutes
    static const completeInfo= 'completeInfo';
    static const homePage= 'homePage';
    static const newPass= 'resetPassword';
+   static const homeScreen= 'homeScreen';
+   static const friendRequestScreen= 'friendRequestScreen';
+   static const communitiesScreen= 'communitiesScreen';
+   static const profileScreen= 'profileScreen';
+   static const notificationScreen= 'notificationScreen';
+   static const storyViewScreen= 'storyViewScreen';
+   static const storyAddScreen= 'storyAddScreen';
 
 }
 
@@ -34,6 +48,14 @@ class AppRoutes
   static const completeInfo=CompleteInformation();
   static const homePage=DevLayout();
   static const newPass=ResetPassword();
+  static const homeScreen= HomeScreen();
+  static const friendRequestScreen= FriendRequestScreen();
+  static const communitiesScreen= CommunitiesScreen();
+  static const profileScreen= ProfileScreen();
+  static const notificationScreen= NotificationsScreen();
+  static const storyViewScreen= StoryViewScreen();
+  static const storyAddScreen= StoryAddScreen();
+
 
  
   static Map <String,Widget Function(BuildContext context)>routes=
@@ -47,6 +69,13 @@ class AppRoutes
      NamedRoutes.completeInfo:(context)=>AppRoutes.completeInfo,
      NamedRoutes.homePage:(context)=>AppRoutes.homePage,
      NamedRoutes.newPass:(context)=>AppRoutes.newPass,
+     NamedRoutes.homeScreen:(context)=>AppRoutes.homeScreen,
+     NamedRoutes.friendRequestScreen:(context)=>AppRoutes.friendRequestScreen,
+     NamedRoutes.communitiesScreen:(context)=>AppRoutes.communitiesScreen,
+     NamedRoutes.profileScreen:(context)=>AppRoutes.profileScreen,
+     NamedRoutes.notificationScreen:(context)=>AppRoutes.notificationScreen,
+     NamedRoutes.storyViewScreen:(context)=>AppRoutes.storyViewScreen,
+     NamedRoutes.storyAddScreen:(context)=>AppRoutes.storyAddScreen,
 
 
   };
