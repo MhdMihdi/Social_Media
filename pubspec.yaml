@@ -54,7 +54,7 @@ dependencies:
   #lottie
   lottie: ^2.4.0
   #video player
-  youtube_player_flutter: ^8.1.2
+  #youtube_player_flutter: ^8.1.2
 
 
 dev_dependencies:

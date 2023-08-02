@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:dev_space/database/Services/user_service.dart';
+import 'package:dev_space/database/models/home_models/home_model.dart';
 import 'package:dev_space/shared/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,6 +30,22 @@ class DevCubit extends Cubit<DevState>
   void toggleIndex(index){
     currentIndex=index;
     emit(DevToggleBottomNavBarState());
+  }
+
+  HomeModel?homeModel;
+
+  void getHomeData(){
+    emit(DevHomePostsLoadingState());
+    UserService.getHomePagePosts().then((value)
+    {
+      homeModel=HomeModel.fromJson(jsonDecode(value.body));
+      debugPrint(homeModel?.message);
+      debugPrint(homeModel!.data.posts[0][0]);
+      emit(DevHomePostsSuccessState());
+    }).catchError((error){
+      debugPrint(error.toString());
+      emit(DevHomePostsErrorState());
+    });
   }
 
 }

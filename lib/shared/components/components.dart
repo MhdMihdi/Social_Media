@@ -110,10 +110,8 @@ class MyFormField extends StatelessWidget
       maxLines: maxLine,
       decoration: InputDecoration(
       labelText: label,
-
       labelStyle: TextStyle(
         color: labelColor,
-
       ),
         prefixIcon: Icon(
         prefix,

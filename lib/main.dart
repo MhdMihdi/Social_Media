@@ -14,7 +14,7 @@ void main()async
   WidgetsFlutterBinding.ensureInitialized();
 
   await CacheHelper.init();
-  String? token=  await CacheHelper.getData(key: 'token');
+  String? token= '1|FzmLnuWIJjKm1N4zeu8cv6oQlvanM00QChRHrX8Y'; //await CacheHelper.getData(key: 'token');
   debugPrint(token);
 
   Bloc.observer=MyBlocObserver();
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget
             create:(context)=>AuthCubit(),
         ),
         BlocProvider(
-            create:(context)=>DevCubit(),
+            create:(context)=>DevCubit()..getHomeData(),
         ),
         // BlocProvider(
         //     create:(context)=>AuthCubit(),

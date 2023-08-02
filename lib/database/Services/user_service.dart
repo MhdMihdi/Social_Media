@@ -6,10 +6,10 @@ import 'package:dev_space/shared/network/local/cache_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+
 class UserService{
 
   static completeInfo({
-      //required  student,
       required  study_semester,
       required  current_year,
       required  section,
@@ -56,7 +56,22 @@ class UserService{
       }
     }
 
-
+  static Future<http.Response> getHomePagePosts()async
+  {
+       //String?token =await CacheHelper.getData(key: 'token');
+    return await http.get(
+       Uri.parse('${Constants.baseUrl}posts/gethomeposts'),
+       headers:
+       {
+         'Accept' : 'application/json',
+         'Authorization': 'Bearer 1|FzmLnuWIJjKm1N4zeu8cv6oQlvanM00QChRHrX8Y'
+       },
+    );
   }
+
+
+
+
+}
 
 
