@@ -15,3 +15,16 @@ class PostsErrorState extends PostsState {
   PostsErrorState({required this.error});
   String error;
 }
+
+
+class LikePostLoadingState extends PostsState {}
+
+class LikePostDoneState extends PostsState {
+  LikePostDoneState({required this.liked});
+  bool liked;
+}
+
+class LikePostErrorState extends PostsState {
+  LikePostErrorState({required this.error});
+  String error;
+}

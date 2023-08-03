@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
       create: (context) => PostsCubit()..getPosts(context),
       child: BlocConsumer<PostsCubit, PostsState>(
         listener: (context, state) {
-          if(state is PostsErrorState){
+          if (state is PostsErrorState) {
             showScaffoldSnackBar(title: state.error, context: context);
           }
         },
@@ -55,8 +55,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               body: RefreshIndicator(
                 color: Constants.color,
-                onRefresh: ()async{
-                 context.read<PostsCubit>().getPosts(context);
+                onRefresh: () async {
+                  await context.read<PostsCubit>().getPosts(context);
                 },
                 child: ListView(children: [
                   Padding(
@@ -148,9 +148,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemCount: state.posts.data.posts.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Post(
-                            description:PostModel.fromJson(
-                                state.posts.data.posts[index][4])
-                                .content ,
+                            isLikedOrDisliked:   state.posts.data.posts[index][6] is bool?state.posts.data.posts[index][6]:null,
+                            id: PostModel.fromJson(
+                                    state.posts.data.posts[index][4])
+                                .id,
+                            description: PostModel.fromJson(
+                                    state.posts.data.posts[index][4])
+                                .content,
                             name: state.posts.data.posts[index][0],
                             timeago: state.posts.data.posts[index][3],
                             likesCount: PostModel.fromJson(
@@ -167,23 +171,24 @@ class _HomeScreenState extends State<HomeScreen> {
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: 5,
                         itemBuilder: (BuildContext context, int index) {
-                          return Shimmer(
-                            color: Colors.deepPurple.shade200.withOpacity(.3),
-                            duration: const Duration(milliseconds: 1000),
-                            child: Container(
-                              margin: EdgeInsets.symmetric(vertical: getHeight * .03),
-                              padding: const EdgeInsets.all(4.0),
-                              width: getWidth * .95,
-                              height: getHeight * .45,
-                              decoration: BoxDecoration(
-                                // color: Colors.grey.shade300,
-                                 color: Colors.deepPurple.shade100.withOpacity(.6),
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
+                          return Container(
+                            margin:
+                                EdgeInsets.symmetric(vertical: getHeight * .03),
+                            padding: const EdgeInsets.all(4.0),
+                            width: getWidth * .95,
+                            height: getHeight * .45,
+                            decoration: BoxDecoration(
+                              // color: Colors.grey.shade300,
+                              color: Colors.deepPurple.shade100.withOpacity(.6),
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            child: Shimmer(
+                              color: Colors.deepPurple.shade200.withOpacity(.3),
+                              duration: const Duration(milliseconds: 1000),
+                              child: Container(),
                             ),
                           );
                         }),
-
                 ]),
               ));
         },

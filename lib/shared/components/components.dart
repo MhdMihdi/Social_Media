@@ -1,7 +1,9 @@
 // ignore_for_file: must_be_immutable
+import 'package:dev_space/modules/home_screen/posts%20cubit/posts_cubit.dart';
 import 'package:dev_space/shared/components/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Header extends StatelessWidget {
   const Header({super.key});
@@ -271,16 +273,17 @@ class Post extends StatefulWidget {
       this.timeago = '14 minutes ago',
       this.likesCount = 0,
       this.dislikesCount = 0,
-      this.isLiked = false,
-      this.isDisliked = false,
+      this.id = 0,
+      this.isLikedOrDisliked,
       this.description = 'on Fire'});
   String name;
   String timeago;
   String description;
   int likesCount;
   int dislikesCount;
-  bool isLiked;
-  bool isDisliked;
+  bool? isLikedOrDisliked;
+
+  int id;
   @override
   State<Post> createState() => _PostState();
 }
@@ -311,210 +314,244 @@ class _PostState extends State<Post> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
-    return Padding(
-      padding: const EdgeInsets.all(4.0),
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: height * .03),
-        width: width * .95,
-        height: height * .45,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.0),
-          color: Constants.color,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const CircleAvatar(
-                    //backgroundImage: ,
-                    radius: 20,
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.name,
-                        style: const TextStyle(color: Colors.white),
+    return BlocProvider(
+      create: (context) => PostsCubit(),
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Container(
+          margin: EdgeInsets.symmetric(vertical: height * .03),
+          width: width * .95,
+          height: height * .45,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20.0),
+            color: Constants.color,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const CircleAvatar(
+                      //backgroundImage: ,
+                      radius: 20,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.name,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        Text(
+                          widget.timeago,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      width: 140.0,
+                    ),
+                    InkWell(
+                      onTap: () {},
+                      splashColor: Colors.white,
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8.0),
+                        child: Row(
+                          //crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CircleAvatar(
+                              radius: 4,
+                            ),
+                            SizedBox(
+                              width: 1,
+                            ),
+                            CircleAvatar(
+                              radius: 4,
+                            ),
+                            SizedBox(
+                              width: 1,
+                            ),
+                            CircleAvatar(
+                              radius: 4,
+                            ),
+                          ],
+                        ),
                       ),
-                      Text(
-                        widget.timeago,
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    width: 140.0,
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    splashColor: Colors.white,
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8.0),
-                      child: Row(
-                        //crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CircleAvatar(
-                            radius: 4,
+                    )
+                  ],
+                ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
+                child: Text(
+                  widget.description,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
+              Container(
+                width: width,
+                height: height * .25,
+                child: Stack(
+                  children: [
+                    PageView(
+                        onPageChanged: (index) {
+                          setState(() {
+                            currentPage = index;
+                          });
+                        },
+                        children: media),
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: 30,
+                          height: 20,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.0),
+                            color: Colors.black54,
                           ),
-                          SizedBox(
-                            width: 1,
+                          child: Text(
+                            '${currentPage + 1}/${media.length}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          CircleAvatar(
-                            radius: 4,
-                          ),
-                          SizedBox(
-                            width: 1,
-                          ),
-                          CircleAvatar(
-                            radius: 4,
-                          ),
-                        ],
+                        ),
                       ),
                     ),
-                  )
-                ],
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
-              child: Text(
-                widget.description,overflow: TextOverflow.ellipsis,
-                style: const TextStyle(color: Colors.white),
+              // const Padding(
+              //   padding: EdgeInsets.symmetric(
+              //     horizontal: 8.0,
+              //   ),
+              //   child:
+              Expanded(
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      '${widget.likesCount} Likes',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    const SizedBox(
+                      width: 15,
+                    ),
+                    Text(
+                      '${widget.dislikesCount} DisLikes',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Container(
-              width: width,
-              height: height * .25,
-              child: Stack(
-                children: [
-                  PageView(
-                      onPageChanged: (index) {
+              // ),
+              // const SizedBox(
+              //   height: 5.0,
+              // ),
+              // const Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: 8.0),
+              //   child:
+              const Divider(
+                height: 1,
+                color: Colors.white,
+              ),
+              // ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    MyButton(
+                      onPressed: () async {
+                        await PostsCubit().likePosts(
+                            context: context, id: widget.id.toString());
                         setState(() {
-                          currentPage = index;
+                          widget.isLikedOrDisliked == null ||
+                                  widget.isLikedOrDisliked == false
+                              ? {
+                                  if (widget.isLikedOrDisliked == false)
+                                    {widget.dislikesCount--},
+                                  widget.isLikedOrDisliked = true,
+                                  widget.likesCount++
+                                }
+                              : {
+                                  widget.isLikedOrDisliked = null,
+                                  widget.likesCount--
+                                };
                         });
                       },
-                      children: media),
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: 30,
-                        height: 20,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20.0),
-                          color: Colors.black54,
-                        ),
-                        child: Text(
-                          '${currentPage + 1}/${media.length}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+                      title: 'Like',
+                      icon: widget.isLikedOrDisliked == true
+                          ? Icons.thumb_up_off_alt_rounded
+                          : Icons.thumb_up_alt_outlined,
+                      titleColor: Colors.white,
+                      side: Constants.color,
+                      width: 60,
                     ),
-                  ),
-                ],
+                    Container(
+                      width: 2,
+                      height: 10,
+                      color: Colors.white,
+                    ),
+                    MyButton(
+                      onPressed: () async {
+                        await PostsCubit().dislikePosts(
+                            context: context, id: widget.id.toString());
+                        setState(() {
+                          if (widget.isLikedOrDisliked == null ||
+                              widget.isLikedOrDisliked!) {
+                            if (widget.isLikedOrDisliked!) {
+                              widget.likesCount--;
+                            }
+                            widget.isLikedOrDisliked = false;
+                            widget.dislikesCount++;
+                          } else {
+                            widget.isLikedOrDisliked = null;
+                            widget.dislikesCount--;
+                          }
+                        });
+                      },
+                      title: 'DisLike',
+                      icon: widget.isLikedOrDisliked == false
+                          ? Icons.thumb_down
+                          : Icons.thumb_down_alt_outlined,
+                      titleColor: Colors.white,
+                      side: Constants.color,
+                      width: 80,
+                    ),
+                    MyButton(
+                      onPressed: () {},
+                      title: 'Comment',
+                      titleColor: Colors.white,
+                      side: Constants.color,
+                      width: 95,
+                    ),
+                    MyButton(
+                      onPressed: () {},
+                      title: 'Share',
+                      titleColor: Colors.white,
+                      side: Constants.color,
+                      width: 95,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            // const Padding(
-            //   padding: EdgeInsets.symmetric(
-            //     horizontal: 8.0,
-            //   ),
-            //   child:
-             Expanded(
-              child: Row(
-                children: [
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Text(
-                    '${widget.likesCount} Likes',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  Text(
-                    '${widget.dislikesCount} DisLikes',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-            // ),
-            // const SizedBox(
-            //   height: 5.0,
-            // ),
-            // const Padding(
-            //   padding: EdgeInsets.symmetric(horizontal: 8.0),
-            //   child:
-            const Divider(
-              height: 1,
-              color: Colors.white,
-            ),
-            // ),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  MyButton(
-                    onPressed: () {
-                      setState(() {
-                        widget.isLiked=!widget.isLiked;
-                      });
-                    },
-                    title: 'Like',
-                    icon:widget.isLiked? Icons.thumb_up_off_alt_rounded:Icons.thumb_up_alt_outlined,
-                    titleColor: Colors.white,
-                    side: Constants.color,
-                    width: 60,
-                  ),
-                  Container(
-                    width: 2,
-                    height: 10,
-                    color: Colors.white,
-                  ),
-                  MyButton(
-                    onPressed: () {
-                      setState(() {
-                        widget.isDisliked=!widget.isDisliked;
-                      });
-                    },
-                    title: 'DisLike',
-                    icon:widget.isDisliked? Icons.thumb_down:Icons.thumb_down_outlined,
-                    titleColor: Colors.white,
-                    side: Constants.color,
-                    width: 80,
-                  ),
-                  MyButton(
-                    onPressed: () {},
-                    title: 'Comment',
-                    titleColor: Colors.white,
-                    side: Constants.color,
-                    width: 95,
-                  ),
-                  MyButton(
-                    onPressed: () {},
-                    title: 'Share',
-                    titleColor: Colors.white,
-                    side: Constants.color,
-                    width: 95,
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -802,31 +839,30 @@ class _SharedPostState extends State<SharedPost> {
   }
 }
 
- void showScaffoldSnackBar({
-required String title,
-required BuildContext context,
-Color color = Colors.red,
+void showScaffoldSnackBar({
+  required String title,
+  required BuildContext context,
+  Color color = Colors.red,
 }) {
-double getWidth = MediaQuery.of(context).size.width;
-double getHeight = MediaQuery.of(context).size.height;
-ScaffoldMessenger.of(context)
-    .showSnackBar(SnackBar(
-behavior: SnackBarBehavior.floating,
-shape:  RoundedRectangleBorder(
-borderRadius: BorderRadius.circular(10),
-),
-content: Text(
-title,
-style: const TextStyle(fontSize: 15),
-),
-margin: const EdgeInsets.symmetric(
-horizontal: 18,
-vertical: 18,
-),
-backgroundColor: color,
-duration: const Duration(milliseconds: 1500),
-))
-    .closed
-    .then(
-(value) => ScaffoldMessenger.of(context).clearSnackBars());
+  double getWidth = MediaQuery.of(context).size.width;
+  double getHeight = MediaQuery.of(context).size.height;
+  ScaffoldMessenger.of(context)
+      .showSnackBar(SnackBar(
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        content: Text(
+          title,
+          style: const TextStyle(fontSize: 15),
+        ),
+        margin: const EdgeInsets.symmetric(
+          horizontal: 18,
+          vertical: 18,
+        ),
+        backgroundColor: color,
+        duration: const Duration(milliseconds: 1500),
+      ))
+      .closed
+      .then((value) => ScaffoldMessenger.of(context).clearSnackBars());
 }

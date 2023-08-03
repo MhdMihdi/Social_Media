@@ -88,6 +88,68 @@ class UserService{
 
 
 
+  static Future likePost({required String id})async
+  {
+    try{
+      String token =await CacheHelper.getData(key: 'token')??'';
+
+      // print(token!);
+      var headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer 1|a1gnqWkHrpDfVt4xyx5pERN08zIcf82KpjagygW5'
+      };
+      var request = http.Request('GET', Uri.parse('${Constants.baseUrl}posts/like_or_cancellike_on_post/${id}'));
+      request.headers.addAll(headers);
+      http.StreamedResponse response = await request.send();
+      String streamRes = await response.stream.bytesToString();
+      print(response.statusCode);
+      print(streamRes);
+      if(response.statusCode==200) {
+        if(streamRes =='cancel_like') {
+          return false;
+        }
+        return true;
+      }
+      else
+      {
+        return response.toString();
+      }}catch (e){
+      return e.toString();
+    }
+  }
+
+
+
+  static Future dislikePost({required String id})async
+  {
+    try{
+      String token =await CacheHelper.getData(key: 'token')??'';
+
+      // print(token!);
+      var headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer 1|a1gnqWkHrpDfVt4xyx5pERN08zIcf82KpjagygW5'
+      };
+      var request = http.Request('GET', Uri.parse('${Constants.baseUrl}posts/dislike_or_canceldislike_on_post/${id}'));
+      request.headers.addAll(headers);
+      http.StreamedResponse response = await request.send();
+      String streamRes = await response.stream.bytesToString();
+      print(response.statusCode);
+      print(streamRes);
+      if(response.statusCode==200) {
+        if(streamRes =='cancel_dislike') {
+          return false;
+        }
+        return true;
+      }
+      else
+      {
+        return response.toString();
+      }}catch (e){
+      return e.toString();
+    }
+  }
+
 }
 
 

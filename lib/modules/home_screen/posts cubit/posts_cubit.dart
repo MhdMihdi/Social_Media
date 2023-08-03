@@ -19,4 +19,26 @@ class PostsCubit extends Cubit<PostsState> {
       emit(PostsErrorState(error:response));
     }
   }
+
+
+  likePosts({context,required String id})async{
+    emit(LikePostLoadingState());
+    final response =await UserService.likePost(id: id);
+    if(response is bool){
+      emit(LikePostDoneState(liked: response));
+    }
+    else{
+      emit(PostsErrorState(error:response));
+    }
+  }
+  dislikePosts({context,required String id})async{
+    emit(LikePostLoadingState());
+    final response =await UserService.dislikePost(id: id);
+    if(response is bool){
+      emit(LikePostDoneState(liked: response));
+    }
+    else{
+      emit(PostsErrorState(error:response));
+    }
+  }
 }
