@@ -54,6 +54,8 @@ dependencies:
   #lottie
   lottie: ^2.4.0
   #video player
+  shimmer: ^2.0.0
+  shimmer_animation: ^2.1.0+1
   #youtube_player_flutter: ^8.1.2
 
 

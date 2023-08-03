@@ -38,11 +38,8 @@ class MyApp extends StatelessWidget
             create:(context)=>AuthCubit(),
         ),
         BlocProvider(
-            create:(context)=>DevCubit()..getHomeData(),
+            create:(context)=>DevCubit(),
         ),
-        // BlocProvider(
-        //     create:(context)=>AuthCubit(),
-        // ),
       ],
       child: BlocConsumer<DevCubit,DevState>(
         listener: (context, state) {},

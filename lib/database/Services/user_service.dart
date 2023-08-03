@@ -6,6 +6,8 @@ import 'package:dev_space/shared/network/local/cache_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../models/home_models/home_model.dart';
+
 
 class UserService{
 
@@ -23,7 +25,7 @@ class UserService{
     }) async
     {
       String?token =await CacheHelper.getData(key: 'token');
-      debugPrint(token);
+      // debugPrint(token);
       var response= await http.post(
         Uri.parse('${Constants.baseUrl}users/completeInfo'),
         headers: {
@@ -56,17 +58,31 @@ class UserService{
       }
     }
 
-  static Future<http.Response> getHomePagePosts()async
+  static Future getHomePagePosts()async
   {
-       //String?token =await CacheHelper.getData(key: 'token');
-    return await http.get(
-       Uri.parse('${Constants.baseUrl}posts/gethomeposts'),
-       headers:
-       {
-         'Accept' : 'application/json',
-         'Authorization': 'Bearer 1|FzmLnuWIJjKm1N4zeu8cv6oQlvanM00QChRHrX8Y'
-       },
-    );
+    try{
+       String token =await CacheHelper.getData(key: 'token')??'';
+
+       // print(token!);
+    var headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer 1|a1gnqWkHrpDfVt4xyx5pERN08zIcf82KpjagygW5'
+    };
+    var request = http.Request('GET', Uri.parse('${Constants.baseUrl}posts/gethomeposts'));
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+       String streamRes = await response.stream.bytesToString();
+       print(response.statusCode);
+       print(streamRes);
+       if(response.statusCode==200) {
+         return homeModelFromJson(streamRes);
+       }
+       else
+         {
+           return response.toString();
+         }}catch (e){
+      return e.toString();
+    }
   }
 
 
