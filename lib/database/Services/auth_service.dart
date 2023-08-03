@@ -109,6 +109,7 @@ class AuthService {
       debugPrint(response.statusCode.toString());
     }
   }
+
   static checkCode({required code})async
   {
     var response= await http.post(
@@ -129,6 +130,7 @@ class AuthService {
       debugPrint(response.statusCode.toString());
     }
   }
+
   static resetPass({required code,required pass})async
   {
     var response= await http.post(

@@ -1,10 +1,14 @@
 import 'package:dev_space/database/models/home_models/story_model.dart';
 import 'package:dev_space/layout/cubit/dev_cubit.dart';
+import 'package:dev_space/modules/home_screen/posts%20cubit/posts_cubit.dart';
 import 'package:dev_space/shared/components/components.dart';
 import 'package:dev_space/shared/components/constants.dart';
 import 'package:dev_space/shared/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
+
+import '../../database/models/home_models/home_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,420 +18,213 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   @override
-  Widget build(BuildContext context)
-  {
-    return BlocConsumer<DevCubit, DevState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-       return Scaffold(
-          appBar:AppBar(
-            backgroundColor:Constants.color,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0)
-            ),
-            title:const Text(
-              'DevSpace',
-              style:TextStyle(
-                fontSize:30,
-                color:Colors.white,
-                fontWeight:FontWeight.bold,
-              ),
-            ),
-            actions:
-            [
-              IconButton(
-                onPressed: (){},
-                icon:const Icon(
-                    Icons.search
-                ),
-                color:Colors.white,
-                iconSize:30,
-              ),
-            ],
-          ),
-          body:SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.vertical,
-            child: Column(
-            children:
-              [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children:
-                    [
-                      IconButton(
-                        onPressed: (){},
-                        color: Constants.color,
-                        icon:const Icon(Icons.account_circle_outlined),
-                        iconSize:45,
-                      ),
-                      Expanded(
-                        child: MyFormField(
-                          label:'Whats on your mind ? ',
-                          padding: const EdgeInsets.all(10.0),
-                          radius: 70.0,
-                        ),
-                      ),
-                    ],
+  Widget build(BuildContext context) {
+    var getHeight = MediaQuery.of(context).size.height;
+    var getWidth = MediaQuery.of(context).size.width;
+    return BlocProvider(
+      create: (context) => PostsCubit()..getPosts(context),
+      child: BlocConsumer<PostsCubit, PostsState>(
+        listener: (context, state) {
+          if (state is PostsErrorState) {
+            showScaffoldSnackBar(title: state.error, context: context);
+          }
+        },
+        builder: (context, state) {
+          return Scaffold(
+              appBar: AppBar(
+                backgroundColor: Constants.color,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0)),
+                title: const Text(
+                  'DevSpace',
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                Container(
-                  width: double.infinity,
-                  height:10 ,
-                  color: Colors.deepPurple.shade200,
-                ),
-                //add story & story view
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0
+                actions: [
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.search),
+                    color: Colors.white,
+                    iconSize: 30,
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      MaterialButton(
-                        onPressed:()
-                        {
-                          Navigator.pushNamed(
-                            context,
-                            NamedRoutes.storyAddScreen,
-                          );
-                        },
-                        child: const CircleAvatar(
-                          radius: 30.0,
-                          backgroundColor: Constants.color,
-                           child: Icon(
-                             Icons.add,
-                             color: Colors.white,
-                             size: 30.0,
-                             ),
-                           ),
+                ],
+              ),
+              body: RefreshIndicator(
+                color: Constants.color,
+                onRefresh: () async {
+                  await context.read<PostsCubit>().getPosts(context);
+                },
+                child: ListView(children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          color: Constants.color,
+                          icon: const Icon(Icons.account_circle_outlined),
+                          iconSize: 45,
                         ),
-                      Expanded(
-                        child: SizedBox(
-                          height: 90.0,
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context,index)=> MaterialButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(
-                                      context,
-                                      NamedRoutes.storyViewScreen
-                                  );
-                                },
-                                child:  CircleAvatar(
-                                  radius: 30,
-                                  backgroundImage: NetworkImage(
-                                   dataUsers[index].profileUrl
-                                  ),
-                                ),
-                              ),
-                              itemCount: dataUsers.length,
+                        Expanded(
+                          child: MyFormField(
+                            label: 'Whats on your mind ? ',
+                            padding: const EdgeInsets.all(10.0),
+                            radius: 70.0,
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  width: double.infinity,
-                  height:10 ,
-                  color: Colors.deepPurple.shade200,
-                ),
-                const SizedBox(
-                  height: 5.0,
-                ),
-                //post
-                Post(),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                //shared post
-                Container(
-                  width: 350,
-                  height:390,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.0),
-                    color: Constants.color,
+                  Container(
+                    width: double.infinity,
+                    height: 10,
+                    color: Colors.deepPurple.shade200,
                   ),
-                  child:Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children:
-                    [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children:
-                          [
-                            const CircleAvatar(
-                              //backgroundImage: ,
-                              radius: 20,
+                  //add story & story view
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        MaterialButton(
+                          onPressed: () {
+                            Navigator.pushNamed(
+                              context,
+                              NamedRoutes.storyAddScreen,
+                            );
+                          },
+                          child: const CircleAvatar(
+                            radius: 30.0,
+                            backgroundColor: Constants.color,
+                            child: Icon(
+                              Icons.add,
+                              color: Colors.white,
+                              size: 30.0,
                             ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            const Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children:
-                              [
-                                Text(
-                                  'dasdkasl is shared a post',
-                                  style: TextStyle(
-                                    color: Colors.white,
-
-                                  ),
-                                ),
-                                Text(
-                                  '14 minutes ago',
-                                  style: TextStyle(
-                                      color: Colors.white
-                                  ),
-                                ),
-
-                              ],
-                            ),
-                            const SizedBox(
-                          width: 80.0,
+                          ),
                         ),
-                            InkWell(
-                              onTap: (){},
-                              splashColor: Colors.white,
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical:  8.0
-                                ),
-                                child: Row(
-                                  //crossAxisAlignment: CrossAxisAlignment.start,
-                                  children:
-                                  [
-                                    CircleAvatar(
-                                      radius: 4,
-                                    ),
-                                    SizedBox(
-                                      width:1 ,
-                                    ),
-                                    CircleAvatar(
-                                      radius: 4,
-                                    ),
-                                    SizedBox(
-                                      width:1 ,
-                                    ),
-                                    CircleAvatar(
-                                      radius: 4,
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ),
-
-                        ]
-                        )
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 8.0
-                        ),
-                        child: Divider(
-                          height: 1,
-                          color: Colors.white,
-                        ),
-                      ),
-                      InkWell(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CircleAvatar(
-                                    //backgroundImage: ,
-                                    radius: 20,
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Mohammad Mihdi',
-                                        style: TextStyle(
-                                            color: Colors.white
-                                        ),
-                                      ),
-                                      Text(
-                                        '14 minutes ago',
-                                        style: TextStyle(
-                                            color: Colors.white
-                                        ),
-                                      ),
-
-                                    ],
-                                  ),
-
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            const Flexible(
-                              child:  Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal:   8.0
-                                ),
-                                child: Text(
-                                  'On Fire',
-                                  style: TextStyle(
-                                      color: Colors.white
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 350,
-                              height: 150,
-                              child: Stack(
-                                children:[
-                                  PageView(
-
-                                      onPageChanged: (index)
-                                      {
-                                        setState(() {
-                                          currentPage = index;
-                                        });
+                        BlocProvider(
+                          create: (context) => PostsCubit()..getActiveStories(context),
+                          child: Expanded(
+                            child: SizedBox(
+                              height: 90.0,
+                              child: BlocBuilder<PostsCubit, PostsState>(
+                                builder: (context, state) {
+                                  if(state is StoriesLoadedState) {
+                                    return ListView.builder(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) =>
+                                        MaterialButton(
+                                      onPressed: () {
+                                        Navigator.pushNamed(context,
+                                            NamedRoutes.storyViewScreen);
                                       },
-                                      children:media
-                                  ),
-                                  Positioned(
-                                    top: 0,
-                                    right: 0,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        width: 30,
-                                        height: 20,
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(20.0),
-                                          color: Colors.black54,
-                                        ),
-                                        child: Text(
-                                          '${currentPage+1}/${media.length}',
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
+                                      child: CircleAvatar(
+                                        radius: 30,
+                                        backgroundImage: NetworkImage(
+                                            dataUsers[index].profileUrl),
                                       ),
                                     ),
-                                  ),
+                                    itemCount: dataUsers.length,
+                                  );
+                                  } else if(state is PostsLoadingState){
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.horizontal,
+                                        itemCount: 4,
+                                      itemBuilder: (context, index) =>
+                                           CircleAvatar(
+                                              radius: 30,
+                                              backgroundImage: NetworkImage(
+                                                  dataUsers[index].profileUrl),
+                                             child:  Shimmer(
+                                               color: Colors.deepPurple.shade200.withOpacity(.3),
+                                               duration: const Duration(milliseconds: 1000),
+                                               child: Container(),
+                                             ),
+                                            )
 
-                                ],
+                                    );
+                                  }
+                                  return const SizedBox();
+                                },
                               ),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 8.0,
-                            vertical: 8.0
-                        ),
-                        child: Divider(
-                          height: 1,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 8.0,
-                        ),
-                        child: Row(
-                          //mainAxisAlignment: MainAxisAlignment.start,
-                          children:
-                          [
-                            Text(
-                              '55 Likes',
-                              style: TextStyle(
-                                  color: Colors.white
-                              ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 10,
+                    color: Colors.deepPurple.shade200,
+                  ),
+                  const SizedBox(
+                    height: 5.0,
+                  ),
+                  //post
+                  if (state is PostsLoadedState)
+                    ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: state.posts.data.posts.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Post(
+                            isLikedOrDisliked:
+                                state.posts.data.posts[index][6] is bool
+                                    ? state.posts.data.posts[index][6]
+                                    : null,
+                            id: PostModel.fromJson(
+                                    state.posts.data.posts[index][4])
+                                .id,
+                            description: PostModel.fromJson(
+                                    state.posts.data.posts[index][4])
+                                .content,
+                            name: state.posts.data.posts[index][0],
+                            timeago: state.posts.data.posts[index][3],
+                            likesCount: PostModel.fromJson(
+                                    state.posts.data.posts[index][4])
+                                .likesCounts,
+                            dislikesCount: PostModel.fromJson(
+                                    state.posts.data.posts[index][4])
+                                .dislikesCounts,
+                          );
+                        }),
+                  if (state is PostsLoadingState)
+                    ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: 5,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Container(
+                            margin:
+                                EdgeInsets.symmetric(vertical: getHeight * .03),
+                            padding: const EdgeInsets.all(4.0),
+                            width: getWidth * .95,
+                            height: getHeight * .45,
+                            decoration: BoxDecoration(
+                              // color: Colors.grey.shade300,
+                              color: Colors.deepPurple.shade100.withOpacity(.6),
+                              borderRadius: BorderRadius.circular(20.0),
                             ),
-                            SizedBox(
-                              width: 15,
+                            child: Shimmer(
+                              color: Colors.deepPurple.shade200.withOpacity(.3),
+                              duration: const Duration(milliseconds: 1000),
+                              child: Container(),
                             ),
-                            Text(
-                              '55 DisLikes',
-                              style: TextStyle(
-                                  color: Colors.white
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          MyButton(
-                            onPressed: (){},
-                            title: 'Like',
-                            titleColor: Colors.white,
-                            side: Constants.color,
-                            width: 60,
-                          ),
-                          Container(
-                            width:2 ,
-                            height: 10,
-                            color: Colors.white,
-                          ),
-                          MyButton(
-                            onPressed: (){},
-                            title: 'DisLike',
-                            titleColor: Colors.white,
-                            side: Constants.color,
-                            width: 80,
-                          ),
-                          MyButton(
-                            onPressed: (){},
-                            title: 'Comment',
-                            titleColor: Colors.white,
-                            side: Constants.color,
-                            width: 95,
-                          ),
-                          MyButton(
-                            onPressed: (){},
-                            title: 'Share',
-                            titleColor: Colors.white,
-                            side: Constants.color,
-                            width: 95,
-                          ),
-                        ],
-                      ),
-                    ]
-                  )
-                ),
-              ]
-            )
-          )
-       );
-  },
-);
+                          );
+                        }),
+                ]),
+              ));
+        },
+      ),
+    );
   }
 }
-
