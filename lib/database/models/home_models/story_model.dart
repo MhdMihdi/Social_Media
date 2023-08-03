@@ -1,3 +1,4 @@
+import 'dart:convert';
 
 class StoryUserModel {
 
@@ -45,3 +46,30 @@ final dataUsers = [
 
 
 ];
+
+/////////////////////naser model
+
+// To parse this JSON data, do
+//
+//     final welcomeStroies = welcomeStroiesFromJson(jsonString);
+
+
+WelcomeStroies welcomeStroiesFromJson(String str) => WelcomeStroies.fromJson(json.decode(str));
+
+String welcomeStroiesToJson(WelcomeStroies data) => json.encode(data.toJson());
+
+class WelcomeStroies {
+  List<List<dynamic>> data;
+
+  WelcomeStroies({
+    required this.data,
+  });
+
+  factory WelcomeStroies.fromJson(Map<String, dynamic> json) => WelcomeStroies(
+    data: List<List<dynamic>>.from(json["data"].map((x) => List<dynamic>.from(x.map((x) => x)))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "data": List<dynamic>.from(data.map((x) => List<dynamic>.from(x.map((x) => x)))),
+  };
+}

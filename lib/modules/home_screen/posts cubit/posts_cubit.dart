@@ -5,6 +5,7 @@ import 'package:dev_space/database/Services/user_service.dart';
 import 'package:meta/meta.dart';
 
 import '../../../database/models/home_models/home_model.dart';
+import '../../../database/models/home_models/story_model.dart';
 
 part 'posts_state.dart';
 
@@ -16,6 +17,16 @@ class PostsCubit extends Cubit<PostsState> {
     final response = await UserService.getHomePagePosts();
     if (response is HomeModel) {
       emit(PostsLoadedState(posts: response));
+    } else {
+      emit(PostsErrorState(error: response));
+    }
+  }
+
+  getActiveStories(context) async {
+    emit(PostsLoadingState());
+    final response = await UserService.getActiveStories();
+    if (response is WelcomeStroies) {
+      emit(StoriesLoadedState(stories: response));
     } else {
       emit(PostsErrorState(error: response));
     }

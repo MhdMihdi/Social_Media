@@ -108,24 +108,53 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        Expanded(
-                          child: SizedBox(
-                            height: 90.0,
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) => MaterialButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(
-                                      context, NamedRoutes.storyViewScreen);
+                        BlocProvider(
+                          create: (context) => PostsCubit()..getActiveStories(context),
+                          child: Expanded(
+                            child: SizedBox(
+                              height: 90.0,
+                              child: BlocBuilder<PostsCubit, PostsState>(
+                                builder: (context, state) {
+                                  if(state is StoriesLoadedState) {
+                                    return ListView.builder(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) =>
+                                        MaterialButton(
+                                      onPressed: () {
+                                        Navigator.pushNamed(context,
+                                            NamedRoutes.storyViewScreen);
+                                      },
+                                      child: CircleAvatar(
+                                        radius: 30,
+                                        backgroundImage: NetworkImage(
+                                            dataUsers[index].profileUrl),
+                                      ),
+                                    ),
+                                    itemCount: dataUsers.length,
+                                  );
+                                  } else if(state is PostsLoadingState){
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.horizontal,
+                                        itemCount: 4,
+                                      itemBuilder: (context, index) =>
+                                           CircleAvatar(
+                                              radius: 30,
+                                              backgroundImage: NetworkImage(
+                                                  dataUsers[index].profileUrl),
+                                             child:  Shimmer(
+                                               color: Colors.deepPurple.shade200.withOpacity(.3),
+                                               duration: const Duration(milliseconds: 1000),
+                                               child: Container(),
+                                             ),
+                                            )
+
+                                    );
+                                  }
+                                  return const SizedBox();
                                 },
-                                child: CircleAvatar(
-                                  radius: 30,
-                                  backgroundImage:
-                                      NetworkImage(dataUsers[index].profileUrl),
-                                ),
                               ),
-                              itemCount: dataUsers.length,
                             ),
                           ),
                         ),
@@ -148,7 +177,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemCount: state.posts.data.posts.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Post(
-                            isLikedOrDisliked:   state.posts.data.posts[index][6] is bool?state.posts.data.posts[index][6]:null,
+                            isLikedOrDisliked:
+                                state.posts.data.posts[index][6] is bool
+                                    ? state.posts.data.posts[index][6]
+                                    : null,
                             id: PostModel.fromJson(
                                     state.posts.data.posts[index][4])
                                 .id,

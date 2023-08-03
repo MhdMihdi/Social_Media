@@ -11,13 +11,17 @@ class PostsLoadedState extends PostsState {
   HomeModel posts;
 }
 
+class StoriesLoadedState extends PostsState {
+  StoriesLoadedState({required this.stories});
+  WelcomeStroies stories;
+}
+
 class PostUploadedState extends PostsState {}
 
 class PostsErrorState extends PostsState {
   PostsErrorState({required this.error});
   String error;
 }
-
 
 class LikePostLoadingState extends PostsState {}
 

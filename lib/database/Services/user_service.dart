@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:dev_space/database/models/home_models/story_model.dart';
 import 'package:dev_space/shared/components/constants.dart';
 import 'package:dev_space/shared/network/local/cache_helper.dart';
 import 'package:flutter/material.dart';
@@ -72,6 +73,33 @@ class UserService {
       print(streamRes);
       if (response.statusCode == 200) {
         return homeModelFromJson(streamRes);
+      } else {
+        return response.toString();
+      }
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+
+  static Future getActiveStories() async {
+    try {
+      String token = await CacheHelper.getData(key: 'token') ?? '';
+
+      // print(token!);
+      var headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer 1|a1gnqWkHrpDfVt4xyx5pERN08zIcf82KpjagygW5'
+      };
+      var request = http.Request(
+          'GET', Uri.parse('${Constants.baseUrl}posts/avtive_stories'));
+      request.headers.addAll(headers);
+      http.StreamedResponse response = await request.send();
+      String streamRes = await response.stream.bytesToString();
+      print(response.statusCode);
+      print(streamRes);
+      if (response.statusCode == 200) {
+        return welcomeStroiesFromJson(streamRes);
       } else {
         return response.toString();
       }

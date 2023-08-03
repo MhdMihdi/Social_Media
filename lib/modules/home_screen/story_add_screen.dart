@@ -140,7 +140,6 @@ class _StoryAddState extends State<StoryAddScreen> {
                         child: Form(
                           key: storyContentFormKey,
                           child: MyFormField(
-                            // key: storyContentFormKey,
                             validate: (value) {
                               if (value == null || value.isEmpty) {
                                 showScaffoldSnackBar(
