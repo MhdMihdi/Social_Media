@@ -13,6 +13,7 @@ import 'package:dev_space/modules/home_screen/home_screen.dart';
 import 'package:dev_space/modules/home_screen/sotry_view_screen.dart';
 import 'package:dev_space/modules/home_screen/story_add_screen.dart';
 import 'package:dev_space/modules/notifications_screen/notifications_screen.dart';
+import 'package:dev_space/modules/profile_screen/edit_profile_screen.dart';
 import 'package:dev_space/modules/profile_screen/profile_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -34,6 +35,7 @@ class NamedRoutes
    static const notificationScreen= 'notificationScreen';
    static const storyViewScreen= 'storyViewScreen';
    static const storyAddScreen= 'storyAddScreen';
+   static const editProfileScreen= 'EditProfileScreen';
 
 }
 
@@ -55,6 +57,7 @@ class AppRoutes
   static const notificationScreen= NotificationsScreen();
   static const storyViewScreen= StoryViewScreen();
   static const storyAddScreen= StoryAddScreen();
+  static const editProfileScreen= EditProfileScreen();
 
 
  
@@ -76,6 +79,7 @@ class AppRoutes
      NamedRoutes.notificationScreen:(context)=>AppRoutes.notificationScreen,
      NamedRoutes.storyViewScreen:(context)=>AppRoutes.storyViewScreen,
      NamedRoutes.storyAddScreen:(context)=>AppRoutes.storyAddScreen,
+     NamedRoutes.editProfileScreen:(context)=>AppRoutes.editProfileScreen,
 
 
   };
