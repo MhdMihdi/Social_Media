@@ -25,6 +25,8 @@ class PostsErrorState extends PostsState {
 
 class LikePostLoadingState extends PostsState {}
 
+class PostSavedState extends PostsState {}
+
 class LikePostDoneState extends PostsState {
   LikePostDoneState({required this.liked});
   bool liked;

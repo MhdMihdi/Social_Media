@@ -7,132 +7,58 @@ class NotificationsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        MaterialButton(
-          onPressed:(){},
-          child: const Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: CircleAvatar(
-                  radius:40,
-                  backgroundImage:AssetImage(
-                    '',
-                  ),
-
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  'You Were Mentioned By Mohamed Khair In A Comment In Tecno .'
-                  ,
-                  style:TextStyle(
-                    color:Constants.color,
-                    fontSize:20,
-
-                  ),
-                ),
-              ),
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Constants.color,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+        title: const Text(
+          'Notifications',
+          style: TextStyle(
+            fontSize: 24,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(
-          height:20,
-        ),
-        MaterialButton(
-          onPressed:(){},
-          child: const Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: CircleAvatar(
-                  radius:40,
-                  backgroundImage:AssetImage(
-                    '',
-                  ),
-
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  'Farah Alazzam And 9 Others Recently Interacted With Your Post On Smile.'
-                  ,
-                  style:TextStyle(
-                    color:Constants.color,
-                    fontSize:20,
-
-                  ),
-                ),
-              ),
-            ],
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.search),
+            color: Colors.white,
+            iconSize: 30,
           ),
-        ),
-        const SizedBox(
-          height:20,
-        ),
-        MaterialButton(
-          onPressed:(){},
-          child: const Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: CircleAvatar(
-                  radius:40,
-                  backgroundImage:AssetImage(
-                    '',
+        ],
+      ),
+      body: ListView.builder(
+        itemCount: 10,
+        itemBuilder: (context, index) => Column(
+          children: [
+            MaterialButton(
+              onPressed: () {},
+              child: const Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: CircleAvatar(
+                      radius: 30,
+                    ),
                   ),
-
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  'A Post Of Yours In The Laptop Group Got Liked By Yasser And 2 Other .'
-                  ,
-                  style:TextStyle(
-                    color:Constants.color,
-                    fontSize:20,
-
+                  Expanded(
+                    child: Text(
+                      'People Talk About Your Shopping post .',
+                      style: TextStyle(
+                        color: Constants.color,
+                        fontSize: 16,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
+            ),
+            Divider(height: 10,color: Colors.deepPurple.withOpacity(.2),)
+          ],
         ),
-        const SizedBox(
-          height:20,
-        ),
-        MaterialButton(
-          onPressed:(){},
-          child: const Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: CircleAvatar(
-                  radius:40,
-                  backgroundImage:AssetImage(
-                    '',
-                  ),
-
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  'People Talk About Your Shopping post .'
-                  ,
-                  style:TextStyle(
-                    color:Constants.color,
-                    fontSize:20,
-
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-
-      ],
+      ),
     );
-
   }
 }

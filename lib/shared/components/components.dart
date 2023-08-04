@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-enum postType{
+enum postType {
   Regular,
   Cv,
   JobOpportunity,
@@ -279,6 +279,7 @@ class PostShimmer extends StatelessWidget {
 class Post extends StatefulWidget {
   Post(
       {super.key,
+      this.images,
       this.name = 'Mohammad Mihdi',
       this.timeago = '14 minutes ago',
       this.likesCount = 0,
@@ -292,8 +293,9 @@ class Post extends StatefulWidget {
   int likesCount;
   int dislikesCount;
   bool? isLikedOrDisliked;
-  bool isChecked=false;
-  postType?type;
+  bool isChecked = false;
+  postType? type;
+  List<String>? images;
   int id;
   @override
   State<Post> createState() => _PostState();
@@ -318,7 +320,6 @@ List<Widget> media = [
 ];
 
 int currentPage = 0;
-
 
 class _PostState extends State<Post> {
   _PostState();
@@ -368,33 +369,71 @@ class _PostState extends State<Post> {
                     const SizedBox(
                       width: 140.0,
                     ),
-                    InkWell(
-                      onTap: () {},
-                      splashColor: Colors.white,
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8.0),
-                        child: Row(
-                          //crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              radius: 4,
-                            ),
-                            SizedBox(
-                              width: 1,
-                            ),
-                            CircleAvatar(
-                              radius: 4,
-                            ),
-                            SizedBox(
-                              width: 1,
-                            ),
-                            CircleAvatar(
-                              radius: 4,
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
+                    PopupMenuButton(
+                        color: Colors.white,
+                        itemBuilder: (_) => <PopupMenuItem<String>>[
+                              const PopupMenuItem<String>(
+                                  value: '1',
+                                  child: SizedBox(
+                                      width: 100,
+                                      // height: 30,
+                                      child: Row(
+                                        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Icon(
+                                            Icons.save_alt,
+                                            color: Colors.green,
+                                          ),
+                                          SizedBox(
+                                            width: 7,
+                                          ),
+                                          Text(
+                                            "Save",
+                                            style: TextStyle(
+                                                color: Colors.deepPurple),
+                                          ),
+                                        ],
+                                      ))),
+                              const PopupMenuItem<String>(
+                                  value: '2',
+                                  child: SizedBox(
+                                      width: 100,
+                                      // height: 30,
+                                      child: Row(
+                                        // mainAxisAlignment:
+                                        //     MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Icon(
+                                            Icons.report,
+                                            color: Colors.red,
+                                          ),
+                                          SizedBox(
+                                            width: 7,
+                                          ),
+                                          Text(
+                                            "Report",
+                                            style: TextStyle(
+                                                color: Colors.deepPurple),
+                                          ),
+                                        ],
+                                      ))),
+                            ],
+                        onSelected: (index) async {
+                          switch (index) {
+                            case '1':
+                              {
+                                PostsCubit().savePost(
+                                      id: widget.id.toString(),
+                                    );
+                                showScaffoldSnackBar(
+                                    title: "Added to your saved posts",
+                                    context: context,
+                                    color: Colors.green);
+                              }
+
+                              break;
+                          }
+                        })
                   ],
                 ),
               ),
@@ -418,7 +457,8 @@ class _PostState extends State<Post> {
                             currentPage = index;
                           });
                         },
-                        children: media),
+                        children: List.generate(widget.images!.length,
+                            (index) => Image.network(widget.images![index]))),
                     Positioned(
                       top: 0,
                       right: 0,
@@ -526,7 +566,8 @@ class _PostState extends State<Post> {
                         setState(() {
                           if (widget.isLikedOrDisliked == null ||
                               widget.isLikedOrDisliked!) {
-                            if (widget.isLikedOrDisliked!) {
+                            if (widget.isLikedOrDisliked != null &&
+                                widget.isLikedOrDisliked!) {
                               widget.likesCount--;
                             }
                             widget.isLikedOrDisliked = false;
@@ -553,18 +594,14 @@ class _PostState extends State<Post> {
                       width: 95,
                     ),
                     MyButton(
-                      onPressed: ()
-                      {
+                      onPressed: () {
                         showModalBottomSheet(
                             context: context,
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(20)
-                              ),
+                                  top: Radius.circular(20)),
                             ),
-                            builder: (BuildContext context)
-                            {
-
+                            builder: (BuildContext context) {
                               return Container(
                                 height: 300,
                                 width: 400,
@@ -572,16 +609,17 @@ class _PostState extends State<Post> {
                                 child: Stack(
                                   alignment: AlignmentDirectional.topCenter,
                                   clipBehavior: Clip.none,
-                                  children:
-                                  [
+                                  children: [
                                     Positioned(
                                       top: -35,
                                       child: Container(
                                         width: 50,
                                         height: 6,
-                                        margin: const EdgeInsets.only(bottom: 20),
+                                        margin:
+                                            const EdgeInsets.only(bottom: 20),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(2.5),
+                                          borderRadius:
+                                              BorderRadius.circular(2.5),
                                           color: Colors.white,
                                         ),
                                       ),
@@ -589,16 +627,18 @@ class _PostState extends State<Post> {
                                     const SizedBox(
                                       height: 20,
                                     ),
-                                     ListView(
-                                       children: [
-                                         Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children:
-                                          [
+                                    ListView(
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
                                             MyFormField(
-                                              controller: TextEditingController(),
+                                              controller:
+                                                  TextEditingController(),
                                               label: 'what\'s in your mind',
-                                              padding: const EdgeInsets.all(15.0),
+                                              padding:
+                                                  const EdgeInsets.all(15.0),
                                             ),
                                             const SizedBox(
                                               height: 10.0,
@@ -609,10 +649,9 @@ class _PostState extends State<Post> {
                                               height: 5.0,
                                             ),
                                             InkWell(
-                                              onTap: (){},
+                                              onTap: () {},
                                               child: Row(
-                                                children:
-                                                [
+                                                children: [
                                                   CircleAvatar(),
                                                   const SizedBox(
                                                     width: 5.0,
@@ -630,10 +669,9 @@ class _PostState extends State<Post> {
                                               height: 5.0,
                                             ),
                                             InkWell(
-                                              onTap: (){},
+                                              onTap: () {},
                                               child: Row(
-                                                children:
-                                                [
+                                                children: [
                                                   CircleAvatar(),
                                                   SizedBox(
                                                     width: 5.0,
@@ -648,33 +686,31 @@ class _PostState extends State<Post> {
                                             MyCheckBox(
                                                 title: 'My profile',
                                                 value: widget.isChecked,
-                                                onChanged: (value)
-                                                {
+                                                onChanged: (value) {
                                                   setState(() {
-                                                    widget.isChecked != widget.isChecked;
+                                                    widget.isChecked !=
+                                                        widget.isChecked;
                                                   });
-                                                }
-                                            ),
+                                                }),
 
                                             const Text('The share type:'),
                                             Row(
                                               children: [
                                                 Expanded(
                                                   child: MyRadioButton(
-                                                      title: postType.Regular.name,
+                                                      title: postType
+                                                          .Regular.name,
                                                       value: postType.Regular,
                                                       groupValue: widget.type,
-                                                      onChanged: (val){}
-                                                  ),
+                                                      onChanged: (val) {}),
                                                 ),
-
                                                 Expanded(
                                                   child: MyRadioButton(
-                                                      title: postType.Advice.name,
+                                                      title: postType
+                                                          .Advice.name,
                                                       value: postType.Advice,
                                                       groupValue: widget.type,
-                                                      onChanged: (val){}
-                                                  ),
+                                                      onChanged: (val) {}),
                                                 ),
                                               ],
                                             ),
@@ -682,21 +718,20 @@ class _PostState extends State<Post> {
                                               children: [
                                                 Expanded(
                                                   child: MyRadioButton(
-                                                      title: postType.Challenge.name,
+                                                      title: postType
+                                                          .Challenge.name,
                                                       titleSize: 13.0,
-                                                      value: postType.Challenge,
+                                                      value:
+                                                          postType.Challenge,
                                                       groupValue: widget.type,
-                                                      onChanged: (val){}
-                                                  ),
+                                                      onChanged: (val) {}),
                                                 ),
-
                                                 Expanded(
                                                   child: MyRadioButton(
                                                       title: postType.Cv.name,
                                                       value: postType.Cv,
                                                       groupValue: widget.type,
-                                                      onChanged: (val){}
-                                                  ),
+                                                      onChanged: (val) {}),
                                                 ),
                                               ],
                                             ),
@@ -704,22 +739,24 @@ class _PostState extends State<Post> {
                                               children: [
                                                 Expanded(
                                                   child: MyRadioButton(
-                                                      title: postType.JobOpportunity.name,
+                                                      title: postType
+                                                          .JobOpportunity
+                                                          .name,
                                                       titleSize: 13.0,
-                                                      value: postType.JobOpportunity,
+                                                      value: postType
+                                                          .JobOpportunity,
                                                       groupValue: widget.type,
-                                                      onChanged: (val){}
-                                                  ),
+                                                      onChanged: (val) {}),
                                                 ),
-
                                                 Expanded(
                                                   child: MyRadioButton(
-                                                      title: postType.Question.name,
+                                                      title: postType
+                                                          .Question.name,
                                                       titleSize: 15.0,
-                                                      value: postType.Question,
+                                                      value:
+                                                          postType.Question,
                                                       groupValue: widget.type,
-                                                      onChanged: (val){}
-                                                  ),
+                                                      onChanged: (val) {}),
                                                 ),
                                               ],
                                             ),
@@ -727,38 +764,33 @@ class _PostState extends State<Post> {
                                               children: [
                                                 Expanded(
                                                   child: MyRadioButton(
-                                                      title: postType.RoadMap.name,
+                                                      title: postType
+                                                          .RoadMap.name,
                                                       value: postType.RoadMap,
                                                       groupValue: widget.type,
-                                                      onChanged: (val){}
-                                                  ),
+                                                      onChanged: (val) {}),
                                                 ),
-
-
                                               ],
                                             ),
                                             Center(
                                               child: MyButton(
-                                                  onPressed: (){},
-                                                  title: 'Share it',
-                                                  titleColor: Colors.white,
-                                                  color: Constants.color,
-                                                  width: 100,
-                                                  height: 50,
-                                                  radius:20.0 ,
+                                                onPressed: () {},
+                                                title: 'Share it',
+                                                titleColor: Colors.white,
+                                                color: Constants.color,
+                                                width: 100,
+                                                height: 50,
+                                                radius: 20.0,
                                               ),
                                             )
-
-
                                           ],
-                                    ),
-                                       ],
-                                     )
+                                        ),
+                                      ],
+                                    )
                                   ],
                                 ),
                               );
-                            }
-                        );
+                            });
                       },
                       title: 'Share',
                       titleColor: Colors.white,
@@ -1037,10 +1069,7 @@ class _SharedPostState extends State<SharedPost> {
                               width: 80,
                             ),
                             MyButton(
-                              onPressed: ()
-                              {
-
-                              },
+                              onPressed: () {},
                               title: 'Comment',
                               titleColor: Colors.white,
                               side: Constants.color,

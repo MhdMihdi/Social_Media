@@ -7,7 +7,6 @@ import 'package:dev_space/shared/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
-
 import '../../database/models/home_models/home_model.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -57,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Constants.color,
                 onRefresh: () async {
                   await context.read<PostsCubit>().getPosts(context);
+
                 },
                 child: ListView(children: [
                   Padding(
@@ -128,12 +128,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                       child: CircleAvatar(
                                         radius: 30,
                                         backgroundImage: NetworkImage(
-                                            dataUsers[index].profileUrl),
+                                            state.stories.data[index][1]),
                                       ),
                                     ),
-                                    itemCount: dataUsers.length,
+                                    itemCount: state.stories.data.length,
                                   );
-                                  } else if(state is PostsLoadingState){
+                                  }
+                                  if(state is PostsLoadingState){
                                     ListView.builder(
                                       shrinkWrap: true,
                                       scrollDirection: Axis.horizontal,
@@ -141,8 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       itemBuilder: (context, index) =>
                                            CircleAvatar(
                                               radius: 30,
-                                              backgroundImage: NetworkImage(
-                                                  dataUsers[index].profileUrl),
+                                            foregroundColor: Colors.deepPurple,
                                              child:  Shimmer(
                                                color: Colors.deepPurple.shade200.withOpacity(.3),
                                                duration: const Duration(milliseconds: 1000),
@@ -177,9 +177,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemCount: state.posts.data.posts.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Post(
+                            images: state.posts.data.posts[index][5].cast<String>(),
                             isLikedOrDisliked:
-                                state.posts.data.posts[index][6] is bool
-                                    ? state.posts.data.posts[index][6]
+                                state.posts.data.posts[index][6] =="my _reaction_on_this_post is like"
+                                    ? true:
+                                state.posts.data.posts[index][6] =="my _reaction_on_this_post is dislike"?
+                                    false
                                     : null,
                             id: PostModel.fromJson(
                                     state.posts.data.posts[index][4])

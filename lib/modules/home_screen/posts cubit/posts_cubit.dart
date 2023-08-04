@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dev_space/database/Services/user_service.dart';
 import 'package:meta/meta.dart';
 
+import '../../../database/Services/posts_service.dart';
 import '../../../database/models/home_models/home_model.dart';
 import '../../../database/models/home_models/story_model.dart';
 
@@ -14,7 +15,7 @@ class PostsCubit extends Cubit<PostsState> {
 
   getPosts(context) async {
     emit(PostsLoadingState());
-    final response = await UserService.getHomePagePosts();
+    final response = await PostsService.getHomePagePosts();
     if (response is HomeModel) {
       emit(PostsLoadedState(posts: response));
     } else {
@@ -24,7 +25,7 @@ class PostsCubit extends Cubit<PostsState> {
 
   getActiveStories(context) async {
     emit(PostsLoadingState());
-    final response = await UserService.getActiveStories();
+    final response = await PostsService.getActiveStories();
     if (response is WelcomeStroies) {
       emit(StoriesLoadedState(stories: response));
     } else {
@@ -34,7 +35,7 @@ class PostsCubit extends Cubit<PostsState> {
 
   likePosts({context, required String id}) async {
     emit(LikePostLoadingState());
-    final response = await UserService.likePost(id: id);
+    final response = await PostsService.likePost(id: id);
     if (response is bool) {
       emit(LikePostDoneState(liked: response));
     } else {
@@ -44,9 +45,19 @@ class PostsCubit extends Cubit<PostsState> {
 
   dislikePosts({context, required String id}) async {
     emit(LikePostLoadingState());
-    final response = await UserService.dislikePost(id: id);
+    final response = await PostsService.dislikePost(id: id);
     if (response is bool) {
       emit(LikePostDoneState(liked: response));
+    } else {
+      emit(PostsErrorState(error: response));
+    }
+  }
+
+  savePost({context, required String id}) async {
+    emit(LikePostLoadingState());
+    final response = await PostsService.savePost(id: id);
+    if (response is bool) {
+      emit(PostSavedState());
     } else {
       emit(PostsErrorState(error: response));
     }
@@ -60,7 +71,7 @@ class PostsCubit extends Cubit<PostsState> {
       List<File>? videos,
       required String type}) async {
     emit(PostsLoadingState());
-    final response = await UserService.createPost(
+    final response = await PostsService.createPost(
         type: type,
         title: title,
         content: content,
