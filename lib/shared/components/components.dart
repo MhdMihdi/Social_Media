@@ -1,4 +1,6 @@
 // ignore_for_file: must_be_immutable, constant_identifier_names
+import 'dart:io';
+
 import 'package:dev_space/modules/home_screen/posts%20cubit/posts_cubit.dart';
 import 'package:dev_space/shared/components/constants.dart';
 import 'package:flutter/material.dart';
@@ -423,8 +425,8 @@ class _PostState extends State<Post> {
                             case '1':
                               {
                                 PostsCubit().savePost(
-                                      id: widget.id.toString(),
-                                    );
+                                  id: widget.id.toString(),
+                                );
                                 showScaffoldSnackBar(
                                     title: "Added to your saved posts",
                                     context: context,
@@ -451,14 +453,25 @@ class _PostState extends State<Post> {
                 height: height * .25,
                 child: Stack(
                   children: [
-                    PageView(
-                        onPageChanged: (index) {
-                          setState(() {
-                            currentPage = index;
-                          });
-                        },
-                        children: List.generate(widget.images!.length,
-                            (index) => Image.network(widget.images![index]))),
+                    if (widget.images != null)
+                      PageView(
+                          onPageChanged: (index) {
+                            setState(() {
+                              currentPage = index;
+                            });
+                          },
+                          children:
+                              List.generate(widget.images!.length, (index) {
+
+                            return Image.network(
+                                widget.images![index].contains('storage')
+                                    ? Constants.IP +widget.images![index].substring(widget
+                                            .images![index]
+                                            .indexOf('storage'))
+                                    : Constants.IP+  widget.images![index].substring(widget
+                                            .images![index]
+                                            .indexOf('media')));
+                          })),
                     Positioned(
                       top: 0,
                       right: 0,
@@ -698,16 +711,16 @@ class _PostState extends State<Post> {
                                               children: [
                                                 Expanded(
                                                   child: MyRadioButton(
-                                                      title: postType
-                                                          .Regular.name,
+                                                      title:
+                                                          postType.Regular.name,
                                                       value: postType.Regular,
                                                       groupValue: widget.type,
                                                       onChanged: (val) {}),
                                                 ),
                                                 Expanded(
                                                   child: MyRadioButton(
-                                                      title: postType
-                                                          .Advice.name,
+                                                      title:
+                                                          postType.Advice.name,
                                                       value: postType.Advice,
                                                       groupValue: widget.type,
                                                       onChanged: (val) {}),
@@ -721,8 +734,7 @@ class _PostState extends State<Post> {
                                                       title: postType
                                                           .Challenge.name,
                                                       titleSize: 13.0,
-                                                      value:
-                                                          postType.Challenge,
+                                                      value: postType.Challenge,
                                                       groupValue: widget.type,
                                                       onChanged: (val) {}),
                                                 ),
@@ -740,8 +752,7 @@ class _PostState extends State<Post> {
                                                 Expanded(
                                                   child: MyRadioButton(
                                                       title: postType
-                                                          .JobOpportunity
-                                                          .name,
+                                                          .JobOpportunity.name,
                                                       titleSize: 13.0,
                                                       value: postType
                                                           .JobOpportunity,
@@ -753,8 +764,7 @@ class _PostState extends State<Post> {
                                                       title: postType
                                                           .Question.name,
                                                       titleSize: 15.0,
-                                                      value:
-                                                          postType.Question,
+                                                      value: postType.Question,
                                                       groupValue: widget.type,
                                                       onChanged: (val) {}),
                                                 ),
@@ -764,8 +774,8 @@ class _PostState extends State<Post> {
                                               children: [
                                                 Expanded(
                                                   child: MyRadioButton(
-                                                      title: postType
-                                                          .RoadMap.name,
+                                                      title:
+                                                          postType.RoadMap.name,
                                                       value: postType.RoadMap,
                                                       groupValue: widget.type,
                                                       onChanged: (val) {}),

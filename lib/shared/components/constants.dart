@@ -5,6 +5,7 @@ class Constants{
 
   static const color= Color(0XFF615AAB);
 
-  static var baseUrl= 'http://127.0.0.1:8000/api/';
+  static var baseUrl= '${IP}api/';
+  static var IP= 'http://192.168.1.102:8000/';
 
 }
