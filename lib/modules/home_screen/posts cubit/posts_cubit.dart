@@ -22,6 +22,15 @@ class PostsCubit extends Cubit<PostsState> {
       emit(PostsErrorState(error: response));
     }
   }
+  getMyPosts(context) async {
+    emit(PostsLoadingState());
+    final response = await PostsService.getMyPosts();
+    if (response is HomeModel) {
+      emit(PostsLoadedState(posts: response));
+    } else {
+      emit(PostsErrorState(error: response));
+    }
+  }
 
   getActiveStories(context) async {
     emit(PostsLoadingState());

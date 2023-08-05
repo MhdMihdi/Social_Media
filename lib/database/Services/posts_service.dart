@@ -85,6 +85,33 @@ class PostsService {
     }
   }
 
+
+  static Future getMyPosts() async {
+    try {
+      String token = await CacheHelper.getData(key: 'token') ?? '';
+
+      // print(token!);
+      var headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer 1|a1gnqWkHrpDfVt4xyx5pERN08zIcf82KpjagygW5'
+      };
+      var request = http.Request(
+          'GET', Uri.parse('${Constants.baseUrl}posts/getMyPosts'));
+      request.headers.addAll(headers);
+      http.StreamedResponse response = await request.send();
+      String streamRes = await response.stream.bytesToString();
+      print(response.statusCode);
+
+      if (response.statusCode == 200) {
+        return homeModelFromJson(streamRes);
+      } else {
+        return response.toString();
+      }
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
   static Future likePost({required String id}) async {
     try {
       String token = await CacheHelper.getData(key: 'token') ?? '';
