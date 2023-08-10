@@ -1,4 +1,3 @@
-import 'package:dev_space/database/models/home_models/story_model.dart';
 import 'package:dev_space/modules/home_screen/posts%20cubit/posts_cubit.dart';
 import 'package:dev_space/shared/components/components.dart';
 import 'package:dev_space/shared/components/constants.dart';
@@ -55,7 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Constants.color,
                 onRefresh: () async {
                   await context.read<PostsCubit>().getPosts(context);
-
                 },
                 child: ListView(children: [
                   Padding(

@@ -1,8 +1,7 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:dev_space/database/Services/user_service.dart';
-import 'package:meta/meta.dart';
+
 
 import '../../../database/Services/posts_service.dart';
 import '../../../database/models/home_models/home_model.dart';
@@ -71,6 +70,16 @@ class PostsCubit extends Cubit<PostsState> {
       emit(PostsErrorState(error: response));
     }
   }
+  reportPost({context, required String id}) async {
+    emit(LikePostLoadingState());
+    final response = await PostsService.reportPost(id: id);
+    if (response is bool) {
+      emit(PostReportedState());
+    } else {
+      emit(PostsErrorState(error: response));
+    }
+  }
+
 
   createPost(
       {context,

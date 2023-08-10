@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dev_space/database/models/home_models/story_model.dart';
 import 'package:dev_space/shared/components/constants.dart';
 import 'package:dev_space/shared/network/local/cache_helper.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/home_models/home_model.dart';
@@ -66,7 +65,7 @@ class PostsService {
       // print(token!);
       var headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer 1|a1gnqWkHrpDfVt4xyx5pERN08zIcf82KpjagygW5'
+        'Authorization': 'Bearer 1|FuW1NtjDxRORULop39NPL8e2PTgamBq6mzV5H4HC'
       };
       var request = http.Request(
           'GET', Uri.parse('${Constants.baseUrl}posts/gethomeposts'));
@@ -185,7 +184,7 @@ class PostsService {
       };
       var request = http.MultipartRequest(
           'POST', Uri.parse('${Constants.baseUrl}posts/saves/save'));
-      request.fields.addAll({'id': '1'});
+      request.fields.addAll({'id': id});
 
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
@@ -206,6 +205,33 @@ class PostsService {
     }
   }
 
+  static Future reportPost({required String id}) async {
+    try {
+      String token = await CacheHelper.getData(key: 'token') ?? '';
+
+      // print(token!);
+      var headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer 1|a1gnqWkHrpDfVt4xyx5pERN08zIcf82KpjagygW5'
+      };
+      var request = http.MultipartRequest(
+          'GET', Uri.parse('${Constants.baseUrl}posts/report_or_cancelreport_on_post/$id'));
+      request.headers.addAll(headers);
+      http.StreamedResponse response = await request.send();
+      String streamRes = await response.stream.bytesToString();
+      print(response.statusCode);
+      print(streamRes);
+      //String message = jsonDecode(streamRes)["message"];
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return response.toString();
+      }
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
   ///stories
   static Future getActiveStories() async {
     try {
@@ -214,7 +240,7 @@ class PostsService {
       // print(token!);
       var headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer 1|a1gnqWkHrpDfVt4xyx5pERN08zIcf82KpjagygW5'
+        'Authorization': 'Bearer 1|k1lWwP8Bygvqwy6vwQL6uvZ2SUMmE3SljCTAcxqc'
       };
       var request = http.Request(
           'GET', Uri.parse('${Constants.baseUrl}posts/avtive_stories'));

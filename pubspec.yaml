@@ -53,10 +53,12 @@ dependencies:
   story: ^1.1.0
   #lottie
   lottie: ^2.4.0
-  #video player
   shimmer: ^2.0.0
   shimmer_animation: ^2.1.0+1
-  #youtube_player_flutter: ^8.1.2
+  video_player: ^2.7.0
+  chewie: ^1.7.0
+
+
 
 
 dev_dependencies:
@@ -69,13 +71,19 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  flutter_launcher_icons: ^0.13.1
   flutter_native_splash: ^2.3.0
+
 flutter_native_splash:
     color: "#ffffff"
     image: assets/images/logo.png
     android_12:
       color: "#ffffff"
       image: assets/images/logo2.png
+
+flutter_launcher_icons:
+  android: true
+  image_path: "assets/images/logo.png"
 
 
 

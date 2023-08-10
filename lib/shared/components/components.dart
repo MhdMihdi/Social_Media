@@ -336,7 +336,7 @@ class _PostState extends State<Post> {
         child: Container(
           margin: EdgeInsets.symmetric(vertical: height * .03),
           width: width * .95,
-          height: height * .45,
+          height: widget.images!=null&&widget.images!.isNotEmpty?height * .45:height * .35,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20.0),
             color: Constants.color,
@@ -432,6 +432,17 @@ class _PostState extends State<Post> {
                                     context: context,
                                     color: Colors.green);
                               }
+                            case '2':
+                              {
+                                PostsCubit().reportPost(
+                                    id: widget.id.toString()
+                                );
+                                showScaffoldSnackBar(
+                                    title: "Reported",
+                                    context: context,
+                                    color: Colors.green);
+
+                              }
 
                               break;
                           }
@@ -439,22 +450,24 @@ class _PostState extends State<Post> {
                   ],
                 ),
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
-                child: Text(
-                  widget.description,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: Colors.white),
+              Expanded(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
+                  child: Text(
+                    widget.description,
+                    //overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
-              Container(
+              widget.images != null&&widget.images!.isNotEmpty?
+               Container(
                 width: width,
                 height: height * .25,
                 child: Stack(
                   children: [
-                    if (widget.images != null)
-                      PageView(
+                    PageView(
                           onPageChanged: (index) {
                             setState(() {
                               currentPage = index;
@@ -462,8 +475,7 @@ class _PostState extends State<Post> {
                           },
                           children:
                               List.generate(widget.images!.length, (index) {
-
-                            return Image.network(
+                                return Image.network(
                                 widget.images![index].contains('storage')
                                     ? Constants.IP +widget.images![index].substring(widget
                                             .images![index]
@@ -486,7 +498,7 @@ class _PostState extends State<Post> {
                             color: Colors.black54,
                           ),
                           child: Text(
-                            '${currentPage + 1}/${media.length}',
+                            '${currentPage + 1}/${widget.images!.length}',
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 10,
@@ -498,12 +510,9 @@ class _PostState extends State<Post> {
                     ),
                   ],
                 ),
-              ),
-              // const Padding(
-              //   padding: EdgeInsets.symmetric(
-              //     horizontal: 8.0,
-              //   ),
-              //   child:
+              )
+                  :const SizedBox(),
+
               Expanded(
                 child: Row(
                   children: [
@@ -524,18 +533,12 @@ class _PostState extends State<Post> {
                   ],
                 ),
               ),
-              // ),
-              // const SizedBox(
-              //   height: 5.0,
-              // ),
-              // const Padding(
-              //   padding: EdgeInsets.symmetric(horizontal: 8.0),
-              //   child:
+
               const Divider(
                 height: 1,
                 color: Colors.white,
               ),
-              // ),
+
               Expanded(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -566,6 +569,7 @@ class _PostState extends State<Post> {
                       titleColor: Colors.white,
                       side: Constants.color,
                       width: 60,
+                      radius: 20.0,
                     ),
                     Container(
                       width: 2,
@@ -806,6 +810,7 @@ class _PostState extends State<Post> {
                       titleColor: Colors.white,
                       side: Constants.color,
                       width: 95,
+                      radius: 20.0,
                     ),
                   ],
                 ),
