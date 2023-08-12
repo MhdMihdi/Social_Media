@@ -309,7 +309,6 @@ class SignUpScreen1 extends StatelessWidget {
                                     onChanged: (val)
                                     {
                                       cubit.selectGender(val);
-
                                     }
                                 ),
                               ),

@@ -15,5 +15,11 @@ class ProfileLoadedState extends ProfileState {
 class ProfileErrorState extends ProfileState {
   ProfileErrorState({required this.error});
   String error;
-
 }
+class ProfileSelectPhoto extends ProfileState{}
+
+class ProfileUpdateInfoLoadingPhoto extends ProfileState{}
+
+class ProfileUpdateInfoSuccessPhoto extends ProfileState{}
+
+class ProfileUpdateInfoDonePhoto extends ProfileState{}

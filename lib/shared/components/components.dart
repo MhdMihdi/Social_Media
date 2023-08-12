@@ -106,6 +106,7 @@ class MyFormField extends StatelessWidget {
       onFieldSubmitted: onSubmit,
       onChanged: onChange,
       onTap: onTap,
+
       validator: validate,
       onSaved: onSave,
       readOnly: readOnly,
@@ -350,9 +351,13 @@ class _PostState extends State<Post> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    //TODo:add pic logic
                     const CircleAvatar(
                       //backgroundImage: ,
                       radius: 20,
+                    ),
+                    const SizedBox(
+                      width: 5.0,
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -369,7 +374,7 @@ class _PostState extends State<Post> {
                       ],
                     ),
                     const SizedBox(
-                      width: 140.0,
+                      width: 85.0,
                     ),
                     PopupMenuButton(
                         color: Colors.white,

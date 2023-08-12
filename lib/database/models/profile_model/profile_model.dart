@@ -11,24 +11,24 @@ String profileModelToJson(ProfileModel data) => json.encode(data.toJson());
 class ProfileModel {
   String message;
   User user;
-  String mediaUrl;
-  String button1;
-  String button2;
+  String?mediaUrl;
+  String?button1;
+  String?button2;
 
   ProfileModel({
     required this.message,
     required this.user,
-     this.mediaUrl='',
-    required this.button1,
-    required this.button2,
+     this.mediaUrl,
+     this.button1,
+     this.button2,
   });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) => ProfileModel(
     message: json["Message"],
     user: User.fromJson(json["user"]),
-    mediaUrl: json["media_url"],
-    button1: json["button1"],
-    button2: json["button2"],
+    mediaUrl: json["media_url"]??(json["media_url"]=null),
+    button1: json["button1"]??(json["button1"]=null),
+    button2: json["button2"]??(json["button2"]=null),
   );
 
   Map<String, dynamic> toJson() => {
@@ -44,22 +44,22 @@ class User {
   int id;
   String firstName;
   String lastName;
-  dynamic userIdentifier;
-  DateTime birthDate;
+  String?userIdentifier;
+  String birthDate;
   String email;
-  dynamic emailVerifiedAt;
-  String phoneNumber;
+  String?emailVerifiedAt;
+  String?phoneNumber;
   String currentLocation;
-  DateTime programmingAge;
+  String programmingAge;
   String gender;
-  String bio;
-  String country;
+  String?bio;
+  String?country;
   DateTime createdAt;
   DateTime updatedAt;
-  List<dynamic> media;
-  Student student;
-  Expert expert;
-  Specialty specialty;
+  List<dynamic>?media;
+  Student?student;
+  Expert?expert;
+  Specialty?specialty;
 
   User({
     required this.id,
@@ -69,40 +69,42 @@ class User {
     required this.birthDate,
     required this.email,
     this.emailVerifiedAt,
-    required this.phoneNumber,
-    required this.currentLocation,
+     this.phoneNumber,
+     required this.currentLocation,
     required this.programmingAge,
     required this.gender,
-    required this.bio,
-    required this.country,
+     this.bio,
+     this.country,
     required this.createdAt,
     required this.updatedAt,
-    required this.media,
-    required this.student,
-    required this.expert,
-    required this.specialty,
+     this.media,
+     this.student,
+     this.expert,
+     this.specialty,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
     id: json["id"],
     firstName: json["first_name"],
     lastName: json["last_name"],
-    userIdentifier: json["user_identifier"],
-    birthDate: DateTime.parse(json["birth_date"]),
+    userIdentifier: json["user_identifier"] ?? (json["user_identifier"]=null),
+    birthDate: json["birth_date"],
     email: json["email"],
     emailVerifiedAt: json["email_verified_at"],
-    phoneNumber: json["phone_number"],
+    phoneNumber: json["phone_number"]?? (json["phone_number"]=null),
     currentLocation: json["current_location"],
-    programmingAge: DateTime.parse(json["programming_age"]),
+    programmingAge: json["programming_age"],
     gender: json["gender"],
-    bio: json["bio"],
-    country: json["country"],
+    bio: json["bio"]?? (json["bio"]=null),
+    country: json["country"]??(json["country"]=null),
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
-    media: List<dynamic>.from(json["media"].map((x) => x)),
-    student: Student.fromJson(json["student"]),
-    expert: Expert.fromJson(json["expert"]),
-    specialty: Specialty.fromJson(json["specialty"]),
+    media: json["media"]!=null?
+    List<dynamic>.from(json["media"].map((x) => x))
+        :[],
+    student: json["student"]!=null?Student.fromJson(json["student"]):null,
+    expert: json["expert"]!=null?Expert.fromJson(json["expert"]):null,
+    specialty: json["specialty"]!=null?Specialty.fromJson(json["specialty"]):null,
   );
 
   Map<String, dynamic> toJson() => {
@@ -110,21 +112,21 @@ class User {
     "first_name": firstName,
     "last_name": lastName,
     "user_identifier": userIdentifier,
-    "birth_date": "${birthDate.year.toString().padLeft(4, '0')}-${birthDate.month.toString().padLeft(2, '0')}-${birthDate.day.toString().padLeft(2, '0')}",
+    "birth_date": birthDate,
     "email": email,
     "email_verified_at": emailVerifiedAt,
     "phone_number": phoneNumber,
     "current_location": currentLocation,
-    "programming_age": "${programmingAge.year.toString().padLeft(4, '0')}-${programmingAge.month.toString().padLeft(2, '0')}-${programmingAge.day.toString().padLeft(2, '0')}",
+    "programming_age": programmingAge,
     "gender": gender,
     "bio": bio,
     "country": country,
     "created_at": createdAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),
-    "media": List<dynamic>.from(media.map((x) => x)),
-    "student": student.toJson(),
-    "expert": expert.toJson(),
-    "specialty": specialty.toJson(),
+    "media": List<dynamic>.from(media!.map((x) => x)),
+    "student": student?.toJson(),
+    "expert": expert?.toJson(),
+    "specialty": specialty?.toJson(),
   };
 }
 
@@ -170,10 +172,10 @@ class Expert {
 
 class Specialty {
   int id;
-  String specialty;
-  String section;
-  String framework;
-  String language;
+  String?specialty;
+  String?section;
+  String?framework;
+  String?language;
   int userId;
   DateTime createdAt;
   DateTime updatedAt;

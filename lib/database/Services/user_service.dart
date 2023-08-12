@@ -85,8 +85,8 @@ class UserService {
   }
 static Future getProfileInfo()async
 {
-
   String token = await CacheHelper.getData(key: 'token') ?? '';
+
     var headers=
     {
       'Accept': 'application/json',
@@ -101,7 +101,7 @@ static Future getProfileInfo()async
       print(response.statusCode);
       print(stream);
       if (response.statusCode == 200) {
-        return profileModelFromJson(stream);
+         return profileModelFromJson(stream);
       } else {
         return response.toString();
       }
@@ -110,6 +110,59 @@ static Future getProfileInfo()async
       return e.toString();
       }
 }
+  static UpdateProfileInfo({
+    image, required firstName, required lastName,
+    required birthDate,required email,
+    required phoneNumber,required currentLocation,
+    required programmingAge,required bio,
+    required city, required specialty,
+    required section, required frameWork,
+    required language,required study_semester,
+    required current_year,required study_sequence,
+    required years_as_expert ,required work_at_company,
+    required companies
+  }) async
+  {
+    String token = await CacheHelper.getData(key: 'token') ?? '';
 
+    var headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer 1|FuW1NtjDxRORULop39NPL8e2PTgamBq6mzV5H4HC'
+    };
+    var request = http.MultipartRequest('POST', Uri.parse('${Constants.baseUrl}users/profile/edit'));
+    request.fields.addAll({
+      'first_name': firstName,
+      'last_name': lastName,
+      'birth_date': birthDate,
+      'email': email,
+      'phone_number': phoneNumber,
+      'current_location': currentLocation,
+      'programming_age': programmingAge,
+      'bio': bio,
+      'country': city,
+      'specialty': specialty,
+      'section': section,
+      'framework': frameWork,
+      'language': language,
+      'study_semester': study_semester,
+      'current_year': current_year,
+      'study_sequence': study_sequence,
+      'years_as_expert': years_as_expert,
+      'work_at_company': work_at_company,
+      'companies': companies
+    });
+    request.files.add(await http.MultipartFile.fromPath('image', image));
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+    }
+    else {
+      print(response.reasonPhrase);
+    }
+
+  }
 
 }

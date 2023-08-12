@@ -1,12 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:dev_space/database/models/friend_request_model/friend_request_model.dart';
-import 'package:dev_space/database/models/home_models/story_model.dart';
 import 'package:dev_space/shared/components/constants.dart';
 import 'package:dev_space/shared/network/local/cache_helper.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../models/home_models/home_model.dart';
+
 
 class FriendRequestService {
   static Future getFriendRequests() async {
