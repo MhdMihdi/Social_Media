@@ -418,13 +418,14 @@ class ProfileScreen extends StatelessWidget {
                                   // physics: const NeverScrollableScrollPhysics(),
                                   itemCount: state.posts.data.posts.length,
                                   itemBuilder: (BuildContext context, int index) {
+
                                     return ProfilePost(
                                       images: state.posts.data.posts[index][5].cast<String>(),
                                       isLikedOrDisliked:
                                       state.posts.data.posts[index][6] =="my _reaction_on_this_post is like"
                                           ? true:
                                       state.posts.data.posts[index][6] =="my _reaction_on_this_post is dislike"?
-                                      false
+                                       false
                                           : null,
                                       id: PostModel.fromJson(
                                           state.posts.data.posts[index][4])
