@@ -69,9 +69,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         Expanded(
                           child: MyFormField(
+                            controller:TextEditingController(),
                             label: 'Whats on your mind ? ',
                             padding: const EdgeInsets.all(10.0),
                             radius: 70.0,
+                            readOnly: true,
+                            onTap: (){},
                           ),
                         ),
                       ],

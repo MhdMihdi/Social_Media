@@ -1,6 +1,7 @@
 // ignore_for_file: unused_local_variable
 
 
+import 'package:dev_space/database/models/home_models/home_model.dart';
 import 'package:dev_space/modules/profile_screen/cubit/profile_cubit.dart';
 import 'package:dev_space/modules/profile_screen/data_between_pro&edit.dart';
 import 'package:dev_space/shared/components/components.dart';
@@ -75,12 +76,12 @@ class ProfileScreen extends StatelessWidget {
                                        backgroundColor: Constants.color,
                                         backgroundImage:NetworkImage(
                                             state.profile.mediaUrl!.contains('storage')
-                                                ? Constants.IP +state.profile.mediaUrl!.substring(
+                                                ? Constants.IP+ state.profile.mediaUrl!.substring(
                                                 state.profile.mediaUrl!
                                                 .indexOf('storage'))
-                                                : Constants.IP+  state.profile.mediaUrl!.substring(
+                                                : Constants.IP +state.profile.mediaUrl!.substring(
                                                 state.profile.mediaUrl!
-                                                .indexOf('media'))
+                                                .indexOf('media'),),
                                         )
                                     ),
                               ),
@@ -411,60 +412,63 @@ class ProfileScreen extends StatelessWidget {
                               ),
                             ),
 
-                            // if (state is PostsLoadedState)
-                            //   ListView.builder(
-                            //       // shrinkWrap: true,
-                            //       // physics: const NeverScrollableScrollPhysics(),
-                            //       itemCount: state.posts.data.posts.length,
-                            //       itemBuilder: (BuildContext context, int index) {
-                            //         return Post(
-                            //           // images: state.posts.data.posts[index][5].cast<String>(),
-                            //           isLikedOrDisliked:
-                            //           state.posts.data.posts[index][6] =="my _reaction_on_this_post is like"
-                            //               ? true:
-                            //           state.posts.data.posts[index][6] =="my _reaction_on_this_post is dislike"?
-                            //           false
-                            //               : null,
-                            //           id: PostModel.fromJson(
-                            //               state.posts.data.posts[index][4])
-                            //               .id,
-                            //           description: PostModel.fromJson(
-                            //               state.posts.data.posts[index][4])
-                            //               .content,
-                            //           name: state.posts.data.posts[index][0],
-                            //           timeago: state.posts.data.posts[index][3],
-                            //           likesCount: PostModel.fromJson(
-                            //               state.posts.data.posts[index][4])
-                            //               .likesCounts,
-                            //           dislikesCount: PostModel.fromJson(
-                            //               state.posts.data.posts[index][4])
-                            //               .dislikesCounts,
-                            //         );
-                            //       }),
-                            // if (state is PostsLoadingState)
-                            //   ListView.builder(
-                            //       shrinkWrap: true,
-                            //       physics: const NeverScrollableScrollPhysics(),
-                            //       itemCount: 5,
-                            //       itemBuilder: (BuildContext context, int index) {
-                            //         return Container(
-                            //           margin:
-                            //           EdgeInsets.symmetric(vertical: getHeight * .03),
-                            //           padding: const EdgeInsets.all(4.0),
-                            //           width: getWidth * .95,
-                            //           height: getHeight * .45,
-                            //           decoration: BoxDecoration(
-                            //             // color: Colors.grey.shade300,
-                            //             color: Colors.deepPurple.shade100.withOpacity(.6),
-                            //             borderRadius: BorderRadius.circular(20.0),
-                            //           ),
-                            //           child: Shimmer(
-                            //             color: Colors.deepPurple.shade200.withOpacity(.3),
-                            //             duration: const Duration(milliseconds: 1000),
-                            //             child: Container(),
-                            //           ),
-                            //         );
-                            //       }),
+                            if (state is ProfilePostsLoadedState)
+                              ListView.builder(
+                                  // shrinkWrap: true,
+                                  // physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: state.posts.data.posts.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return ProfilePost(
+                                      images: state.posts.data.posts[index][5].cast<String>(),
+                                      isLikedOrDisliked:
+                                      state.posts.data.posts[index][6] =="my _reaction_on_this_post is like"
+                                          ? true:
+                                      state.posts.data.posts[index][6] =="my _reaction_on_this_post is dislike"?
+                                      false
+                                          : null,
+                                      id: PostModel.fromJson(
+                                          state.posts.data.posts[index][4])
+                                          .id,
+                                      description: PostModel.fromJson(
+                                          state.posts.data.posts[index][4])
+                                          .content,
+                                      name: state.posts.data.posts[index][0],
+                                      timeago: state.posts.data.posts[index][3],
+                                      likesCount: PostModel.fromJson(
+                                          state.posts.data.posts[index][4])
+                                          .likesCounts,
+                                      dislikesCount: PostModel.fromJson(
+                                          state.posts.data.posts[index][4])
+                                          .dislikesCounts,
+                                      userId: PostModel.fromJson(
+                                          state.posts.data.posts[index][4]).userId,
+                                    );
+                                  }),
+
+                            if (state is ProfilePostsLoadingState)
+                              ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: 5,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return Container(
+                                      margin:
+                                      EdgeInsets.symmetric(vertical: getHeight * .03),
+                                      padding: const EdgeInsets.all(4.0),
+                                      width: getWidth * .95,
+                                      height: getHeight * .45,
+                                      decoration: BoxDecoration(
+                                        // color: Colors.grey.shade300,
+                                        color: Colors.deepPurple.shade100.withOpacity(.6),
+                                        borderRadius: BorderRadius.circular(20.0),
+                                      ),
+                                      child: Shimmer(
+                                        color: Colors.deepPurple.shade200.withOpacity(.3),
+                                        duration: const Duration(milliseconds: 1000),
+                                        child: Container(),
+                                      ),
+                                    );
+                                  }),
                           ]
                         ),
 

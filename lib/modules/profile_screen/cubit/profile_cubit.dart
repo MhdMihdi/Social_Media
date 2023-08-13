@@ -1,6 +1,8 @@
 
 import 'dart:io';
+import 'package:dev_space/database/Services/posts_service.dart';
 import 'package:dev_space/database/Services/user_service.dart';
+import 'package:dev_space/database/models/home_models/home_model.dart';
 import 'package:dev_space/database/models/profile_model/profile_model.dart';
 import 'package:dev_space/shared/components/constants.dart';
 import 'package:dev_space/shared/components/select_photo_options_screen.dart';
@@ -117,10 +119,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   updateProfileInfo(context) async
   {
-    bool isValidate = editKey.currentState!.validate();
-
-    if (isValidate) {
-      // isLoading=true;
+    // isLoading=true;
       emit(ProfileUpdateInfoLoadingPhoto());
       try {
         var data = await UserService.UpdateProfileInfo(
@@ -143,7 +142,8 @@ class ProfileCubit extends Cubit<ProfileState> {
           study_sequence: studySequenceController.text,
           years_as_expert:yearsAsExpertController.text ,
           work_at_company: workAtCompanyController.text,
-          companies: companiesController.text
+          companies: companiesController.text,
+          context: context
         );
         if (data != null) {
           emit(ProfileUpdateInfoSuccessPhoto());
@@ -170,7 +170,56 @@ class ProfileCubit extends Cubit<ProfileState> {
         emit(ProfileUpdateInfoDonePhoto());
       }
     }
+
+  getProfilePosts({context,required id}) async {
+    emit(ProfilePostsLoadingState());
+    //PostModel?post;
+    final response = await PostsService.getProfilePosts(id:id);
+    if (response is HomeModel) {
+      emit(ProfilePostsLoadedState(posts: response));
+    } else {
+      emit(ProfilePostsErrorState(error: response));
+    }
+  }
+
+  likePosts({context, required String id}) async {
+    emit(ProfileLikePostLoadingState());
+    final response = await PostsService.likePost(id: id);
+    if (response is bool) {
+      emit(ProfileLikePostDoneState(liked: response));
+    } else {
+      emit(ProfilePostsErrorState(error: response));
+    }
+  }
+
+  dislikePosts({context, required String id}) async {
+    emit(ProfileLikePostLoadingState());
+    final response = await PostsService.dislikePost(id: id);
+    if (response is bool) {
+      emit(ProfileLikePostDoneState(liked: response));
+    } else {
+      emit(ProfilePostsErrorState(error: response));
+    }
+  }
+  savePost({context, required String id}) async {
+    emit(ProfileLikePostLoadingState());
+    final response = await PostsService.savePost(id: id);
+    if (response is bool) {
+      emit(ProfilePostSavedState());
+    } else {
+      emit(ProfilePostsErrorState(error: response));
+    }
+  }
+  reportPost({context, required String id}) async {
+    emit(ProfileLikePostLoadingState());
+    final response = await PostsService.reportPost(id: id);
+    if (response is bool) {
+      emit(ProfilePostReportedState());
+    } else {
+      emit(ProfilePostsErrorState(error: response));
+    }
+  }
   }
 
 
-}
+

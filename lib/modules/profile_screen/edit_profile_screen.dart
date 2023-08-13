@@ -13,14 +13,14 @@ class EditProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Data data = ModalRoute.of(context)!.settings.arguments as Data;
+
     return BlocProvider(
       create: (context) => ProfileCubit(),
       child: BlocConsumer<ProfileCubit, ProfileState>(
         listener: (context, state) {},
         builder: (context, state) {
+          final Data data = ModalRoute.of(context)!.settings.arguments as Data;
           var cubit = ProfileCubit.get(context);
-
           cubit.fNameController=TextEditingController(text: data.firstName);
           cubit.lNameController=TextEditingController(text: data.lastName);
           cubit.birthDateController=TextEditingController(text: data.birthDate);
@@ -70,6 +70,7 @@ class EditProfileScreen extends StatelessWidget {
                     onPressed: ()
                     {
                       cubit.updateProfileInfo(context);
+                      //print(cubit.phoneNumberController.text);
                     },
                     child: const Text(
                       'Update',
@@ -90,9 +91,10 @@ class EditProfileScreen extends StatelessWidget {
               child: Form(
                 key: cubit.editKey,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: SingleChildScrollView(
+                child: ListView(
                   physics: const BouncingScrollPhysics(),
-                  child: Column(
+                  children:[
+                    Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children:
                     [
@@ -441,10 +443,6 @@ class EditProfileScreen extends StatelessWidget {
                           ),
                           validate: (value)
                           {
-                            if(value!.isEmpty)
-                            {
-                              return 'Companies is required';
-                            }
                             return null;
                           }
                       ),
@@ -465,10 +463,6 @@ class EditProfileScreen extends StatelessWidget {
                           ],
                           validate: (value)
                           {
-                            if(value!.isEmpty)
-                            {
-                              return 'years is required';
-                            }
                             return null;
                           }
                       ),
@@ -484,15 +478,12 @@ class EditProfileScreen extends StatelessWidget {
                           ),
                           validate: (value)
                           {
-                            if(value!.isEmpty)
-                            {
-                              return 'current company is required';
-                            }
                             return null;
                           }
                       ),
                     ],
                   ),
+                 ]
                 ),
               ),
             ),

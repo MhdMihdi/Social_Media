@@ -23,3 +23,32 @@ class ProfileUpdateInfoLoadingPhoto extends ProfileState{}
 class ProfileUpdateInfoSuccessPhoto extends ProfileState{}
 
 class ProfileUpdateInfoDonePhoto extends ProfileState{}
+
+class ProfilePostsLoadingState extends ProfileState{
+
+}
+
+class ProfilePostsLoadedState extends ProfileState{
+  ProfilePostsLoadedState({required this.posts});
+  HomeModel posts;
+}
+
+class ProfilePostsErrorState extends ProfileState{
+  ProfilePostsErrorState({required this.error});
+  String error;
+}
+class ProfilePostSavedState extends ProfileState {}
+
+class ProfilePostReportedState extends ProfileState {}
+
+class ProfileLikePostDoneState extends ProfileState {
+  ProfileLikePostDoneState({required this.liked});
+  bool liked;
+}
+
+class ProfileLikePostLoadingState extends ProfileState {}
+
+class ProfileLikePostErrorState extends ProfileState {
+  ProfileLikePostErrorState({required this.error});
+  String error;
+}

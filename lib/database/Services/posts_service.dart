@@ -84,6 +84,31 @@ class PostsService {
     }
   }
 
+  static Future getProfilePosts({required id}) async {
+    try {
+      String token = await CacheHelper.getData(key: 'token') ?? '';
+
+      // print(token!);
+      var headers = {
+        //'Accept': 'application/json',
+        'Authorization': 'Bearer 1|FuW1NtjDxRORULop39NPL8e2PTgamBq6mzV5H4HC'
+      };
+      var request = http.Request(
+          'GET', Uri.parse('${Constants.baseUrl}users/get_profile_posts/$id'));
+      request.headers.addAll(headers);
+      http.StreamedResponse response = await request.send();
+      String streamRes = await response.stream.bytesToString();
+      print(response.statusCode);
+
+      if (response.statusCode == 200) {
+        return homeModelFromJson(streamRes);
+      } else {
+        return response.toString();
+      }
+    } catch (e) {
+      return e.toString();
+    }
+  }
 
   static Future getMyPosts() async {
     try {
