@@ -11,9 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
-
-
-
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
   @override
@@ -22,7 +19,7 @@ class ProfileScreen extends StatelessWidget {
     var getWidth=MediaQuery.of(context).size.width;
     return BlocProvider(
       create: (context) => ProfileCubit()..getProfileInfo(context),
-      child: BlocConsumer<ProfileCubit, ProfileState>(
+      child: BlocConsumer<ProfileCubit,ProfileState>(
         listener: (context, state) {
           if(state is ProfileErrorState){
             showScaffoldSnackBar(title: state.error, context: context);
@@ -33,8 +30,7 @@ class ProfileScreen extends StatelessWidget {
               body: RefreshIndicator(
                 color: Constants.color,
                 onRefresh: ()async{
-                  await context.read<ProfileCubit>().getProfileInfo(context);
-                  //posts
+                  await context.read<ProfileCubit>().getProfilePosts(context);
                 },
                 child: ListView(
                   children: [
@@ -116,7 +112,7 @@ class ProfileScreen extends StatelessWidget {
                                     );
                                   }),
                             if(state is ProfileLoadedState)
-                            Center(
+                              Center(
                               child: Column(
                                 children: [
                                    Text(
@@ -411,65 +407,78 @@ class ProfileScreen extends StatelessWidget {
                                 color: Colors.grey,
                               ),
                             ),
+                            //posts
+                            BlocProvider(
+                                create: (context)=>ProfileCubit()..getProfilePosts(context),
+                                child: BlocBuilder<ProfileCubit, ProfileState>(
+                                builder: (context, state) {
+                                  return Column(
+                                  children:
+                                  [
+                                    if (state is ProfilePostsLoadedState)
+                                      ListView.builder(
+                                          shrinkWrap: true,
+                                          physics: const NeverScrollableScrollPhysics(),
+                                          itemCount: state.posts.data.posts.length,
+                                          itemBuilder: (BuildContext context, int index) {
 
-                            if (state is ProfilePostsLoadedState)
-                              ListView.builder(
-                                  // shrinkWrap: true,
-                                  // physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: state.posts.data.posts.length,
-                                  itemBuilder: (BuildContext context, int index) {
+                                            return ProfilePost(
+                                              images: state.posts.data.posts[index][5].cast<String>(),
+                                              isLikedOrDisliked:
+                                              state.posts.data.posts[index][6] =="my _reaction_on_this_post is like"
+                                                  ? true:
+                                              state.posts.data.posts[index][6] =="my _reaction_on_this_post is dislike"?
+                                              false
+                                                  : null,
+                                              id: PostModel.fromJson(
+                                                  state.posts.data.posts[index][4])
+                                                  .id,
+                                              description: PostModel.fromJson(
+                                                  state.posts.data.posts[index][4])
+                                                  .content,
+                                              name: state.posts.data.posts[index][0],
+                                              //profileImage: state.posts.data.posts[index].join('')[1],
+                                              timeago: state.posts.data.posts[index][3],
+                                              likesCount: PostModel.fromJson(
+                                                  state.posts.data.posts[index][4])
+                                                  .likesCounts,
+                                              dislikesCount: PostModel.fromJson(
+                                                  state.posts.data.posts[index][4])
+                                                  .dislikesCounts,
+                                              userId: PostModel.fromJson(
+                                                  state.posts.data.posts[index][4]).userId,
+                                            );
+                                          }),
 
-                                    return ProfilePost(
-                                      images: state.posts.data.posts[index][5].cast<String>(),
-                                      isLikedOrDisliked:
-                                      state.posts.data.posts[index][6] =="my _reaction_on_this_post is like"
-                                          ? true:
-                                      state.posts.data.posts[index][6] =="my _reaction_on_this_post is dislike"?
-                                       false
-                                          : null,
-                                      id: PostModel.fromJson(
-                                          state.posts.data.posts[index][4])
-                                          .id,
-                                      description: PostModel.fromJson(
-                                          state.posts.data.posts[index][4])
-                                          .content,
-                                      name: state.posts.data.posts[index][0],
-                                      timeago: state.posts.data.posts[index][3],
-                                      likesCount: PostModel.fromJson(
-                                          state.posts.data.posts[index][4])
-                                          .likesCounts,
-                                      dislikesCount: PostModel.fromJson(
-                                          state.posts.data.posts[index][4])
-                                          .dislikesCounts,
-                                      userId: PostModel.fromJson(
-                                          state.posts.data.posts[index][4]).userId,
-                                    );
-                                  }),
-
-                            if (state is ProfilePostsLoadingState)
-                              ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: 5,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    return Container(
-                                      margin:
-                                      EdgeInsets.symmetric(vertical: getHeight * .03),
-                                      padding: const EdgeInsets.all(4.0),
-                                      width: getWidth * .95,
-                                      height: getHeight * .45,
-                                      decoration: BoxDecoration(
-                                        // color: Colors.grey.shade300,
-                                        color: Colors.deepPurple.shade100.withOpacity(.6),
-                                        borderRadius: BorderRadius.circular(20.0),
-                                      ),
-                                      child: Shimmer(
-                                        color: Colors.deepPurple.shade200.withOpacity(.3),
-                                        duration: const Duration(milliseconds: 1000),
-                                        child: Container(),
-                                      ),
-                                    );
-                                  }),
+                                    if (state is ProfilePostsLoadingState)
+                                      ListView.builder(
+                                          shrinkWrap: true,
+                                          physics: const NeverScrollableScrollPhysics(),
+                                          itemCount: 5,
+                                          itemBuilder: (BuildContext context, int index) {
+                                            return Container(
+                                              margin:
+                                              EdgeInsets.symmetric(vertical: getHeight * .03),
+                                              padding: const EdgeInsets.all(4.0),
+                                              width: getWidth * .95,
+                                              height: getHeight * .45,
+                                              decoration: BoxDecoration(
+                                                // color: Colors.grey.shade300,
+                                                color: Colors.deepPurple.shade100.withOpacity(.6),
+                                                borderRadius: BorderRadius.circular(20.0),
+                                              ),
+                                              child: Shimmer(
+                                                color: Colors.deepPurple.shade200.withOpacity(.3),
+                                                duration: const Duration(milliseconds: 1000),
+                                                child: Container(),
+                                              ),
+                                            );
+                                          }),
+                                  ],
+                                );
+  },
+),
+                            ),
                           ]
                         ),
 
@@ -482,6 +491,6 @@ class ProfileScreen extends StatelessWidget {
             );
         },
       ),
-    );
+);
   }
 }

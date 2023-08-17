@@ -1,6 +1,10 @@
+// ignore_for_file: camel_case_types, constant_identifier_names
+
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 import '../../../database/Services/posts_service.dart';
@@ -8,9 +12,19 @@ import '../../../database/models/home_models/home_model.dart';
 import '../../../database/models/home_models/story_model.dart';
 
 part 'posts_state.dart';
-
+enum postType {
+  Regular,
+  Cv,
+  JobOpportunity,
+  Question,
+  Challenge,
+  RoadMap,
+  Advice,
+}
 class PostsCubit extends Cubit<PostsState> {
   PostsCubit() : super(PostsInitialState());
+
+  static PostsCubit get(context)=>BlocProvider.of(context);
 
   getPosts(context) async {
     emit(PostsLoadingState());
@@ -21,6 +35,15 @@ class PostsCubit extends Cubit<PostsState> {
       emit(PostsErrorState(error: response));
     }
   }
+  // getProfilePosts(context) async {
+  //   emit(PostsLoadingState());
+  //   final response = await PostsService.getProfilePosts();
+  //   if (response is HomeModel) {
+  //     emit(PostsLoadedState(posts: response));
+  //   } else {
+  //     emit(PostsErrorState(error: response));
+  //   }
+  // }
   getMyPosts(context) async {
     emit(PostsLoadingState());
     final response = await PostsService.getMyPosts();
@@ -101,4 +124,21 @@ class PostsCubit extends Cubit<PostsState> {
       emit(PostsErrorState(error: response.toString()));
     }
   }
+
+  var contentController=TextEditingController();
+
+   postType?type;
+
+  sharePost({required context,required id,})async
+  {
+    emit(SharePostUploading());
+    var response=await PostsService.sharePost(id: id.toString(), type: type!.name, content: contentController.text);
+    if(response != null){
+      emit(SharePostUploaded());
+      Navigator.pop(context);
+    }else{
+      emit(PostsErrorState(error: response));
+    }
+  }
 }
+

@@ -4,6 +4,7 @@ import 'package:dev_space/database/Services/posts_service.dart';
 import 'package:dev_space/database/Services/user_service.dart';
 import 'package:dev_space/database/models/home_models/home_model.dart';
 import 'package:dev_space/database/models/profile_model/profile_model.dart';
+import 'package:dev_space/shared/components/components.dart';
 import 'package:dev_space/shared/components/constants.dart';
 import 'package:dev_space/shared/components/select_photo_options_screen.dart';
 import 'package:flutter/material.dart';
@@ -170,55 +171,56 @@ class ProfileCubit extends Cubit<ProfileState> {
         emit(ProfileUpdateInfoDonePhoto());
       }
     }
-
-  getProfilePosts({context,required id}) async {
+  getProfilePosts(context) async {
     emit(ProfilePostsLoadingState());
-    //PostModel?post;
-    final response = await PostsService.getProfilePosts(id:id);
+    final response = await PostsService.getProfilePosts();
     if (response is HomeModel) {
       emit(ProfilePostsLoadedState(posts: response));
     } else {
       emit(ProfilePostsErrorState(error: response));
     }
   }
-
   likePosts({context, required String id}) async {
-    emit(ProfileLikePostLoadingState());
+    emit(LikePostLoadingState());
     final response = await PostsService.likePost(id: id);
     if (response is bool) {
-      emit(ProfileLikePostDoneState(liked: response));
+      emit(LikePostDoneState(liked: response));
     } else {
       emit(ProfilePostsErrorState(error: response));
     }
   }
 
   dislikePosts({context, required String id}) async {
-    emit(ProfileLikePostLoadingState());
+    emit(LikePostLoadingState());
     final response = await PostsService.dislikePost(id: id);
     if (response is bool) {
-      emit(ProfileLikePostDoneState(liked: response));
+      emit(LikePostDoneState(liked: response));
     } else {
       emit(ProfilePostsErrorState(error: response));
     }
   }
+
   savePost({context, required String id}) async {
-    emit(ProfileLikePostLoadingState());
+    emit(LikePostLoadingState());
     final response = await PostsService.savePost(id: id);
     if (response is bool) {
-      emit(ProfilePostSavedState());
+      emit(PostSavedState());
     } else {
       emit(ProfilePostsErrorState(error: response));
     }
   }
   reportPost({context, required String id}) async {
-    emit(ProfileLikePostLoadingState());
+    emit(LikePostLoadingState());
     final response = await PostsService.reportPost(id: id);
     if (response is bool) {
-      emit(ProfilePostReportedState());
+      emit(PostReportedState());
     } else {
       emit(ProfilePostsErrorState(error: response));
     }
   }
+
+
+
   }
 
 

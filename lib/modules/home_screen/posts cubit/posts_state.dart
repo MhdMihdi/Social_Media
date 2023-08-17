@@ -38,3 +38,7 @@ class LikePostErrorState extends PostsState {
   LikePostErrorState({required this.error});
   String error;
 }
+
+class SharePostUploading extends PostsState{}
+
+class SharePostUploaded extends PostsState{}

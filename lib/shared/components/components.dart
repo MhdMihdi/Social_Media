@@ -1,22 +1,17 @@
-// ignore_for_file: must_be_immutable, constant_identifier_names
-import 'dart:io';
+// ignore_for_file: must_be_immutable, constant_identifier_names, prefer_typing_uninitialized_variables
 
+import 'package:dev_space/modules/comment_screen/comment_cubit.dart';
+import 'package:dev_space/modules/comment_screen/comment_screen.dart';
 import 'package:dev_space/modules/home_screen/posts%20cubit/posts_cubit.dart';
 import 'package:dev_space/modules/profile_screen/cubit/profile_cubit.dart';
+import 'package:dev_space/modules/share_screen/share_screen.dart';
 import 'package:dev_space/shared/components/constants.dart';
+import 'package:dev_space/shared/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-enum postType {
-  Regular,
-  Cv,
-  JobOpportunity,
-  Question,
-  Challenge,
-  RoadMap,
-  Advice,
-}
+
 
 class Header extends StatelessWidget {
   const Header({super.key});
@@ -72,11 +67,12 @@ class MyFormField extends StatelessWidget {
   TextAlign align;
   TextStyle? style;
   int? maxLine;
+  String?hint;
 
   MyFormField({
     super.key,
     required this.controller,
-    required this.label,
+     this.label,
     this.prefix,
     this.validate,
     this.labelColor,
@@ -97,6 +93,7 @@ class MyFormField extends StatelessWidget {
     this.align = TextAlign.start,
     this.style,
     this.maxLine = 1,
+    this.hint
   });
   @override
   Widget build(BuildContext context) {
@@ -117,6 +114,7 @@ class MyFormField extends StatelessWidget {
       maxLines: maxLine,
       decoration: InputDecoration(
         labelText: label,
+        hintText: hint,
         labelStyle: TextStyle(
           color: labelColor,
         ),
@@ -309,7 +307,9 @@ class Post extends StatefulWidget {
       this.dislikesCount = 0,
       this.id = 0,
       this.isLikedOrDisliked,
-      this.description = 'on Fire'});
+      this.description = 'on Fire',
+      this.type,
+      });
   String name;
   String timeago;
   String description;
@@ -317,14 +317,16 @@ class Post extends StatefulWidget {
   int dislikesCount;
   bool? isLikedOrDisliked;
   bool isChecked = false;
-  postType? type;
+  postType?type;
   List<String>? images;
   int id;
+
   @override
   State<Post> createState() => _PostState();
 }
 class _PostState extends State<Post> {
   _PostState();
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -348,7 +350,7 @@ class _PostState extends State<Post> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     //TODo:add pic logic
                     const CircleAvatar(
@@ -608,7 +610,18 @@ class _PostState extends State<Post> {
                       width: 80,
                     ),
                     MyButton(
-                      onPressed: () {},
+                      onPressed: ()
+                      {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context)=>CommentScreen(
+                                  id: widget.id,
+                                )
+                            )
+                        );
+
+                      },
                       title: 'Comment',
                       titleColor: Colors.white,
                       side: Constants.color,
@@ -616,199 +629,14 @@ class _PostState extends State<Post> {
                     ),
                     MyButton(
                       onPressed: () {
-                        showModalBottomSheet(
-                            context: context,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(20)),
-                            ),
-                            builder: (BuildContext context) {
-                              return Container(
-                                height: 300,
-                                width: 400,
-                                padding: const EdgeInsets.all(20),
-                                child: Stack(
-                                  alignment: AlignmentDirectional.topCenter,
-                                  clipBehavior: Clip.none,
-                                  children: [
-                                    Positioned(
-                                      top: -35,
-                                      child: Container(
-                                        width: 50,
-                                        height: 6,
-                                        margin:
-                                            const EdgeInsets.only(bottom: 20),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(2.5),
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    ListView(
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            MyFormField(
-                                              controller:
-                                                  TextEditingController(),
-                                              label: 'what\'s in your mind',
-                                              padding:
-                                                  const EdgeInsets.all(15.0),
-                                            ),
-                                            const SizedBox(
-                                              height: 10.0,
-                                            ),
-                                            //pages
-                                            const Text('Your pages:'),
-                                            const SizedBox(
-                                              height: 5.0,
-                                            ),
-                                            InkWell(
-                                              onTap: () {},
-                                              child: Row(
-                                                children: [
-                                                  CircleAvatar(),
-                                                  const SizedBox(
-                                                    width: 5.0,
-                                                  ),
-                                                  Text('Page Name'),
-                                                ],
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 10.0,
-                                            ),
-                                            //Communities
-                                            const Text('Your Communities:'),
-                                            const SizedBox(
-                                              height: 5.0,
-                                            ),
-                                            InkWell(
-                                              onTap: () {},
-                                              child: Row(
-                                                children: [
-                                                  CircleAvatar(),
-                                                  SizedBox(
-                                                    width: 5.0,
-                                                  ),
-                                                  Text('Community Name'),
-                                                ],
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 10.0,
-                                            ),
-                                            MyCheckBox(
-                                                title: 'My profile',
-                                                value: widget.isChecked,
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    widget.isChecked !=
-                                                        widget.isChecked;
-                                                  });
-                                                }),
-
-                                            const Text('The share type:'),
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                  child: MyRadioButton(
-                                                      title:
-                                                          postType.Regular.name,
-                                                      value: postType.Regular,
-                                                      groupValue: widget.type,
-                                                      onChanged: (val) {}),
-                                                ),
-                                                Expanded(
-                                                  child: MyRadioButton(
-                                                      title:
-                                                          postType.Advice.name,
-                                                      value: postType.Advice,
-                                                      groupValue: widget.type,
-                                                      onChanged: (val) {}),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                  child: MyRadioButton(
-                                                      title: postType
-                                                          .Challenge.name,
-                                                      titleSize: 13.0,
-                                                      value: postType.Challenge,
-                                                      groupValue: widget.type,
-                                                      onChanged: (val) {}),
-                                                ),
-                                                Expanded(
-                                                  child: MyRadioButton(
-                                                      title: postType.Cv.name,
-                                                      value: postType.Cv,
-                                                      groupValue: widget.type,
-                                                      onChanged: (val) {}),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                  child: MyRadioButton(
-                                                      title: postType
-                                                          .JobOpportunity.name,
-                                                      titleSize: 13.0,
-                                                      value: postType
-                                                          .JobOpportunity,
-                                                      groupValue: widget.type,
-                                                      onChanged: (val) {}),
-                                                ),
-                                                Expanded(
-                                                  child: MyRadioButton(
-                                                      title: postType
-                                                          .Question.name,
-                                                      titleSize: 15.0,
-                                                      value: postType.Question,
-                                                      groupValue: widget.type,
-                                                      onChanged: (val) {}),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                  child: MyRadioButton(
-                                                      title:
-                                                          postType.RoadMap.name,
-                                                      value: postType.RoadMap,
-                                                      groupValue: widget.type,
-                                                      onChanged: (val) {}),
-                                                ),
-                                              ],
-                                            ),
-                                            Center(
-                                              child: MyButton(
-                                                onPressed: () {},
-                                                title: 'Share it',
-                                                titleColor: Colors.white,
-                                                color: Constants.color,
-                                                width: 100,
-                                                height: 50,
-                                                radius: 20.0,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              );
-                            });
+                        Navigator.push(
+                          context,
+                            MaterialPageRoute(
+                                builder: (context)=>ShareScreen(
+                                  id: widget.id,
+                                )
+                            )
+                        );
                       },
                       title: 'Share',
                       titleColor: Colors.white,
@@ -832,6 +660,7 @@ class ProfilePost extends StatefulWidget {
       {super.key,
       this.images,
       this.name = 'Mohammad Mihdi',
+       this.profileImage='',
       this.timeago = '14 minutes ago',
       this.likesCount = 0,
       this.dislikesCount = 0,
@@ -840,6 +669,7 @@ class ProfilePost extends StatefulWidget {
       this.isLikedOrDisliked,
       this.description = 'on Fire'});
   String name;
+  String profileImage;
   String timeago;
   String description;
   int likesCount;
@@ -882,8 +712,16 @@ class _ProfilePostState extends State<ProfilePost> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     //TODo:add pic logic
-                    const CircleAvatar(
-                      //backgroundImage: ,
+
+                     const CircleAvatar(
+                      // backgroundImage: NetworkImage(
+                      //     widget.profileImage.contains('storage')
+                      //     ? Constants.IP+widget.profileImage.substring(widget
+                      //     .profileImage
+                      //     .indexOf('storage'))
+                      //     : Constants.IP+widget.profileImage.substring(widget
+                      //     .profileImage
+                      //     .indexOf('media'))),
                       radius: 20,
                     ),
                     const SizedBox(
@@ -904,7 +742,7 @@ class _ProfilePostState extends State<ProfilePost> {
                       ],
                     ),
                     const SizedBox(
-                      width: 85.0,
+                      width: 80.0,
                     ),
                     PopupMenuButton(
                         color: Colors.white,
@@ -1192,59 +1030,6 @@ class _ProfilePostState extends State<ProfilePost> {
                                               padding:
                                                   const EdgeInsets.all(15.0),
                                             ),
-                                            const SizedBox(
-                                              height: 10.0,
-                                            ),
-                                            //pages
-                                            const Text('Your pages:'),
-                                            const SizedBox(
-                                              height: 5.0,
-                                            ),
-                                            InkWell(
-                                              onTap: () {},
-                                              child: Row(
-                                                children: [
-                                                  CircleAvatar(),
-                                                  const SizedBox(
-                                                    width: 5.0,
-                                                  ),
-                                                  Text('Page Name'),
-                                                ],
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 10.0,
-                                            ),
-                                            //Communities
-                                            const Text('Your Communities:'),
-                                            const SizedBox(
-                                              height: 5.0,
-                                            ),
-                                            InkWell(
-                                              onTap: () {},
-                                              child: Row(
-                                                children: [
-                                                  CircleAvatar(),
-                                                  SizedBox(
-                                                    width: 5.0,
-                                                  ),
-                                                  Text('Community Name'),
-                                                ],
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 10.0,
-                                            ),
-                                            MyCheckBox(
-                                                title: 'My profile',
-                                                value: widget.isChecked,
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    widget.isChecked !=
-                                                        widget.isChecked;
-                                                  });
-                                                }),
-
                                             const Text('The share type:'),
                                             Row(
                                               children: [
@@ -1947,3 +1732,154 @@ void showScaffoldSnackBar({
       .closed
       .then((value) => ScaffoldMessenger.of(context).clearSnackBars());
 }
+
+class Comment extends StatefulWidget {
+   Comment({
+     super.key,
+     this.commenter='',
+     this.commentContent='',
+     this.likesCount=0,
+     this.dislikesCount=0,
+     this.timeAgo='',
+     this.isLikedOrDisliked,
+     this.commentId=0,
+   });
+  String commenter;
+  String commentContent;
+  int likesCount;
+  int dislikesCount;
+  String timeAgo;
+  bool? isLikedOrDisliked;
+
+  int commentId;
+  @override
+  State<Comment> createState() => _CommentState();
+}
+
+class _CommentState extends State<Comment> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                color: Constants.color,
+                borderRadius: BorderRadius.circular(10.0)
+            ),
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              //mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children:
+              [
+                InkWell(
+                  onTap: () {},
+                  child: Text(
+                    widget.commenter,
+                    style: const TextStyle(
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Flexible(
+                    child: Text(
+                      widget.commentContent,
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
+                    )
+                ),
+              ],
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('${widget.likesCount} Likes'),
+              const SizedBox(width: 5.0,),
+              Text('${widget.dislikesCount} DisLiked'),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(widget.timeAgo),
+              IconButton(
+                  onPressed: () {
+                    CommentCubit().likeComment(context: context,commentId: widget.commentId.toString());
+                    setState(() {
+                      widget.isLikedOrDisliked == null ||
+                          widget.isLikedOrDisliked == false
+                          ? {
+                        if (widget.isLikedOrDisliked == false)
+                          {widget.dislikesCount--},
+                        widget.isLikedOrDisliked = true,
+                        widget.likesCount++
+                      }
+                          : {
+                        widget.isLikedOrDisliked = null,
+                        widget.likesCount--
+                      };
+                    });
+                  },
+                  icon:  Icon(
+                      widget.isLikedOrDisliked == true
+                          ?Icons.thumb_up
+                          :Icons.thumb_up_alt_outlined
+                  )
+              ),
+              IconButton(
+                  onPressed: () {
+                    CommentCubit().dislikeComment(context: context, commentId:widget.commentId.toString() );
+                    setState(() {
+                      if (widget.isLikedOrDisliked == null ||
+                          widget.isLikedOrDisliked!) {
+                        if (widget.isLikedOrDisliked != null &&
+                            widget.isLikedOrDisliked!) {
+                          widget.likesCount--;
+                        }
+                        widget.isLikedOrDisliked = false;
+                        widget.dislikesCount++;
+                      } else {
+                        widget.isLikedOrDisliked = null;
+                        widget.dislikesCount--;
+                      }
+                    });
+                  },
+                  icon:  Icon(
+                    widget.isLikedOrDisliked == false
+                        ? Icons.thumb_down
+                        : Icons.thumb_down_alt_outlined,
+                  )
+              ),
+              IconButton(
+                  onPressed: (){
+                    CommentCubit().reportComment(context: context, commentId: widget.commentId.toString());
+
+                    },
+                  icon: const Icon(
+                    Icons.report,
+                    color: Colors.red,
+                  )
+              )
+            ],
+          ),
+
+        ],
+      ),
+    );
+  }
+}
+
+

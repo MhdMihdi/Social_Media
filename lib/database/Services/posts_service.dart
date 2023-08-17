@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:dev_space/database/models/comment_model/comment_model.dart';
 import 'package:dev_space/database/models/home_models/story_model.dart';
 import 'package:dev_space/shared/components/constants.dart';
 import 'package:dev_space/shared/network/local/cache_helper.dart';
@@ -65,7 +66,7 @@ class PostsService {
       // print(token!);
       var headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer 1|FuW1NtjDxRORULop39NPL8e2PTgamBq6mzV5H4HC'
+        'Authorization': 'Bearer 1|RHPCnSsOEvut1nTh7mMyGocd6ZknULjLhq7DpNHh'
       };
       var request = http.Request(
           'GET', Uri.parse('${Constants.baseUrl}posts/gethomeposts'));
@@ -84,7 +85,7 @@ class PostsService {
     }
   }
 
-  static Future getProfilePosts({required id}) async {
+  static Future getProfilePosts() async {
     try {
       String token = await CacheHelper.getData(key: 'token') ?? '';
 
@@ -94,12 +95,12 @@ class PostsService {
         'Authorization': 'Bearer 1|FuW1NtjDxRORULop39NPL8e2PTgamBq6mzV5H4HC'
       };
       var request = http.Request(
-          'GET', Uri.parse('${Constants.baseUrl}users/get_profile_posts/$id'));
+          'GET', Uri.parse('${Constants.baseUrl}users/get_my_profile_posts'));
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
       String streamRes = await response.stream.bytesToString();
       print(response.statusCode);
-
+      print(streamRes);
       if (response.statusCode == 200) {
         return homeModelFromJson(streamRes);
       } else {
@@ -148,7 +149,7 @@ class PostsService {
       var request = http.Request(
           'GET',
           Uri.parse(
-              '${Constants.baseUrl}posts/like_or_cancellike_on_post/${id}'));
+              '${Constants.baseUrl}posts/like_or_cancellike_on_post/$id'));
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
       String streamRes = await response.stream.bytesToString();
@@ -179,7 +180,7 @@ class PostsService {
       var request = http.Request(
           'GET',
           Uri.parse(
-              '${Constants.baseUrl}posts/dislike_or_canceldislike_on_post/${id}'));
+              '${Constants.baseUrl}posts/dislike_or_canceldislike_on_post/$id'));
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
       String streamRes = await response.stream.bytesToString();
@@ -265,7 +266,7 @@ class PostsService {
       // print(token!);
       var headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer 1|k1lWwP8Bygvqwy6vwQL6uvZ2SUMmE3SljCTAcxqc'
+        'Authorization': 'Bearer 1|RHPCnSsOEvut1nTh7mMyGocd6ZknULjLhq7DpNHh'
       };
       var request = http.Request(
           'GET', Uri.parse('${Constants.baseUrl}posts/avtive_stories'));
@@ -283,52 +284,147 @@ class PostsService {
       return e.toString();
     }
   }
+
+  //comments
+ static Future getComment ({required postId})async
+ {
+   String token = await CacheHelper.getData(key: 'token') ?? '';
+
+   var headers = {
+     'Accept': 'application/json',
+     'Authorization': 'Bearer 1|RHPCnSsOEvut1nTh7mMyGocd6ZknULjLhq7DpNHh'
+   };
+   var request = http.Request('GET', Uri.parse('${Constants.baseUrl}posts/get_comments_on_post/$postId'));
+
+   request.headers.addAll(headers);
+   http.StreamedResponse response = await request.send();
+   String streamRes = await response.stream.bytesToString();
+   //print(streamRes);
+   if (response.statusCode == 200) {
+     return commentModelFromJson(streamRes);
+   }
+   else {
+     print(response.reasonPhrase);
+   }
+ }
+ static Future likeComment({required commentId})async
+ {
+   String token = await CacheHelper.getData(key: 'token') ?? '';
+   var headers = {
+     'Accept': 'application/json',
+     'Authorization': 'Bearer 1|RHPCnSsOEvut1nTh7mMyGocd6ZknULjLhq7DpNHh'
+   };
+   var request = http.Request('GET', Uri.parse('${Constants.baseUrl}posts/like_or_cancellike_on_comment/$commentId'));
+
+   request.headers.addAll(headers);
+
+   http.StreamedResponse response = await request.send();
+   String streamRes = await response.stream.bytesToString();
+   print(streamRes);
+   if (response.statusCode == 200) {
+     if (streamRes == 'cancel_like') {
+       return false;
+     }
+     return true;
+   }
+   else {
+     print(response.reasonPhrase);
+   }
+
+ }
+ static Future dislikeComment({required commentId})async
+ {
+   String token = await CacheHelper.getData(key: 'token') ?? '';
+   var headers = {
+     'Accept': 'application/json',
+     'Authorization': 'Bearer 1|RHPCnSsOEvut1nTh7mMyGocd6ZknULjLhq7DpNHh'
+   };
+   var request = http.Request('GET', Uri.parse('${Constants.baseUrl}posts/dislike_or_canceldislike_on_comment/$commentId'));
+
+   request.headers.addAll(headers);
+
+   http.StreamedResponse response = await request.send();
+
+   String streamRes = await response.stream.bytesToString();
+   print(streamRes);
+   if (response.statusCode == 200) {
+     if (streamRes == 'cancel_dislikes') {
+       return false;
+     }
+     return true;
+   }
+   else {
+     print(response.reasonPhrase);
+   }
+
+ }
+ static Future reportComment({required commentId})async
+ {
+   String token = await CacheHelper.getData(key: 'token') ?? '';
+   var headers = {
+     'Accept': 'application/json',
+     'Authorization': 'Bearer 1|RHPCnSsOEvut1nTh7mMyGocd6ZknULjLhq7DpNHh'
+   };
+   var request = http.Request('GET', Uri.parse('${Constants.baseUrl}posts/report_or_cancelreport_on_comment/$commentId'));
+
+   request.headers.addAll(headers);
+
+   http.StreamedResponse response = await request.send();
+   String streamRes = await response.stream.bytesToString();
+   if (response.statusCode == 200) {
+     return true;
+   }
+   else {
+     return response.toString();
+   }
+ }
+ static Future createComment({required content,required id})async
+ {
+   var headers = {
+     'Accept': 'application/json',
+     'Content-Type': 'application/x-www-form-urlencoded',
+     'Authorization': 'Bearer 1|RHPCnSsOEvut1nTh7mMyGocd6ZknULjLhq7DpNHh'
+   };
+   var request = http.Request('POST', Uri.parse('${Constants.baseUrl}posts/create_comment_on_post/$id'));
+   request.bodyFields = {
+     'content': content
+   };
+   request.headers.addAll(headers);
+   http.StreamedResponse response = await request.send();
+   String stream=await response.stream.bytesToString();
+   var res=jsonDecode(stream);
+   print(response.statusCode);
+   print(res);
+   if (response.statusCode == 200||response.statusCode==201) {
+     return res;
+   }
+   else {
+     print(response.reasonPhrase);
+   }
+ }
+ static Future sharePost({required id,required type,required content})async
+ {
+   var headers = {
+     'Accept': 'application/json',
+     //'Content-Type': 'application/x-www-form-urlencoded',
+     'Authorization': 'Bearer 1|RHPCnSsOEvut1nTh7mMyGocd6ZknULjLhq7DpNHh'
+   };
+   var request = http.Request('POST', Uri.parse('${Constants.baseUrl}posts/share_post_2/$id'));
+   request.bodyFields = {
+     'type': type,
+     'content': content
+   };
+   request.headers.addAll(headers);
+   http.StreamedResponse response = await request.send();
+   String stream=await response.stream.bytesToString();
+   var res =jsonDecode(stream);
+   if (response.statusCode == 200||response.statusCode==201) {
+     return res;
+   }
+   else {
+     print(response.reasonPhrase);
+   }
+
+ }
 }
-// jsonEncode({
-// "Message": "success",
-// "data": {
-// "posts":  [
-// [
-// "Eladio Dickinson",
-// [],
-// "under_graduate_ years_as_expert = 2",
-// "2 hours ago",
-// {
-// "id": 113,
-// "title": "naser",
-// "content": "flutter fornt-end developer3",
-// "type": "Regular",
-// "likes_counts": 0,
-// "dislikes_counts": 0,
-// "reports_number": 0,
-// "Approvals_counter": 0,
-// "location_type": "App\\Models\\User",
-// "location_id": 1,
-// "user_id": 1,
-// "created_at": "2023-08-04T11:20:55.000000Z",
-// "updated_at": "2023-08-04T11:20:55.000000Z",
-// "user": {
-// "id": 1,
-// "first_name": "Eladio",
-// "last_name": "Dickinson",
-// "user_identifier": null,
-// "birth_date": "1990-06-17",
-// "email": "annamae46@example.org",
-// "email_verified_at": "2023-08-02T16:11:00.000000Z",
-// "phone_number": "51361412",
-// "current_location": "Dedrick Hoppe",
-// "programming_age": "1994-08-02",
-// "gender": "male",
-// "bio": "Bla Bla Bla",
-// "country": "Syria",
-// "created_at": "2023-08-02T16:11:00.000000Z",
-// "updated_at": "2023-08-03T14:03:22.000000Z"
-// }
-// },
-// [
-// "public/storage/9/List-of-Products-for-store.png"
-// ],
-// "you have no reaction on this post ",
-// null
-// ],]   }
-// })
+

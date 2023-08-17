@@ -7,6 +7,7 @@ import 'package:dev_space/modules/auth/log_in/forget_password/email_verifiction.
 import 'package:dev_space/modules/auth/sign_up/sign_up_screen1.dart';
 import 'package:dev_space/modules/auth/sign_up/sign_up_screen2.dart';
 import 'package:dev_space/modules/auth/welcome/welcome_screen.dart';
+import 'package:dev_space/modules/comment_screen/comment_screen.dart';
 import 'package:dev_space/modules/communities_screen/communities_sceen.dart';
 import 'package:dev_space/modules/friends_request_screen/friends_request_screen.dart';
 import 'package:dev_space/modules/home_screen/home_screen.dart';
@@ -36,6 +37,7 @@ class NamedRoutes
    static const storyViewScreen= 'storyViewScreen';
    static const storyAddScreen= 'storyAddScreen';
    static const editProfileScreen= 'EditProfileScreen';
+   static const commentScreen= 'CommentScreen';
 
 }
 
@@ -58,6 +60,7 @@ class AppRoutes
   static const storyViewScreen= StoryViewScreen();
   static const storyAddScreen= StoryAddScreen();
   static const editProfileScreen= EditProfileScreen();
+  static const commentScreen= CommentScreen();
 
 
  
@@ -80,6 +83,7 @@ class AppRoutes
      NamedRoutes.storyViewScreen:(context)=>AppRoutes.storyViewScreen,
      NamedRoutes.storyAddScreen:(context)=>AppRoutes.storyAddScreen,
      NamedRoutes.editProfileScreen:(context)=>AppRoutes.editProfileScreen,
+     NamedRoutes.commentScreen:(context)=>AppRoutes.commentScreen,
 
 
   };
