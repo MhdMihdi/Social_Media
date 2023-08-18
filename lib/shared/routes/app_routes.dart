@@ -9,7 +9,9 @@ import 'package:dev_space/modules/auth/sign_up/sign_up_screen2.dart';
 import 'package:dev_space/modules/auth/welcome/welcome_screen.dart';
 import 'package:dev_space/modules/comment_screen/comment_screen.dart';
 import 'package:dev_space/modules/communities_screen/communities_sceen.dart';
+import 'package:dev_space/modules/drawer/createPage.dart';
 import 'package:dev_space/modules/friends_request_screen/friends_request_screen.dart';
+import 'package:dev_space/modules/home_screen/create_post.dart';
 import 'package:dev_space/modules/home_screen/home_screen.dart';
 import 'package:dev_space/modules/home_screen/sotry_view_screen.dart';
 import 'package:dev_space/modules/home_screen/story_add_screen.dart';
@@ -38,6 +40,8 @@ class NamedRoutes
    static const storyAddScreen= 'storyAddScreen';
    static const editProfileScreen= 'EditProfileScreen';
    static const commentScreen= 'CommentScreen';
+   static const createPostScreen= 'createPostScreen';
+   static const createPageScreen= 'createPageScreen';
 
 }
 
@@ -61,6 +65,10 @@ class AppRoutes
   static const storyAddScreen= StoryAddScreen();
   static const editProfileScreen= EditProfileScreen();
   static const commentScreen= CommentScreen();
+  static const createPostScreen= CreatePost();
+  static var createPageScreen= CreatePage();
+
+
 
 
  
@@ -84,6 +92,8 @@ class AppRoutes
      NamedRoutes.storyAddScreen:(context)=>AppRoutes.storyAddScreen,
      NamedRoutes.editProfileScreen:(context)=>AppRoutes.editProfileScreen,
      NamedRoutes.commentScreen:(context)=>AppRoutes.commentScreen,
+     NamedRoutes.createPostScreen:(context)=>AppRoutes.createPostScreen,
+     NamedRoutes.createPageScreen:(context)=>AppRoutes.createPageScreen,
 
 
   };

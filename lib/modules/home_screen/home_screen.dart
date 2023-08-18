@@ -26,6 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
           if (state is PostsErrorState) {
             showScaffoldSnackBar(title: state.error, context: context);
           }
+          if(state is PostsLoadedState && state.posts.message== 'end posts >> refresh'){
+            showScaffoldSnackBar(title: 'Refresh', context: context);
+          }
 
         },
         builder: (context, state) {
@@ -57,8 +60,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 onRefresh: () async {
                   await context.read<PostsCubit>().getPosts(context);
                 },
-                child: ListView(children: [
-                  Padding(
+                child: ListView(
+                  children:
+                  [
+                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -127,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Navigator.pushNamed(context,
                                             NamedRoutes.storyViewScreen);
                                       },
-                                      child: CircleAvatar(
+                                       child: CircleAvatar(
                                         radius: 30,
                                         backgroundImage: NetworkImage(
                                             state.stories.data[index][1]),

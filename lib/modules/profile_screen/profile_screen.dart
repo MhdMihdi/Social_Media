@@ -128,6 +128,19 @@ class ProfileScreen extends StatelessWidget {
                                 ],
                               ),
                             ),
+                            // Center(
+                            //   child: MyButton(
+                            //       onPressed: (){},
+                            //       title: 'Add Friend',
+                            //       color: Constants.color,
+                            //       titleColor: Colors.white,
+                            //       width: 150.0,
+                            //       height: 50.0,
+                            //       radius: 20.0,
+                            //   ),
+                            // ),
+                            // SizedBox(height: 15.0,),
+
                             Row(
                               children:
                               [
@@ -421,7 +434,6 @@ class ProfileScreen extends StatelessWidget {
                                           physics: const NeverScrollableScrollPhysics(),
                                           itemCount: state.posts.data.posts.length,
                                           itemBuilder: (BuildContext context, int index) {
-
                                             return ProfilePost(
                                               images: state.posts.data.posts[index][5].cast<String>(),
                                               isLikedOrDisliked:

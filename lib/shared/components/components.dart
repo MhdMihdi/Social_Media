@@ -2,6 +2,7 @@
 
 import 'package:dev_space/modules/comment_screen/comment_cubit.dart';
 import 'package:dev_space/modules/comment_screen/comment_screen.dart';
+import 'package:dev_space/modules/communities_screen/communities_cubit.dart';
 import 'package:dev_space/modules/home_screen/posts%20cubit/posts_cubit.dart';
 import 'package:dev_space/modules/profile_screen/cubit/profile_cubit.dart';
 import 'package:dev_space/modules/share_screen/share_screen.dart';
@@ -375,7 +376,7 @@ class _PostState extends State<Post> {
                       ],
                     ),
                     const SizedBox(
-                      width: 85.0,
+                      width: 130.0,
                     ),
                     PopupMenuButton(
                         color: Colors.white,
@@ -425,6 +426,33 @@ class _PostState extends State<Post> {
                                           ),
                                         ],
                                       ))),
+                                      const PopupMenuItem<String>(
+                              value: '3',
+                              child: SizedBox(
+                                  width: 100,
+                                  // height: 30,
+                                  child: Row(
+                                    // mainAxisAlignment:
+                                    //     MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Icon(
+                                        Icons.thumb_up,
+                                        color: Colors.green,
+                                      ),
+                                      Icon(
+                                        Icons.thumb_up,
+                                        color: Colors.green,
+                                      ),
+                                      SizedBox(
+                                        width: 7,
+                                      ),
+                                      Text(
+                                        "Agree",
+                                        style: TextStyle(
+                                            color: Colors.deepPurple),
+                                      ),
+                                    ],)
+                              )),
                             ],
                         onSelected: (index) async {
                           switch (index) {
@@ -691,7 +719,7 @@ class _ProfilePostState extends State<ProfilePost> {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     return BlocProvider(
-      create: (context) => PostsCubit(),
+      create: (context) => ProfileCubit(),
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Container(
@@ -1143,6 +1171,389 @@ class _ProfilePostState extends State<ProfilePost> {
   }
 }
 
+class CommunityPost extends StatefulWidget {
+  CommunityPost(
+      {super.key,
+        this.images,
+        this.name = 'Mohammad Mihdi',
+        this.timeago = '14 minutes ago',
+        this.likesCount = 0,
+        this.dislikesCount = 0,
+        this.id = 0,
+        this.isLikedOrDisliked,
+        this.description = 'on Fire',
+        this.type,
+      });
+  String name;
+  String timeago;
+  String description;
+  int likesCount;
+  int dislikesCount;
+  bool? isLikedOrDisliked;
+  bool isChecked = false;
+  postType?type;
+  List<String>? images;
+  int id;
+
+  @override
+  State<CommunityPost>createState() => _CommunityPostState();
+}
+class _CommunityPostState extends State<CommunityPost> {
+  _CommunityPostState();
+
+  @override
+  Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
+    return BlocProvider(
+      create: (context) => CommunitiesCubit(),
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Container(
+          margin: EdgeInsets.symmetric(vertical: height * .03),
+          width: width * .95,
+          height: widget.images!=null&&widget.images!.isNotEmpty?height * .45:height * .35,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20.0),
+            color: Constants.color,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    //TODo:add pic logic
+                    const CircleAvatar(
+                      //backgroundImage: ,
+                      radius: 20,
+                    ),
+                    const SizedBox(
+                      width: 5.0,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.name,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        Text(
+                          widget.timeago,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      width: 130.0,
+                    ),
+                    PopupMenuButton(
+                        color: Colors.white,
+                        itemBuilder: (_) => <PopupMenuItem<String>>[
+                          const PopupMenuItem<String>(
+                              value: '1',
+                              child: SizedBox(
+                                  width: 100,
+                                  // height: 30,
+                                  child: Row(
+                                    // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Icon(
+                                        Icons.save_alt,
+                                        color: Colors.green,
+                                      ),
+                                      SizedBox(
+                                        width: 7,
+                                      ),
+                                      Text(
+                                        "Save",
+                                        style: TextStyle(
+                                            color: Colors.deepPurple),
+                                      ),
+                                    ],
+                                  ))),
+                          const PopupMenuItem<String>(
+                              value: '2',
+                              child: SizedBox(
+                                  width: 100,
+                                  // height: 30,
+                                  child: Row(
+                                    // mainAxisAlignment:
+                                    //     MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Icon(
+                                        Icons.report,
+                                        color: Colors.red,
+                                      ),
+                                      SizedBox(
+                                        width: 7,
+                                      ),
+                                      Text(
+                                        "Report",
+                                        style: TextStyle(
+                                            color: Colors.deepPurple),
+                                      ),]
+                                    ))),
+                                      const PopupMenuItem<String>(
+                                        value: '3',
+                                        child: SizedBox(
+                                            width: 100,
+                                            // height: 30,
+                                            child: Row(
+                                              // mainAxisAlignment:
+                                              //     MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                Icon(
+                                                  Icons.thumb_up,
+                                                  color: Colors.green,
+                                                ),
+                                                Icon(
+                                                  Icons.thumb_up,
+                                                  color: Colors.green,
+                                                ),
+                                                SizedBox(
+                                                  width: 7,
+                                                ),
+                                                Text(
+                                                  "Agree",
+                                                  style: TextStyle(
+                                                      color: Colors.deepPurple),
+                                                ),
+                                    ],)
+                                  )),
+                        ],
+                        onSelected: (index) async {
+                          switch (index) {
+                            case '1':
+                              {
+                                CommunitiesCubit().savePost(
+                                  id: widget.id.toString(),
+                                );
+                                showScaffoldSnackBar(
+                                    title: "Added to your saved posts",
+                                    context: context,
+                                    color: Colors.green);
+                              }
+                            case '2':
+                              {
+                                CommunitiesCubit().reportPost(
+                                    id: widget.id.toString()
+                                );
+                                showScaffoldSnackBar(
+                                    title: "Reported",
+                                    context: context,
+                                    color: Colors.green);
+
+                              }
+
+                              break;
+                          }
+                        })
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
+                  child: Text(
+                    widget.description,
+                    //overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+              widget.images != null&&widget.images!.isNotEmpty?
+              Container(
+                width: width,
+                height: height * .25,
+                child: Stack(
+                  children: [
+                    PageView(
+                        onPageChanged: (index) {
+                          setState(() {
+                            currentPage = index;
+                          });
+                        },
+                        children:
+                        List.generate(widget.images!.length, (index) {
+                          return Image.network(
+                              widget.images![index].contains('storage')
+                                  ? Constants.IP +widget.images![index].substring(widget
+                                  .images![index]
+                                  .indexOf('storage'))
+                                  : Constants.IP+  widget.images![index].substring(widget
+                                  .images![index]
+                                  .indexOf('media')));
+                        })),
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: 30,
+                          height: 20,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.0),
+                            color: Colors.black54,
+                          ),
+                          child: Text(
+                            '${currentPage + 1}/${widget.images!.length}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+                  :const SizedBox(),
+
+              Expanded(
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      '${widget.likesCount} Likes',
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    const SizedBox(
+                      width: 15,
+                    ),
+                    Text(
+                      '${widget.dislikesCount} DisLikes',
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+
+              const Divider(
+                height: 1,
+                color: Colors.white,
+              ),
+
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    MyButton(
+                      onPressed: () async {
+                        await CommunitiesCubit().likePosts(
+                            context: context, id: widget.id.toString());
+                        setState(() {
+                          widget.isLikedOrDisliked == null ||
+                              widget.isLikedOrDisliked == false
+                              ? {
+                            if (widget.isLikedOrDisliked == false)
+                              {widget.dislikesCount--},
+                            widget.isLikedOrDisliked = true,
+                            widget.likesCount++
+                          }
+                              : {
+                            widget.isLikedOrDisliked = null,
+                            widget.likesCount--
+                          };
+                        });
+                      },
+                      title: 'Like',
+                      icon: widget.isLikedOrDisliked == true
+                          ? Icons.thumb_up_off_alt_rounded
+                          : Icons.thumb_up_alt_outlined,
+                      titleColor: Colors.white,
+                      side: Constants.color,
+                      width: 60,
+                      radius: 20.0,
+                    ),
+                    Container(
+                      width: 2,
+                      height: 10,
+                      color: Colors.white,
+                    ),
+                    MyButton(
+                      onPressed: () async {
+                        await CommunitiesCubit().dislikePosts(
+                            context: context, id: widget.id.toString());
+                        setState(() {
+                          if (widget.isLikedOrDisliked == null ||
+                              widget.isLikedOrDisliked!) {
+                            if (widget.isLikedOrDisliked != null &&
+                                widget.isLikedOrDisliked!) {
+                              widget.likesCount--;
+                            }
+                            widget.isLikedOrDisliked = false;
+                            widget.dislikesCount++;
+                          } else {
+                            widget.isLikedOrDisliked = null;
+                            widget.dislikesCount--;
+                          }
+                        });
+                      },
+                      title: 'DisLike',
+                      icon: widget.isLikedOrDisliked == false
+                          ? Icons.thumb_down
+                          : Icons.thumb_down_alt_outlined,
+                      titleColor: Colors.white,
+                      side: Constants.color,
+                      width: 80,
+                    ),
+                    MyButton(
+                      onPressed: ()
+                      {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context)=>CommentScreen(
+                                  id: widget.id,
+                                )
+                            )
+                        );
+
+                      },
+                      title: 'Comment',
+                      titleColor: Colors.white,
+                      side: Constants.color,
+                      width: 95,
+                    ),
+                    MyButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context)=>ShareScreen(
+                                  id: widget.id,
+                                )
+                            )
+                        );
+                      },
+                      title: 'Share',
+                      titleColor: Colors.white,
+                      side: Constants.color,
+                      width: 95,
+                      radius: 20.0,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 
 

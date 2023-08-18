@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 
+import 'package:dev_space/database/models/Notifications_model/new_notificons_model.dart';
+import 'package:dev_space/database/models/Notifications_model/old_notification_model.dart';
 import 'package:dev_space/database/models/home_models/story_model.dart';
 import 'package:dev_space/database/models/profile_model/profile_model.dart';
 import 'package:dev_space/modules/profile_screen/data_between_pro&edit.dart';
@@ -59,24 +61,49 @@ class UserService {
   }
 
 
-  static Future getNotifications() async {
+  static Future getOldNotifications() async {
     try {
       String token = await CacheHelper.getData(key: 'token') ?? '';
 
       // print(token!);
       var headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer 1|a1gnqWkHrpDfVt4xyx5pERN08zIcf82KpjagygW5'
+        'Authorization': 'Bearer 1|RHPCnSsOEvut1nTh7mMyGocd6ZknULjLhq7DpNHh'
       };
       var request = http.Request('GET',
-          Uri.parse('${Constants.baseUrl}friends/request/receiver/show'));
+          Uri.parse('${Constants.baseUrl}users/show_old_notification'));
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
       String streamRes = await response.stream.bytesToString();
       print(response.statusCode);
       print(streamRes);
       if (response.statusCode == 200) {
-        return welcomeStroiesFromJson(streamRes);
+        return oldNotificationsFromJson(streamRes);
+      } else {
+        return response.toString();
+      }
+    } catch (e) {
+      return e.toString();
+    }
+  }
+  static Future getNewNotifications() async {
+    try {
+      String token = await CacheHelper.getData(key: 'token') ?? '';
+
+      // print(token!);
+      var headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer 1|RHPCnSsOEvut1nTh7mMyGocd6ZknULjLhq7DpNHh'
+      };
+      var request = http.Request('GET',
+          Uri.parse('${Constants.baseUrl}users/show_unread_notification'));
+      request.headers.addAll(headers);
+      http.StreamedResponse response = await request.send();
+      String streamRes = await response.stream.bytesToString();
+      print(response.statusCode);
+      print(streamRes);
+      if (response.statusCode == 200) {
+        return newNotificationsFromJson(streamRes);
       } else {
         return response.toString();
       }
@@ -91,7 +118,7 @@ static Future getProfileInfo()async
     var headers=
     {
       'Accept': 'application/json',
-      'Authorization': 'Bearer 1|FuW1NtjDxRORULop39NPL8e2PTgamBq6mzV5H4HC'
+      'Authorization': 'Bearer 1|lcRMmyu03137nCjoVgQ8Pul6DDWcl4z5znuG41qt'
     };
     try{
     var request=http.MultipartRequest('GET',
