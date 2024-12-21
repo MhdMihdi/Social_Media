@@ -1,4 +1,6 @@
 import 'package:dev_space/modules/home_screen/posts%20cubit/posts_cubit.dart';
+import 'package:dev_space/modules/home_screen/sotry_view_screen.dart';
+import 'package:dev_space/modules/search/search_screen.dart';
 import 'package:dev_space/shared/components/components.dart';
 import 'package:dev_space/shared/components/constants.dart';
 import 'package:dev_space/shared/routes/app_routes.dart';
@@ -29,15 +31,15 @@ class _HomeScreenState extends State<HomeScreen> {
           if(state is PostsLoadedState && state.posts.message== 'end posts >> refresh'){
             showScaffoldSnackBar(title: 'Refresh', context: context);
           }
-
-        },
+          },
         builder: (context, state) {
           var cubit= PostsCubit.get(context);
           return Scaffold(
               appBar: AppBar(
                 backgroundColor: Constants.color,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0)),
+                    borderRadius: BorderRadius.circular(15.0)
+                ),
                 title: const Text(
                   'DevSpace',
                   style: TextStyle(
@@ -48,7 +50,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 actions: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: (){
+                      Navigator.push(context,
+                      MaterialPageRoute(builder: (context)=>SearchScreen())
+                      );
+                    },
                     icon: const Icon(Icons.search),
                     color: Colors.white,
                     iconSize: 30,
@@ -77,11 +83,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         Expanded(
                           child: MyFormField(
                             controller:TextEditingController(),
-                            label: 'Whats on your mind ? ',
+                            hint: 'Whats on your mind ? ',
                             padding: const EdgeInsets.all(10.0),
                             radius: 70.0,
                             readOnly: true,
-                            onTap: (){},
+                            onTap: ()
+                            {
+                              Navigator.pushNamed(
+                                  context,
+                                  NamedRoutes.createPostScreen
+                              );
+                            },
                           ),
                         ),
                       ],
@@ -122,76 +134,42 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 90.0,
                               child: BlocBuilder<PostsCubit, PostsState>(
                                 builder: (context, state) {
-                                  if(state is StoriesLoadedState) {
-                                    ListView.builder(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    itemBuilder: (context, index) =>
-                                        MaterialButton(
-                                      onPressed: () {
-                                        Navigator.pushNamed(context,
-                                            NamedRoutes.storyViewScreen);
-                                      },
-                                       child: CircleAvatar(
-                                        radius: 30,
-                                        backgroundImage: NetworkImage(
-                                            state.stories.data[index][1]),
-                                      ),
-                                    ),
-                                    itemCount: state.stories.data.length,
-                                  );
-                                  }
-                                  if(state is PostsLoadingState){
-                                    ListView.builder(
-                                      shrinkWrap: true,
-                                      scrollDirection: Axis.horizontal,
-                                        itemCount: 4,
-                                      itemBuilder: (context, index) =>
-                                           CircleAvatar(
-                                              radius: 30,
-                                            foregroundColor: Colors.deepPurple,
-                                             child:  Shimmer(
-                                               color: Colors.deepPurple.shade200.withOpacity(.3),
-                                               duration: const Duration(milliseconds: 1000),
-                                               child: Container(),
-                                             ),
-                                            )
+                                  return Row(
+                                    children:
+                                    [
+                                      if(state is StoriesLoadedState)
 
-                                    );
-                                  }
-                                  return const SizedBox();
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                        BlocProvider(
-                          create: (context) => PostsCubit()..getActiveStories(context),
-                          child: Expanded(
-                            child: SizedBox(
-                              height: 90.0,
-                              child: BlocBuilder<PostsCubit, PostsState>(
-                                builder: (context, state) {
-                                  if(state is StoriesLoadedState) {
                                     ListView.builder(
                                       shrinkWrap: true,
                                       scrollDirection: Axis.horizontal,
                                       itemBuilder: (context, index) =>
                                           MaterialButton(
                                             onPressed: () {
-                                              Navigator.pushNamed(context,
-                                                  NamedRoutes.storyViewScreen);
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(builder: (context)=>
+                                                StoryViewScreen(
+                                                  id: state.stories.data[index][0],
+                                                )
+                                                )
+                                              );
                                             },
                                             child: CircleAvatar(
                                               radius: 30,
                                               backgroundImage: NetworkImage(
-                                                  state.stories.data[index][1]),
+                                                  state.stories.data[index][1][0].contains('storage')
+                                                      ? Constants.IP +state.stories.data[index][1][0].substring(
+                                                      state.stories.data[index][1][0]
+                                                          .indexOf('storage'))
+                                                      : Constants.IP+  state.stories.data[index][1][0].substring(
+                                                      state.stories.data[index][1][0]
+                                                          .indexOf('media'))),
                                             ),
                                           ),
                                       itemCount: state.stories.data.length,
-                                    );
-                                  }
-                                  if(state is PostsLoadingState){
+                                    ),
+
+                                  if(state is StoriesLoadingState)
                                     ListView.builder(
                                         shrinkWrap: true,
                                         scrollDirection: Axis.horizontal,
@@ -206,15 +184,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 child: Container(),
                                               ),
                                             )
+                                    )
 
-                                    );
-                                  }
-                                  return const SizedBox();
+                                    ],
+                                  );
+
+
                                 },
                               ),
                             ),
                           ),
                         ),
+
                       ],
                     ),
                   ),
@@ -255,8 +236,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             dislikesCount: PostModel.fromJson(
                                     state.posts.data.posts[index][4])
                                 .dislikesCounts,
-                            type:cubit.type
+                            type:cubit.type,
+                            typee: PostModel.fromJson(
+                                state.posts.data.posts[index][4])
+                                .type=='Challenge'?true:false,
+                            expert: state.posts.data.posts[index][2]=='expert'?true:false,
+                            isSave: cubit.isSave==true?true:false,
+                            isReported: cubit.isReported==true?true:false,
                           );
+
                         }),
                   if (state is PostsLoadingState)
                     ListView.builder(

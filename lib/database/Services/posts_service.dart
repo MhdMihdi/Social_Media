@@ -5,38 +5,39 @@ import 'package:dev_space/database/models/home_models/story_model.dart';
 import 'package:dev_space/shared/components/constants.dart';
 import 'package:dev_space/shared/network/local/cache_helper.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 
 import '../models/home_models/home_model.dart';
 
 class PostsService {
+
   static Future createPost(
       {String title = '',
       String content = '',
-      List<File>? images,
-      List<File>? videos,
+      List<XFile>? images,
+      List<XFile>? videos,
       required String type}) async {
     try {
       String token = await CacheHelper.getData(key: 'token') ?? '';
 
       var headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer 1|a1gnqWkHrpDfVt4xyx5pERN08zIcf82KpjagygW5',
+        'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT',
         'Cookie':
             'XSRF-TOKEN=eyJpdiI6InZGdklvU2pNdXFFK08vRVpQMjVUdGc9PSIsInZhbHVlIjoia2JFT2Nxa1lCdWxZSTVCZXlCQkJGZjJ4bU9kWVNlQ2hzcmVWNDNNWU5NMzRvTmZ4ekkvTVVFb2xDb2pTbGtoZnlYcXBKcVZ6WUVIRytzR1gyMGIyTUhWdE1hT09WcjhnRmhmdW50UmlKYTJGUXgrTzdpVjBqZWgyRDU3MW95UUYiLCJtYWMiOiI0OGQyNjM4OWFjYjFjODkxY2VjMmVlMmI0ZjFiNzI0ZGEwN2M3ZWYyNDZkZWVhZmJlZDM4YjIyYmYxOGI3ZmRhIiwidGFnIjoiIn0%3D; devspace_session=eyJpdiI6IkQ4K3ZBSS9WL2NTT28rTTlnZjRWaFE9PSIsInZhbHVlIjoieW1iK3BIeERvb2t0dURCUEUyYlQ5c2Y3S3IySWlqY0Zoa3g0OXp6MmhzQVRGWUNlY1NOZmdxVmNKRUY2bURrSWZSNFJIRzdkMjZHeHlsQXJMVllmYTN3OHhYeGFZWDVCTy9tbWZqOUFEbTg5UkovQnVQcE9KRUlsTHpZYW9HNWkiLCJtYWMiOiI3ODRhNjhmNDIxNGIyMDI2Zjk2NjdhMzQ2M2M1NzU2ZmQ2YzFmMGQ3MmRlMjc1ZTFlZWExN2QwY2FjOWMzOGViIiwidGFnIjoiIn0%3D'
       };
       var request = http.MultipartRequest(
           'POST', Uri.parse('${Constants.baseUrl}posts/create_from_profile'));
       request.fields
-          .addAll({'title': title, 'content': content ?? "", 'type': type});
+          .addAll({'title': title, 'content': content , 'type': type});
       print(request.fields);
-      if (images != null) {
+      if (images != null&&images.isNotEmpty) {
         for (int i = 0; i < images.length; i++) {
           request.files.add(await http.MultipartFile.fromPath(
               'image${i + 1}', images[i].path));
-        }
+          }
       }
-
-      if (videos != null) {
+      if (videos != null&&videos.isNotEmpty) {
         for (int i = 0; i < videos.length; i++) {
           request.files.add(await http.MultipartFile.fromPath(
               'vedio${i + 1}', videos[i].path));
@@ -45,12 +46,109 @@ class PostsService {
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();
-
       String streamRes = await response.stream.bytesToString();
       print(response.statusCode);
       print(streamRes);
-      if (response.statusCode == 200) {
-        return true;
+      String stream=jsonDecode(streamRes);
+      if (response.statusCode == 200||response.statusCode==201) {
+        return stream;
+      } else {
+        return "something went wrong";
+      }
+    } catch (e) {
+      return e.toString();
+    }
+  }
+  static Future createStory(
+      {String title = '',
+      String content = '',
+      List<XFile>? images,
+      List<XFile>? videos,
+      required String type}) async {
+    try {
+      String token = await CacheHelper.getData(key: 'token') ?? '';
+
+      var headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT',
+      };
+      var request = http.MultipartRequest(
+          'POST', Uri.parse('${Constants.baseUrl}posts/create_from_profile'));
+      request.fields
+          .addAll({'title': title, 'content': content , 'type': type});
+      print(request.fields);
+      if (images != null&&images.isNotEmpty) {
+        for (int i = 0; i < images.length; i++) {
+          request.files.add(await http.MultipartFile.fromPath(
+              'image${i + 1}', images[i].path));
+        }
+      }
+
+      if (videos != null&&videos.isNotEmpty) {
+        for (int i = 0; i < videos.length; i++) {
+          request.files.add(await http.MultipartFile.fromPath(
+              'vedio${i + 1}', videos[i].path));
+        }
+      }
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+      String streamRes = await response.stream.bytesToString();
+      print(response.statusCode);
+      print(streamRes);
+      String stream=jsonDecode(streamRes);
+      if (response.statusCode == 200||response.statusCode==201) {
+        return stream;
+      } else {
+        return "something went wrong";
+      }
+    } catch (e) {
+      return e.toString();
+    }
+  }
+  static Future createPostCom({
+      id,
+      String title = '',
+      String content = '',
+      List<XFile>? images,
+      List<XFile>? videos,
+      required String type}) async {
+    try {
+      String token = await CacheHelper.getData(key: 'token') ?? '';
+
+      var headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT',
+        'Cookie':
+            'XSRF-TOKEN=eyJpdiI6InZGdklvU2pNdXFFK08vRVpQMjVUdGc9PSIsInZhbHVlIjoia2JFT2Nxa1lCdWxZSTVCZXlCQkJGZjJ4bU9kWVNlQ2hzcmVWNDNNWU5NMzRvTmZ4ekkvTVVFb2xDb2pTbGtoZnlYcXBKcVZ6WUVIRytzR1gyMGIyTUhWdE1hT09WcjhnRmhmdW50UmlKYTJGUXgrTzdpVjBqZWgyRDU3MW95UUYiLCJtYWMiOiI0OGQyNjM4OWFjYjFjODkxY2VjMmVlMmI0ZjFiNzI0ZGEwN2M3ZWYyNDZkZWVhZmJlZDM4YjIyYmYxOGI3ZmRhIiwidGFnIjoiIn0%3D; devspace_session=eyJpdiI6IkQ4K3ZBSS9WL2NTT28rTTlnZjRWaFE9PSIsInZhbHVlIjoieW1iK3BIeERvb2t0dURCUEUyYlQ5c2Y3S3IySWlqY0Zoa3g0OXp6MmhzQVRGWUNlY1NOZmdxVmNKRUY2bURrSWZSNFJIRzdkMjZHeHlsQXJMVllmYTN3OHhYeGFZWDVCTy9tbWZqOUFEbTg5UkovQnVQcE9KRUlsTHpZYW9HNWkiLCJtYWMiOiI3ODRhNjhmNDIxNGIyMDI2Zjk2NjdhMzQ2M2M1NzU2ZmQ2YzFmMGQ3MmRlMjc1ZTFlZWExN2QwY2FjOWMzOGViIiwidGFnIjoiIn0%3D'
+      };
+      var request = http.MultipartRequest(
+          'POST', Uri.parse('${Constants.baseUrl}posts/create_from_community$id'));
+      request.fields
+          .addAll({'title': title, 'content': content , 'type': type});
+      print(request.fields);
+      if (images != null&&images.isNotEmpty) {
+        for (int i = 0; i < images.length; i++) {
+          request.files.add(await http.MultipartFile.fromPath(
+              'image${i + 1}', images[i].path));
+        }
+      }
+
+      if (videos != null&&videos.isNotEmpty) {
+        for (int i = 0; i < videos.length; i++) {
+          request.files.add(await http.MultipartFile.fromPath(
+              'vedio${i + 1}', videos[i].path));
+        }
+      }
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+      String streamRes = await response.stream.bytesToString();
+      print(response.statusCode);
+      print(streamRes);
+      String stream=jsonDecode(streamRes);
+      if (response.statusCode == 200||response.statusCode==201) {
+        return stream;
       } else {
         return "something went wrong";
       }
@@ -66,7 +164,7 @@ class PostsService {
       // print(token!);
       var headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer 1|lcRMmyu03137nCjoVgQ8Pul6DDWcl4z5znuG41qt'
+        'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
       };
       var request = http.Request(
           'GET', Uri.parse('${Constants.baseUrl}posts/gethomeposts'));
@@ -74,7 +172,6 @@ class PostsService {
       http.StreamedResponse response = await request.send();
       String streamRes = await response.stream.bytesToString();
       print(response.statusCode);
-
       if (response.statusCode == 200) {
         return homeModelFromJson(streamRes);
       } else {
@@ -92,7 +189,7 @@ class PostsService {
       // print(token!);
       var headers = {
         //'Accept': 'application/json',
-        'Authorization': 'Bearer 1|lcRMmyu03137nCjoVgQ8Pul6DDWcl4z5znuG41qt'
+        'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
       };
       var request = http.Request(
           'GET', Uri.parse('${Constants.baseUrl}users/get_my_profile_posts'));
@@ -118,7 +215,7 @@ class PostsService {
       // print(token!);
       var headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer 1|a1gnqWkHrpDfVt4xyx5pERN08zIcf82KpjagygW5'
+        'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
       };
       var request = http.Request(
           'GET', Uri.parse('${Constants.baseUrl}posts/getMyPosts'));
@@ -144,7 +241,7 @@ class PostsService {
       // print(token!);
       var headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer 1|lcRMmyu03137nCjoVgQ8Pul6DDWcl4z5znuG41qt'
+        'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
       };
       var request = http.Request(
           'GET',
@@ -175,7 +272,7 @@ class PostsService {
       // print(token!);
       var headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer 1|lcRMmyu03137nCjoVgQ8Pul6DDWcl4z5znuG41qt'
+        'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
       };
       var request = http.Request(
           'GET',
@@ -206,7 +303,7 @@ class PostsService {
       // print(token!);
       var headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer 1|lcRMmyu03137nCjoVgQ8Pul6DDWcl4z5znuG41qt'
+        'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
       };
       var request = http.MultipartRequest(
           'POST', Uri.parse('${Constants.baseUrl}posts/saves/save'));
@@ -219,10 +316,11 @@ class PostsService {
       print(streamRes);
       String message = jsonDecode(streamRes)["Message"];
       if (response.statusCode == 200) {
-        if (message == 'success') {
+        if (message == 'save success') {
           return true;
+        }else {
+          return false;
         }
-        return true;
       } else {
         return response.toString();
       }
@@ -238,7 +336,7 @@ class PostsService {
       // print(token!);
       var headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer 1|lcRMmyu03137nCjoVgQ8Pul6DDWcl4z5znuG41qt'
+        'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
       };
       var request = http.MultipartRequest(
           'GET', Uri.parse('${Constants.baseUrl}posts/report_or_cancelreport_on_post/$id'));
@@ -249,7 +347,41 @@ class PostsService {
       print(streamRes);
       //String message = jsonDecode(streamRes)["message"];
       if (response.statusCode == 200) {
-        return true;
+        if(streamRes=='report') {
+          return true;
+        } else{
+          return false;
+        }
+      } else {
+        return response.toString();
+      }
+    } catch (e) {
+      return e.toString();
+    }
+  }
+  static Future agreePost({required String id}) async {
+    try {
+      String token = await CacheHelper.getData(key: 'token') ?? '';
+
+      // print(token!);
+      var headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
+      };
+      var request = http.MultipartRequest(
+          'GET', Uri.parse('${Constants.baseUrl}posts/agree_or_cancelagree_challenget/$id'));
+      request.headers.addAll(headers);
+      http.StreamedResponse response = await request.send();
+      String streamRes = await response.stream.bytesToString();
+      print(response.statusCode);
+      print(streamRes);
+      String message = jsonDecode(streamRes)["message"];
+      if (response.statusCode == 200) {
+        if(message=='voted') {
+          return true;
+        } else{
+          return false;
+        }
       } else {
         return response.toString();
       }
@@ -266,7 +398,7 @@ class PostsService {
       // print(token!);
       var headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer 1|lcRMmyu03137nCjoVgQ8Pul6DDWcl4z5znuG41qt'
+        'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
       };
       var request = http.Request(
           'GET', Uri.parse('${Constants.baseUrl}posts/avtive_stories'));
@@ -284,6 +416,31 @@ class PostsService {
       return e.toString();
     }
   }
+  static Future getStory({required id}) async {
+    try {
+      String token = await CacheHelper.getData(key: 'token') ?? '';
+
+      // print(token!);
+      var headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
+      };
+      var request = http.Request(
+          'GET', Uri.parse('${Constants.baseUrl}posts/showstory/$id'));
+      request.headers.addAll(headers);
+      http.StreamedResponse response = await request.send();
+      String streamRes = await response.stream.bytesToString();
+      print(response.statusCode);
+      print(streamRes);
+      if (response.statusCode == 200) {
+        return homeModelFromJson(streamRes);
+      } else {
+        return response.toString();
+      }
+    } catch (e) {
+      return e.toString();
+    }
+  }
 
   //comments
  static Future getComment ({required postId})async
@@ -292,7 +449,7 @@ class PostsService {
 
    var headers = {
      'Accept': 'application/json',
-     'Authorization': 'Bearer 1|lcRMmyu03137nCjoVgQ8Pul6DDWcl4z5znuG41qt'
+     'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
    };
    var request = http.Request('GET', Uri.parse('${Constants.baseUrl}posts/get_comments_on_post/$postId'));
 
@@ -312,7 +469,7 @@ class PostsService {
    String token = await CacheHelper.getData(key: 'token') ?? '';
    var headers = {
      'Accept': 'application/json',
-     'Authorization': 'Bearer 1|lcRMmyu03137nCjoVgQ8Pul6DDWcl4z5znuG41qt'
+     'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
    };
    var request = http.Request('GET', Uri.parse('${Constants.baseUrl}posts/like_or_cancellike_on_comment/$commentId'));
 
@@ -337,7 +494,7 @@ class PostsService {
    String token = await CacheHelper.getData(key: 'token') ?? '';
    var headers = {
      'Accept': 'application/json',
-     'Authorization': 'Bearer 1|lcRMmyu03137nCjoVgQ8Pul6DDWcl4z5znuG41qt'
+     'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
    };
    var request = http.Request('GET', Uri.parse('${Constants.baseUrl}posts/dislike_or_canceldislike_on_comment/$commentId'));
 
@@ -363,7 +520,7 @@ class PostsService {
    String token = await CacheHelper.getData(key: 'token') ?? '';
    var headers = {
      'Accept': 'application/json',
-     'Authorization': 'Bearer 1|lcRMmyu03137nCjoVgQ8Pul6DDWcl4z5znuG41qt'
+     'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
    };
    var request = http.Request('GET', Uri.parse('${Constants.baseUrl}posts/report_or_cancelreport_on_comment/$commentId'));
 
@@ -380,10 +537,11 @@ class PostsService {
  }
  static Future createComment({required content,required id})async
  {
+   String token = await CacheHelper.getData(key: 'token') ?? '';
    var headers = {
      'Accept': 'application/json',
      'Content-Type': 'application/x-www-form-urlencoded',
-     'Authorization': 'Bearer 1|lcRMmyu03137nCjoVgQ8Pul6DDWcl4z5znuG41qt'
+     'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
    };
    var request = http.Request('POST', Uri.parse('${Constants.baseUrl}posts/create_comment_on_post/$id'));
    request.bodyFields = {
@@ -404,10 +562,11 @@ class PostsService {
  }
  static Future sharePost({required id,required type,required content})async
  {
+   String token = await CacheHelper.getData(key: 'token') ?? '';
    var headers = {
      'Accept': 'application/json',
      //'Content-Type': 'application/x-www-form-urlencoded',
-     'Authorization': 'Bearer 1|lcRMmyu03137nCjoVgQ8Pul6DDWcl4z5znuG41qt'
+     'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
    };
    var request = http.Request('POST', Uri.parse('${Constants.baseUrl}posts/share_post_2/$id'));
    request.bodyFields = {

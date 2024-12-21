@@ -87,7 +87,7 @@ class PostClass {
 
   factory PostClass.fromJson(Map<String, dynamic> json) => PostClass(
     id: json["id"],
-    title: json["title"],
+    title: json["title"]??'',
     content: json["content"],
     type: json["type"],
     likesCounts: json["likes_counts"],
@@ -127,7 +127,7 @@ class User {
   dynamic userIdentifier;
   DateTime birthDate;
   String email;
-  DateTime emailVerifiedAt;
+  DateTime?emailVerifiedAt;
   dynamic phoneNumber;
   String currentLocation;
   DateTime programmingAge;
@@ -180,7 +180,7 @@ class User {
     "user_identifier": userIdentifier,
     "birth_date": "${birthDate.year.toString().padLeft(4, '0')}-${birthDate.month.toString().padLeft(2, '0')}-${birthDate.day.toString().padLeft(2, '0')}",
     "email": email,
-    "email_verified_at": emailVerifiedAt.toIso8601String(),
+    "email_verified_at": emailVerifiedAt,
     "phone_number": phoneNumber,
     "current_location": currentLocation,
     "programming_age": "${programmingAge.year.toString().padLeft(4, '0')}-${programmingAge.month.toString().padLeft(2, '0')}-${programmingAge.day.toString().padLeft(2, '0')}",

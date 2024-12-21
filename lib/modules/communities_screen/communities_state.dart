@@ -29,6 +29,8 @@ class PostSavedState extends CommunitiesState {}
 
 class PostReportedState extends CommunitiesState {}
 
+class PostAgrredState extends CommunitiesState {}
+
 class LikePostLoadingState extends CommunitiesState {}
 
 class LikePostDoneState extends CommunitiesState {
@@ -40,6 +42,8 @@ class LikePostErrorState extends CommunitiesState {
   LikePostErrorState({required this.error});
   String error;
 }
+
+class CommunitiesPostUploadedState extends CommunitiesState {}
 
 class SharePostUploading extends CommunitiesState{}
 

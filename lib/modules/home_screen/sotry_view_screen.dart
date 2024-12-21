@@ -1,112 +1,98 @@
-
-import 'package:dev_space/database/models/home_models/story_model.dart';
+import 'package:dev_space/modules/home_screen/posts%20cubit/posts_cubit.dart';
 import 'package:dev_space/shared/components/components.dart';
 import 'package:dev_space/shared/components/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:story/story_page_view.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class StoryViewScreen extends StatelessWidget {
-  const StoryViewScreen({super.key});
+int currentPage = 0;
+class StoryViewScreen extends StatefulWidget {
+   int?id;
+
+   StoryViewScreen({
+    super.key,
+    this.id,
+
+  });
 
   @override
+  State<StoryViewScreen> createState() => _StoryViewScreenState();
+}
+
+class _StoryViewScreenState extends State<StoryViewScreen> {
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body:
-        StoryPageView(
-
-          itemBuilder: (context, pageIndex, storyIndex) {
-            var user = dataUsers[pageIndex];
-            var story = user.stories[storyIndex];
-            return Stack(
-              children: [
-
-                Positioned.fill(
-                    child: Container(
-                      color: Constants.color,
-                    )
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
+    return BlocProvider(
+      create: (context) => PostsCubit()..getStory(context: context, id: widget.id),
+      child: BlocConsumer<PostsCubit, PostsState>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          var cubit=PostsCubit.get(context);
+          return Scaffold(
+              backgroundColor: Constants.color,
+              appBar: AppBar(
+                backgroundColor: Constants.color,
+                leading: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios
+                  ),
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
                 ),
-                Positioned.fill(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.contain,
-                            image: NetworkImage(story.imageUrl),
-                          )
-                      ),
-                    )
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 42.0,left: 16),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 60,
-                        height: 60,
+              ),
+              body:Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  if(state is GetStoryLoadedState)
+                  SizedBox(
+                    height: 100,
+                    child: ListView.builder(
+                      itemCount: state.model.data.posts.length,
+                      itemBuilder:(context,index)=> Container(
+                        //margin: EdgeInsets.symmetric(vertical: height * .03),
+                        width: 200,
+                        height:100,
                         decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(user.profileUrl)
-                            )
+                          borderRadius: BorderRadius.circular(20.0),
+                          color: Constants.color,
+                        ),
+                        child: Column(
+                          // mainAxisAlignment: MainAxisAlignment.start,
+                          // crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              state.model.data.posts[index][0],
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20.0
+                              ),
+                            ),
+                            Flexible(
+                              child: Text(
+                                'content : ${state.model.data.posts[index][4]['content']}',
+                                //overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                  fontSize: 20.0,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(width: 14),
-                      Text(
-                        user.name,
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-                Positioned(
-                  bottom: 40,
-                  left:20,
-                  child: Row(
-                    children:
-                    [
-                      MyButton(
-                        onPressed: (){},
-                        title: 'Like',
-                        titleColor: Colors.white,
-                        titleSize: 20.0,
-                        side: Constants.color,
-                        width: 80,
+                ],
+              ),
 
-                      ),
-                      Container(
-                        width:1 ,
-                        height: 10,
-                        color: Colors.white,
-                      ),
-                      MyButton(
-                        onPressed: (){},
-                        title: 'DisLike',
-                        titleColor: Colors.white,
-                        titleSize: 20.0,
-                        side: Constants.color,
-                        width: 100,
-                      ),
-                      MyButton(
-                        onPressed: (){},
-                        title: 'Comment',
-                        titleColor: Colors.white,
-                        titleSize: 20.0,
-                        side: Constants.color,
 
-                      ),
-
-                    ],
-                  ),
-                ),
-              ],
-            );
-          },
-          pageLength: dataUsers.length,
-          storyLength: (pageIndex) => dataUsers[pageIndex].stories.length,
-        ));
+          );
+        },
+      ),
+    );
   }
 }

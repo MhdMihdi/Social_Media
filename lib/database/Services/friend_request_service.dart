@@ -12,7 +12,7 @@ class FriendRequestService {
       // print(token!);
       var headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer 1|a1gnqWkHrpDfVt4xyx5pERN08zIcf82KpjagygW5'
+        'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
       };
       var request = http.Request('GET',
           Uri.parse('${Constants.baseUrl}friends/request/receiver/show'));
@@ -39,7 +39,7 @@ class FriendRequestService {
       // print(token!);
       var headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer 1|a1gnqWkHrpDfVt4xyx5pERN08zIcf82KpjagygW5'
+        'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
       };
       var request;
       if (isAccept!) {

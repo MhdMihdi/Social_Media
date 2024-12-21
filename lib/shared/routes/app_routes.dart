@@ -11,6 +11,7 @@ import 'package:dev_space/modules/comment_screen/comment_screen.dart';
 import 'package:dev_space/modules/communities_screen/communities_sceen.dart';
 import 'package:dev_space/modules/drawer/createPage.dart';
 import 'package:dev_space/modules/friends_request_screen/friends_request_screen.dart';
+import 'package:dev_space/modules/communities_screen/create_com_post.dart';
 import 'package:dev_space/modules/home_screen/create_post.dart';
 import 'package:dev_space/modules/home_screen/home_screen.dart';
 import 'package:dev_space/modules/home_screen/sotry_view_screen.dart';
@@ -41,6 +42,7 @@ class NamedRoutes
    static const editProfileScreen= 'EditProfileScreen';
    static const commentScreen= 'CommentScreen';
    static const createPostScreen= 'createPostScreen';
+   static const createPostComScreen= 'createPostComScreen';
    static const createPageScreen= 'createPageScreen';
 
 }
@@ -61,11 +63,12 @@ class AppRoutes
   static const communitiesScreen= CommunitiesScreen();
   static const profileScreen= ProfileScreen();
   static const notificationScreen= NotificationsScreen();
-  static const storyViewScreen= StoryViewScreen();
+  static var  storyViewScreen= StoryViewScreen();
   static const storyAddScreen= StoryAddScreen();
   static const editProfileScreen= EditProfileScreen();
   static const commentScreen= CommentScreen();
   static const createPostScreen= CreatePost();
+  static const createPostComScreen= CreateComPost();
   static var createPageScreen= CreatePage();
 
 
@@ -94,6 +97,7 @@ class AppRoutes
      NamedRoutes.commentScreen:(context)=>AppRoutes.commentScreen,
      NamedRoutes.createPostScreen:(context)=>AppRoutes.createPostScreen,
      NamedRoutes.createPageScreen:(context)=>AppRoutes.createPageScreen,
+     NamedRoutes.createPostComScreen:(context)=>AppRoutes.createPostComScreen,
 
 
   };

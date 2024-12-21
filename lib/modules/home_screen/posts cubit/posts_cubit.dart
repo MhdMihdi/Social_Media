@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 
 import '../../../database/Services/posts_service.dart';
@@ -83,43 +84,99 @@ class PostsCubit extends Cubit<PostsState> {
       emit(PostsErrorState(error: response));
     }
   }
-
+  bool?isSave;
   savePost({context, required String id}) async {
     emit(LikePostLoadingState());
     final response = await PostsService.savePost(id: id);
     if (response is bool) {
+      if(response==true){
+        isSave=true;
+      }else{
+        isSave=false;
+      }
       emit(PostSavedState());
+
     } else {
       emit(PostsErrorState(error: response));
     }
   }
+  bool?isReported;
   reportPost({context, required String id}) async {
     emit(LikePostLoadingState());
     final response = await PostsService.reportPost(id: id);
     if (response is bool) {
+      if(response==true){
+        isReported==true;
+      }else{
+        isReported==false;
+      }
       emit(PostReportedState());
+
+    } else {
+      emit(PostsErrorState(error: response));
+    }
+  }
+  agreePost({context, required String id}) async {
+    emit(LikePostLoadingState());
+    final response = await PostsService.agreePost(id: id);
+    if (response is bool) {
+      emit(PostAgrredState());
     } else {
       emit(PostsErrorState(error: response));
     }
   }
 
+  var selectedtype ;
+  //List<XFile>imageFile=[];
+  final ImagePicker imagepicker = ImagePicker();
 
-  createPost(
-      {context,
-      String title = '',
-      String content = '',
-      List<File>? images,
-      List<File>? videos,
-      required String type}) async {
+
+  List<XFile> videos = []; // List of selected images
+
+  var contetPController=TextEditingController();
+
+
+  createPost({required context,required images}) async {
     emit(PostsLoadingState());
     final response = await PostsService.createPost(
-        type: type,
-        title: title,
+        type: selectedtype.toString(),
+        title: '',
+        content: contetPController.text,
+        images: images,
+        videos: videos
+    );
+    if (response != null ) {
+      emit(PostUploadedState());
+      Navigator.pop(context);
+      //emit(PostsLoadingState());
+    } else {
+      emit(PostsErrorState(error: response.toString()));
+    }
+  }
+  createStory({required context,required images,required content}) async {
+    emit(PostsLoadingState());
+    final response = await PostsService.createStory(
+        type: 'Story',
+        title: '',
         content: content,
         images: images,
-        videos: videos);
-    if (response is bool && response) {
-      emit(PostUploadedState());
+        videos: videos
+    );
+    if (response != null ) {
+      emit(StoryUploadedState());
+      Navigator.pop(context);
+      //emit(PostsLoadingState());
+    } else {
+      emit(PostsErrorState(error: response.toString()));
+    }
+  }
+  getStory({required context,required id}) async {
+    emit(GetStoryLoadingState());
+    final response = await PostsService.getStory(id: id.toString());
+    if (response  is HomeModel ) {
+      emit(GetStoryLoadedState(model: response));
+
+      //emit(PostsLoadingState());
     } else {
       emit(PostsErrorState(error: response.toString()));
     }

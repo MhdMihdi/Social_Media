@@ -15,11 +15,11 @@ void main()async
   WidgetsFlutterBinding.ensureInitialized();
 
   await CacheHelper.init();
-  String? token='1|FzmLnuWIJjKm1N4zeu8cv6oQlvanM00QChRHrX8Y'; //await CacheHelper.getData(key: 'token');
+  //String? token= '1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT';
+  String?token =await CacheHelper.getData(key: 'token');
   debugPrint(token);
 
   Bloc.observer=MyBlocObserver();
-
 
   runApp(MyApp(token: token));
 }

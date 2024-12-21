@@ -28,14 +28,14 @@ class UserService {
     required bio,
     required country,
   }) async {
-    String? token = await CacheHelper.getData(key: 'token');
+    String? token = await CacheHelper.getData(key: 'token')??'';
     // debugPrint(token);
     var response = await http.post(
       Uri.parse('${Constants.baseUrl}users/completeInfo'),
       headers: {
         //'Accept' : 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
+        'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
       },
       body: jsonEncode(<String, dynamic>{
         //'student':student,
@@ -68,7 +68,7 @@ class UserService {
       // print(token!);
       var headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer 1|RHPCnSsOEvut1nTh7mMyGocd6ZknULjLhq7DpNHh'
+        'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
       };
       var request = http.Request('GET',
           Uri.parse('${Constants.baseUrl}users/show_old_notification'));
@@ -93,7 +93,7 @@ class UserService {
       // print(token!);
       var headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer 1|RHPCnSsOEvut1nTh7mMyGocd6ZknULjLhq7DpNHh'
+        'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
       };
       var request = http.Request('GET',
           Uri.parse('${Constants.baseUrl}users/show_unread_notification'));
@@ -118,7 +118,7 @@ static Future getProfileInfo()async
     var headers=
     {
       'Accept': 'application/json',
-      'Authorization': 'Bearer 1|lcRMmyu03137nCjoVgQ8Pul6DDWcl4z5znuG41qt'
+      'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
     };
     try{
     var request=http.MultipartRequest('GET',
@@ -156,35 +156,14 @@ static Future getProfileInfo()async
     final Data data = ModalRoute.of(context)!.settings.arguments as Data;
     var headers = {
       'Accept': 'application/json',
-      'Authorization': 'Bearer 1|FuW1NtjDxRORULop39NPL8e2PTgamBq6mzV5H4HC'
+      'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
     };
 
     var request = http.MultipartRequest('POST', Uri.parse('${Constants.baseUrl}users/profile/edit'));
     print(data.firstName);
     print(firstName);
 
-
-   if (firstName!=null&&data.firstName!=firstName
-       && lastName!=null&&data.lastName!=lastName
-       && birthDate!=null&&data.birthDate!=birthDate
-       && email!=null&&data.email!=email
-       && phoneNumber!=null&&data.phoneNumber!=phoneNumber
-       && currentLocation!=null&&data.currentLocation!=currentLocation
-       && programmingAge!=null&&data.programmingAge!=programmingAge
-       && bio!=null&&data.bio!=bio
-       && city!=null&&data.country!=city
-       && specialty!=null&&data.specialty!=specialty
-       && section!=null&&data.section!=section
-       && frameWork!=null&&data.framework!=frameWork
-       && language!=null&&data.language!=language
-       && study_semester!=null&&data.studySemester!=study_semester
-       && current_year!=null&&data.currentYear!=current_year
-       && study_sequence!=null&&data.studySequence!=study_sequence
-       && years_as_expert!=null&&data.yearsAsExpert!=years_as_expert
-       && work_at_company!=null&&data.workAtCompany!=work_at_company
-       && companies!=null&&data.companies!=companies)
-   {
-        return request.fields.addAll({
+     request.fields.addAll({
         'first_name': firstName,
         'last_name': lastName,
         'birth_date': birthDate,
@@ -205,7 +184,7 @@ static Future getProfileInfo()async
         'work_at_company': work_at_company,
         'companies': companies
    });
-  }
+
     print(phoneNumber);
 
     if(image != null) {

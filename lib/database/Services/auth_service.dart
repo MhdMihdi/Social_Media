@@ -42,8 +42,9 @@ class AuthService {
       'language': language,
       'gender': gender
     });
-    request.files.add(await http.MultipartFile.fromPath('image', image));
-
+    if(image!=null) {
+      request.files.add(await http.MultipartFile.fromPath('image', image));
+    }
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();

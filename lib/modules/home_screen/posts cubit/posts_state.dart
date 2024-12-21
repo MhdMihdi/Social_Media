@@ -10,13 +10,24 @@ class PostsLoadedState extends PostsState {
   PostsLoadedState({required this.posts});
   HomeModel posts;
 }
-
+class StoriesLoadingState extends PostsState{}
 class StoriesLoadedState extends PostsState {
   StoriesLoadedState({required this.stories});
   WelcomeStroies stories;
 }
 
 class PostUploadedState extends PostsState {}
+
+class StoryUploadedState extends PostsState {}
+
+class GetStoryLoadingState extends PostsState
+{
+
+}
+class GetStoryLoadedState extends PostsState{
+  GetStoryLoadedState({required this.model});
+  HomeModel model;
+}
 
 class PostsErrorState extends PostsState {
   PostsErrorState({required this.error});
@@ -28,6 +39,7 @@ class LikePostLoadingState extends PostsState {}
 class PostSavedState extends PostsState {}
 
 class PostReportedState extends PostsState {}
+class PostAgrredState extends PostsState {}
 
 class LikePostDoneState extends PostsState {
   LikePostDoneState({required this.liked});
@@ -42,3 +54,5 @@ class LikePostErrorState extends PostsState {
 class SharePostUploading extends PostsState{}
 
 class SharePostUploaded extends PostsState{}
+
+class SelectPhotos extends PostsState{}

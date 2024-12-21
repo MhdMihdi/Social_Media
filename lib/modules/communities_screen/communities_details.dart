@@ -1,6 +1,7 @@
 
 import 'package:dev_space/database/models/communties_models/communties_detalis_model.dart';
 import 'package:dev_space/modules/communities_screen/communities_cubit.dart';
+import 'package:dev_space/modules/communities_screen/create_com_post.dart';
 import 'package:dev_space/shared/components/components.dart';
 import 'package:dev_space/shared/components/constants.dart';
 
@@ -176,11 +177,18 @@ class CommunitiesDetailsScreen extends StatelessWidget {
                           Expanded(
                             child: MyFormField(
                               controller: TextEditingController(),
-                              label: 'Whats on your mind ? ',
+                              hint: 'Whats on your mind ? ',
                               padding: const EdgeInsets.all(10.0),
                               radius: 70.0,
                               readOnly: true,
-                              onTap: () {},
+                              onTap: (){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context)=>
+                                      CreateComPost(id:id),
+                                  )
+                                );
+                              },
                             ),
                           ),
                         ],
@@ -190,16 +198,98 @@ class CommunitiesDetailsScreen extends StatelessWidget {
                         height: 10,
                         color: Colors.deepPurple.shade200,
                       ),
-                      Row(
+                      SizedBox(
+                        height: 50.0,
+                        child: ListView(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
                           children:[
-                            MyButton(
-                                onPressed: (){},
-                                title: 'Advice',
-                                titleColor: Colors.white,
-                                color: Constants.color,
-                                radius: 20.0,
-                            ),
-                          ]
+                            Row(
+                              children:[
+                                MyButton(
+                                    onPressed: ()
+                                    {
+                                      cubit.getCommunityDetails(id: id, type: 'all');
+                                    },
+                                    title: 'All',
+                                    titleColor: Colors.white,
+                                    color: Constants.color,
+                                    radius: 20.0,
+                                ),
+                                MyButton(
+                                    onPressed: ()
+                                    {
+                                      cubit.getCommunityDetails(id: id, type: 'Regular');
+                                    },
+                                    title: 'Regular',
+                                    titleColor: Colors.white,
+                                    color: Constants.color,
+                                    radius: 20.0,
+                                ),
+                                MyButton(
+                                    onPressed: ()
+                                    {
+                                      cubit.getCommunityDetails(id: id, type: 'Advice');
+                                    },
+                                    title: 'Advice',
+                                    titleColor: Colors.white,
+                                    color: Constants.color,
+                                    radius: 20.0,
+                                ),
+                                MyButton(
+                                    onPressed: ()
+                                    {
+                                      cubit.getCommunityDetails(id: id, type: 'Challenge');
+                                    },
+                                    title: 'Challenge',
+                                    titleColor: Colors.white,
+                                    color: Constants.color,
+                                    radius: 20.0,
+                                ),
+                                MyButton(
+                                    onPressed: ()
+                                    {
+                                      cubit.getCommunityDetails(id: id, type: 'CV');
+                                    },
+                                    title: 'Cv',
+                                    titleColor: Colors.white,
+                                    color: Constants.color,
+                                    radius: 20.0,
+                                ),
+                                MyButton(
+                                    onPressed: ()
+                                    {
+                                      cubit.getCommunityDetails(id: id, type: 'Job Opportunities');
+                                    },
+                                    title: 'Job Opportunities',
+                                    titleColor: Colors.white,
+                                    color: Constants.color,
+                                    radius: 20.0,
+                                ),
+                                MyButton(
+                                    onPressed: ()
+                                    {
+                                      cubit.getCommunityDetails(id: id, type: 'Question');
+                                    },
+                                    title: 'Question',
+                                    titleColor: Colors.white,
+                                    color: Constants.color,
+                                    radius: 20.0,
+                                ),
+                                MyButton(
+                                    onPressed: ()
+                                    {
+                                      cubit.getCommunityDetails(id: id, type: 'Road map');
+                                    },
+                                    title: 'Road Map',
+                                    titleColor: Colors.white,
+                                    color: Constants.color,
+                                    radius: 20.0,
+                                ),
+                              ]
+                          ),
+                         ]
+                        ),
                       ),
                       if(state is CommunitiesDetailsLoadingState)
                         ListView.builder(
@@ -256,7 +346,12 @@ class CommunitiesDetailsScreen extends StatelessWidget {
                                 dislikesCount: PostClass.fromJson(
                                     state.communities.data.posts[index][4])
                                     .dislikesCounts,
-
+                                 typee: PostClass.fromJson(
+                              state.communities.data.posts[index][4])
+                                  .type=='Challenge'?true:false,
+                              expert: state.communities.data.posts[index][2]=='expert'?true:false,
+                                isSave: cubit.isSave==true?true:false,
+                                isReported: cubit.isReported==true?true:false,
                               );
                             }
                         ),

@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:dev_space/database/models/comment_model/comment_model.dart';
 import 'package:dev_space/database/models/communties_models/communties_detalis_model.dart';
 import 'package:dev_space/database/models/communties_models/get_communties_model.dart';
 import 'package:dev_space/shared/components/constants.dart';
@@ -11,9 +9,10 @@ class CommunitiesService{
 
   static Future getCommunities()async
   {
+    String token = await CacheHelper.getData(key: 'token') ?? '';
     var headers = {
       'Accept': 'application/json',
-      'Authorization': 'Bearer 1|lcRMmyu03137nCjoVgQ8Pul6DDWcl4z5znuG41qt'
+      'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
     };
     var request = http.Request('GET', Uri.parse('${Constants.baseUrl}posts/getMyCommuites'));
 
@@ -30,9 +29,10 @@ class CommunitiesService{
   }
   static Future getCommunityDetails({required id,required type})async
   {
+    String token = await CacheHelper.getData(key: 'token') ?? '';
     var headers = {
       'Accept': 'application/json',
-      'Authorization': 'Bearer 1|lcRMmyu03137nCjoVgQ8Pul6DDWcl4z5znuG41qt'
+      'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
     };
     var request = http.MultipartRequest('POST', Uri.parse('${Constants.baseUrl}posts/getcommunityInfo/$id'));
     request.headers.addAll(headers);
@@ -56,7 +56,7 @@ class CommunitiesService{
       // print(token!);
       var headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer 1|lcRMmyu03137nCjoVgQ8Pul6DDWcl4z5znuG41qt'
+        'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
       };
       var request = http.Request(
           'GET',
@@ -87,7 +87,7 @@ class CommunitiesService{
       // print(token!);
       var headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer 1|lcRMmyu03137nCjoVgQ8Pul6DDWcl4z5znuG41qt'
+        'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
       };
       var request = http.Request(
           'GET',
@@ -118,7 +118,7 @@ class CommunitiesService{
       // print(token!);
       var headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer 1|lcRMmyu03137nCjoVgQ8Pul6DDWcl4z5znuG41qt'
+        'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
       };
       var request = http.MultipartRequest(
           'POST', Uri.parse('${Constants.baseUrl}posts/saves/save'));
@@ -131,10 +131,11 @@ class CommunitiesService{
       print(streamRes);
       String message = jsonDecode(streamRes)["Message"];
       if (response.statusCode == 200) {
-        if (message == 'success') {
+        if (message == 'save success') {
           return true;
+        }else{
+        return false;
         }
-        return true;
       } else {
         return response.toString();
       }
@@ -150,7 +151,7 @@ class CommunitiesService{
       // print(token!);
       var headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer 1|lcRMmyu03137nCjoVgQ8Pul6DDWcl4z5znuG41qt'
+        'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
       };
       var request = http.MultipartRequest(
           'GET', Uri.parse('${Constants.baseUrl}posts/report_or_cancelreport_on_post/$id'));
@@ -161,7 +162,11 @@ class CommunitiesService{
       print(streamRes);
       //String message = jsonDecode(streamRes)["message"];
       if (response.statusCode == 200) {
-        return true;
+        if(streamRes=='report') {
+          return true;
+        }else{
+          return false;
+        }
       } else {
         return response.toString();
       }
@@ -169,7 +174,36 @@ class CommunitiesService{
       return e.toString();
     }
   }
+  static Future agreePost({required String id}) async {
+    try {
+      String token = await CacheHelper.getData(key: 'token') ?? '';
 
+      // print(token!);
+      var headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer 1|WpvzXtyhfa2VmHP9nCh2EUhhf3c227kqiEMGAbQT'
+      };
+      var request = http.MultipartRequest(
+          'GET', Uri.parse('${Constants.baseUrl}posts/agree_or_cancelagree_challenget/$id'));
+      request.headers.addAll(headers);
+      http.StreamedResponse response = await request.send();
+      String streamRes = await response.stream.bytesToString();
+      print(response.statusCode);
+      print(streamRes);
+      String message = jsonDecode(streamRes)["message"];
+      if (response.statusCode == 200) {
+        if(message=='voted') {
+          return true;
+        } else{
+          return false;
+        }
+      } else {
+        return response.toString();
+      }
+    } catch (e) {
+      return e.toString();
+    }
+  }
 
 
 }

@@ -1,20 +1,20 @@
-import 'package:dev_space/modules/home_screen/posts%20cubit/posts_cubit.dart';
+import 'package:dev_space/modules/communities_screen/communities_cubit.dart';
 import 'package:dev_space/shared/components/components.dart';
 import 'package:dev_space/shared/components/constants.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-class CreatePost extends StatefulWidget {
-  const CreatePost({super.key});
+class CreateComPost extends StatefulWidget {
+  final int?id;
+  const CreateComPost({super.key, this.id});
 
   @override
-  State<CreatePost> createState() => _CreatepostState();
+  State<CreateComPost> createState() => _CreatepostState();
 }
 
-class _CreatepostState extends State<CreatePost> {
+class _CreatepostState extends State<CreateComPost> {
 
    //List<XFile>imageFile=[];
   final ImagePicker imagepicker = ImagePicker();
@@ -65,19 +65,18 @@ class _CreatepostState extends State<CreatePost> {
       ),
     );
   }
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => PostsCubit(),
-      child: BlocConsumer<PostsCubit, PostsState>(
+      create: (context) => CommunitiesCubit(),
+      child: BlocConsumer<CommunitiesCubit, CommunitiesState>(
         listener: (context, state) {
-          if(state is PostUploadedState){
+          if(state is CommunitiesPostUploadedState){
             showScaffoldSnackBar(title: 'Post Uploaded', context: context,color: Colors.green);
           }
         },
         builder: (context, state) {
-          var cubit=PostsCubit.get(context);
+          var cubit=CommunitiesCubit.get(context);
           return Scaffold(
             appBar:AppBar(
               backgroundColor:Constants.color,
@@ -105,7 +104,7 @@ class _CreatepostState extends State<CreatePost> {
                 TextButton(
                     onPressed: ()
                     {
-                      cubit.createPost(context: context, images: imageList);
+                      cubit.createPost(context: context, images: imageList,id: widget.id.toString());
                     },
                     child:const Text(
                         'Publish',
@@ -118,7 +117,7 @@ class _CreatepostState extends State<CreatePost> {
             ),
             body:ListView(
               children:[
-                if(state is PostsLoadingState)
+                if(state is CommunitiesDetailsLoadingState)
                   const LinearProgressIndicator(
                     color: Constants.color,
                   ),
@@ -165,7 +164,7 @@ class _CreatepostState extends State<CreatePost> {
                       color:Color(0XFF615AAB),
                     ),
                     MaterialButton(
-                      onPressed:showOption, //فتح المعرض
+                      onPressed:showOption,
                       child: const Row(
                         children: [
                           Icon(Icons.photo_library,

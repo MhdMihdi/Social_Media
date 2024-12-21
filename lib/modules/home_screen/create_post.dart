@@ -1,4 +1,4 @@
-import 'package:dev_space/modules/communities_screen/communities_cubit.dart';
+import 'package:dev_space/modules/home_screen/posts%20cubit/posts_cubit.dart';
 import 'package:dev_space/shared/components/components.dart';
 import 'package:dev_space/shared/components/constants.dart';
 import 'package:flutter/material.dart';
@@ -6,14 +6,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-class CreateComPost extends StatefulWidget {
-  const CreateComPost({super.key});
+class CreatePost extends StatefulWidget {
+  const CreatePost({super.key});
 
   @override
-  State<CreateComPost> createState() => _CreatepostState();
+  State<CreatePost> createState() => _CreatepostState();
 }
 
-class _CreatepostState extends State<CreateComPost> {
+class _CreatepostState extends State<CreatePost> {
 
    //List<XFile>imageFile=[];
   final ImagePicker imagepicker = ImagePicker();
@@ -67,15 +67,15 @@ class _CreatepostState extends State<CreateComPost> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CommunitiesCubit(),
-      child: BlocConsumer<CommunitiesCubit, CommunitiesState>(
+      create: (context) => PostsCubit(),
+      child: BlocConsumer<PostsCubit,PostsState>(
         listener: (context, state) {
-          if(state is CommunitiesPostUploadedState){
+          if(state is PostUploadedState){
             showScaffoldSnackBar(title: 'Post Uploaded', context: context,color: Colors.green);
           }
         },
         builder: (context, state) {
-          var cubit=CommunitiesCubit.get(context);
+          var cubit=PostsCubit.get(context);
           return Scaffold(
             appBar:AppBar(
               backgroundColor:Constants.color,
@@ -116,7 +116,7 @@ class _CreatepostState extends State<CreateComPost> {
             ),
             body:ListView(
               children:[
-                if(state is CommunitiesPostUploadedState)
+                if(state is PostsLoadingState)
                   const LinearProgressIndicator(
                     color: Constants.color,
                   ),

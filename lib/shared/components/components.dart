@@ -310,6 +310,10 @@ class Post extends StatefulWidget {
       this.isLikedOrDisliked,
       this.description = 'on Fire',
       this.type,
+        this.typee,
+        this.expert,
+        this.isSave,
+        this.isReported,
       });
   String name;
   String timeago;
@@ -321,7 +325,10 @@ class Post extends StatefulWidget {
   postType?type;
   List<String>? images;
   int id;
-
+  bool?typee;
+  bool?expert;
+  bool?isSave;
+  bool?isReported;
   @override
   State<Post> createState() => _PostState();
 }
@@ -376,12 +383,12 @@ class _PostState extends State<Post> {
                       ],
                     ),
                     const SizedBox(
-                      width: 130.0,
+                      width: 80.0,
                     ),
                     PopupMenuButton(
                         color: Colors.white,
                         itemBuilder: (_) => <PopupMenuItem<String>>[
-                              const PopupMenuItem<String>(
+                               PopupMenuItem<String>(
                                   value: '1',
                                   child: SizedBox(
                                       width: 100,
@@ -389,21 +396,21 @@ class _PostState extends State<Post> {
                                       child: Row(
                                         // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          Icon(
+                                          const Icon(
                                             Icons.save_alt,
                                             color: Colors.green,
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             width: 7,
                                           ),
                                           Text(
                                             "Save",
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 color: Colors.deepPurple),
                                           ),
                                         ],
                                       ))),
-                              const PopupMenuItem<String>(
+                               PopupMenuItem<String>(
                                   value: '2',
                                   child: SizedBox(
                                       width: 100,
@@ -412,70 +419,71 @@ class _PostState extends State<Post> {
                                         // mainAxisAlignment:
                                         //     MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          Icon(
+                                          const Icon(
                                             Icons.report,
                                             color: Colors.red,
+                                          ),
+                                          const SizedBox(
+                                            width: 7,
+                                          ),
+                                          Text(
+                                            "Report",
+                                            style: const TextStyle(
+                                                color: Colors.deepPurple),
+                                          ),
+                                        ],
+                                      ))),
+                                     if( widget.typee==true&&widget.expert==true)
+                                      const PopupMenuItem<String>(
+                                      value: '3',
+                                      child: SizedBox(
+                                      width: 100,
+                                      // height: 30,
+                                      child: Row(
+                                        // mainAxisAlignment:
+                                        //     MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Icon(
+                                            Icons.thumb_up,
+                                            color: Colors.green,
+                                          ),
+                                          Icon(
+                                            Icons.thumb_up,
+                                            color: Colors.green,
                                           ),
                                           SizedBox(
                                             width: 7,
                                           ),
                                           Text(
-                                            "Report",
+                                            "Agree",
                                             style: TextStyle(
                                                 color: Colors.deepPurple),
                                           ),
-                                        ],
-                                      ))),
-                                      const PopupMenuItem<String>(
-                              value: '3',
-                              child: SizedBox(
-                                  width: 100,
-                                  // height: 30,
-                                  child: Row(
-                                    // mainAxisAlignment:
-                                    //     MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Icon(
-                                        Icons.thumb_up,
-                                        color: Colors.green,
-                                      ),
-                                      Icon(
-                                        Icons.thumb_up,
-                                        color: Colors.green,
-                                      ),
-                                      SizedBox(
-                                        width: 7,
-                                      ),
-                                      Text(
-                                        "Agree",
-                                        style: TextStyle(
-                                            color: Colors.deepPurple),
-                                      ),
-                                    ],)
+                                        ],)
                               )),
                             ],
                         onSelected: (index) async {
                           switch (index) {
                             case '1':
                               {
+
                                 PostsCubit().savePost(
                                   id: widget.id.toString(),
                                 );
-                                showScaffoldSnackBar(
-                                    title: "Added to your saved posts",
-                                    context: context,
-                                    color: Colors.green);
+
                               }
                             case '2':
                               {
                                 PostsCubit().reportPost(
                                     id: widget.id.toString()
                                 );
-                                showScaffoldSnackBar(
-                                    title: "Reported",
-                                    context: context,
-                                    color: Colors.green);
 
+                              }
+                              case '3':
+                              {
+                                PostsCubit().agreePost(
+                                    id: widget.id.toString()
+                                );
                               }
 
                               break;
@@ -516,7 +524,9 @@ class _PostState extends State<Post> {
                                             .indexOf('storage'))
                                     : Constants.IP+  widget.images![index].substring(widget
                                             .images![index]
-                                            .indexOf('media')));
+                                            .indexOf('media')),
+                                  fit: BoxFit.fill,
+                                );
                           })),
                     Positioned(
                       top: 0,
@@ -737,7 +747,7 @@ class _ProfilePostState extends State<ProfilePost> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     //TODo:add pic logic
 
@@ -770,7 +780,7 @@ class _ProfilePostState extends State<ProfilePost> {
                       ],
                     ),
                     const SizedBox(
-                      width: 80.0,
+                      width: 120.0,
                     ),
                     PopupMenuButton(
                         color: Colors.white,
@@ -883,7 +893,9 @@ class _ProfilePostState extends State<ProfilePost> {
                                             .indexOf('storage'))
                                     : Constants.IP+  widget.images![index].substring(widget
                                             .images![index]
-                                            .indexOf('media')));
+                                            .indexOf('media')),
+                                  fit: BoxFit.fill,
+                                );
                           })),
                     Positioned(
                       top: 0,
@@ -1183,6 +1195,10 @@ class CommunityPost extends StatefulWidget {
         this.isLikedOrDisliked,
         this.description = 'on Fire',
         this.type,
+        this.typee,
+        this.expert,
+        this.isSave,
+        this.isReported
       });
   String name;
   String timeago;
@@ -1194,6 +1210,10 @@ class CommunityPost extends StatefulWidget {
   postType?type;
   List<String>? images;
   int id;
+  bool?typee;
+  bool?expert;
+  bool?isSave;
+  bool?isReported;
 
   @override
   State<CommunityPost>createState() => _CommunityPostState();
@@ -1254,7 +1274,7 @@ class _CommunityPostState extends State<CommunityPost> {
                     PopupMenuButton(
                         color: Colors.white,
                         itemBuilder: (_) => <PopupMenuItem<String>>[
-                          const PopupMenuItem<String>(
+                           PopupMenuItem<String>(
                               value: '1',
                               child: SizedBox(
                                   width: 100,
@@ -1270,13 +1290,13 @@ class _CommunityPostState extends State<CommunityPost> {
                                         width: 7,
                                       ),
                                       Text(
-                                        "Save",
-                                        style: TextStyle(
+                                       "Save",
+                                        style: const TextStyle(
                                             color: Colors.deepPurple),
                                       ),
                                     ],
                                   ))),
-                          const PopupMenuItem<String>(
+                           PopupMenuItem<String>(
                               value: '2',
                               child: SizedBox(
                                   width: 100,
@@ -1294,10 +1314,11 @@ class _CommunityPostState extends State<CommunityPost> {
                                       ),
                                       Text(
                                         "Report",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             color: Colors.deepPurple),
                                       ),]
                                     ))),
+                                      if(widget.typee==true&&widget.expert==true)
                                       const PopupMenuItem<String>(
                                         value: '3',
                                         child: SizedBox(
@@ -1333,20 +1354,20 @@ class _CommunityPostState extends State<CommunityPost> {
                                 CommunitiesCubit().savePost(
                                   id: widget.id.toString(),
                                 );
-                                showScaffoldSnackBar(
-                                    title: "Added to your saved posts",
-                                    context: context,
-                                    color: Colors.green);
+
+
                               }
                             case '2':
                               {
                                 CommunitiesCubit().reportPost(
                                     id: widget.id.toString()
                                 );
-                                showScaffoldSnackBar(
-                                    title: "Reported",
-                                    context: context,
-                                    color: Colors.green);
+                              }
+                                case '3':
+                              {
+                                CommunitiesCubit().agreePost(
+                                    id: widget.id.toString()
+                                );
 
                               }
 
@@ -1388,7 +1409,9 @@ class _CommunityPostState extends State<CommunityPost> {
                                   .indexOf('storage'))
                                   : Constants.IP+  widget.images![index].substring(widget
                                   .images![index]
-                                  .indexOf('media')));
+                                  .indexOf('media')),
+                            fit: BoxFit.fill,
+                          );
                         })),
                     Positioned(
                       top: 0,

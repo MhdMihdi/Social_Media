@@ -7,6 +7,7 @@ import 'package:dev_space/database/models/communties_models/get_communties_model
 import 'package:dev_space/modules/home_screen/posts%20cubit/posts_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 
 part 'communities_state.dart';
@@ -56,26 +57,38 @@ class CommunitiesCubit extends Cubit<CommunitiesState> {
       emit(CommunitiesErrorState(error: response));
     }
   }
-
+  bool?isSave;
   savePost({context, required String id}) async {
     emit(LikePostLoadingState());
     final response = await CommunitiesService.savePost(id: id);
     if (response is bool) {
       emit(PostSavedState());
+
     } else {
       emit(CommunitiesErrorState(error: response));
     }
   }
+  bool?isReported;
   reportPost({context, required String id}) async {
     emit(LikePostLoadingState());
     final response = await CommunitiesService.reportPost(id: id);
     if (response is bool) {
       emit(PostReportedState());
+
+
     } else {
       emit(CommunitiesErrorState(error: response));
     }
   }
-
+  agreePost({context, required String id}) async {
+    emit(LikePostLoadingState());
+    final response = await PostsService.agreePost(id: id);
+    if (response is bool) {
+      emit(PostAgrredState());
+    } else {
+      emit(CommunitiesErrorState(error: response));
+    }
+  }
   var contentController=TextEditingController();
 
   postType?type;
@@ -89,6 +102,35 @@ class CommunitiesCubit extends Cubit<CommunitiesState> {
       Navigator.pop(context);
     }else{
       emit(CommunitiesErrorState(error: response));
+    }
+  }
+
+  var selectedtype ;
+  //List<XFile>imageFile=[];
+  final ImagePicker imagepicker = ImagePicker();
+
+
+  List<XFile> videos = []; // List of selected images
+
+  var contetPController=TextEditingController();
+
+
+  createPost({required context,required images,required id}) async {
+    emit(CommunitiesDetailsLoadingState());
+    final response = await PostsService.createPostCom(
+        id:id,
+        type: selectedtype.toString(),
+        title: '',
+        content: contetPController.text,
+        images: images,
+        videos: videos
+    );
+    if (response != null ) {
+      emit(CommunitiesPostUploadedState());
+      Navigator.pop(context);
+      //emit(PostsLoadingState());
+    } else {
+      emit(CommunitiesErrorState(error: response.toString()));
     }
   }
 
